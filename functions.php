@@ -319,7 +319,9 @@ function show_searchResult($data=null){
 				<th>Options</th>
 			</tr>
 		<?php
-		try {
+		if( $result == false){
+			echo "<tr class='center'><td colspan='5'><h2>No Record Found</h2></td></tr>";
+		}else{
 			foreach ($result as $key) {
 			?>
 			<tr class="center">
@@ -336,10 +338,7 @@ function show_searchResult($data=null){
 			</tr>
 			<?php
 		}
-		} catch (Exception $e) {
-			echo $e;
 		}
-		
 
 		?>
 	</table><?php			
