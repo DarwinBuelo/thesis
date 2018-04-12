@@ -129,11 +129,7 @@
 
 			?>
 		</div>
-		<div class="footer asbestos">
-			<center>
-				<p>footer</p>
-			</center>
-		</div>
+
 	</div>
 
 
