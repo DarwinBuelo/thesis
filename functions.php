@@ -309,7 +309,7 @@ function show_searchResult($id=null){
 		<?php
 		$c = new dbcon();
 		$result = $c->select('content','id',$id);
-		var_dump($result);
+		
 		?>
 			<tr class="center">
 				<th>Image</th>
