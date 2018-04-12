@@ -37,11 +37,21 @@ class dbcon
 		}
 	}
 
-	function search(){
+	function search($data=null){
 		$this->connect();
-		$query = "SELECT * FROM $table WHERE note like 'try' or note LIKE '%try' or note LIKE '%try%' or note LIKE 'try%' ";
+		$data = $this->clean($data);
+		$table = 'content';
+
+		if ($data == "") {
+			$query = "SELECT * FROM $table";
+		}else{
+			$query = "SELECT * FROM $table WHERE note LIKE '$data' or note LIKE '%".$data."' or note LIKE '%".$data."%' or note LIKE '".$data."%'";	
+		}
+		
 		$result = mysqli_query($this->conn,$query);
 		return $result->fetch_all(MYSQLI_ASSOC);
+		$this->close();
+
 	}
 
 	//select data from the table

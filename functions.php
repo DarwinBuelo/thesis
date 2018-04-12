@@ -303,13 +303,13 @@ function show_searchInput(){
 }
 
 //do the searching for mgAllImage
-function show_searchResult($id=null){
+function show_searchResult($data=null){
 		?>
 		<table width="100%">
 		<?php
 		$c = new dbcon();
-		$result = $c->select('content','id',$id);
-		var_dump($result);
+		$result = $c->search($data);
+		
 		?>
 			<tr class="center">
 				<th>Image</th>
