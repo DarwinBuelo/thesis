@@ -116,11 +116,23 @@
 			 	//mange all image
 			 	case 'mgAllImage';
 			 		show_searchInput();
+			 		$id = getParam('id');
+			 		$filename = getParam('file');
+			 		
+			 		if (is_numeric($id)){
+			 			do_deleteImage($id,$filename);
+			 			header('location:index.php?p=mgAllImage');
+			 		}
+
 			 		if (isset($_POST['searchInput'])) {			 		show_searchResult($_POST['searchInput']);
 			 		}else{
 			 			show_searchResult();
 			 		}
+			 		
+
+
 			 		break;
+
 			 	default:
 			 		index();
 			 		break;

@@ -333,7 +333,10 @@ function show_searchResult($data=null){
 				<td><?php echo $key['note']?></td>
 				<td>
 					<button>Edit</button>
-					<button>Delete</button>
+					<?php echo "<a href=\"index.php?p=mgAllImage&id=".$key['id']."&file=".$key['media_link']."\"
+				>Delete</a>";
+				?>
+					
 				</td>
 			</tr>
 			<?php
@@ -344,4 +347,14 @@ function show_searchResult($data=null){
 	</table><?php			
 }
 
+//delete Image from table content with the id
+function do_deleteImage($id,$filename){
+	global $c;
+ 	$c->delete('content',$id);
+ 	$path = "media/images/".$filename;
+
+ 	unlink($path);
+
+
+}
 ?>
