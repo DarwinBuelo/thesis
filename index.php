@@ -84,15 +84,35 @@
 			 		break;
 			 	case 'upImage':
 			 		//show modal on uploading Images
-			 		show_upImage();
-			 		show_ContentMgt();
-			 		break;
-			 	case 'doUpload':
 			 		$task = getParam('t');
-			 		if($task == 'profile'){
-			 			//get the id and upload the file
+			 		$id = getParam('id');
+			 		switch ($task) {
+			 			case 'edit':
+
+			 				show_upImage($id);
+			 				show_searchInput();
+					 		$id = getParam('id');
+					 		$filename = getParam('file');
+			 				show_searchResult();
+			 				break;
+			 			
+			 			default:
+			 				show_upImage();
+			 				show_ContentMgt();
+			 				break;
+			 		}
+
+			 		break;
+
+			 	case 'doUpload':
+			 		//do the uploading of data
+			 		$task = getParam('t');
+			 		if(is_numeric($task)){
+			 			doUpload($task);
+			 			header('location:index.php?p=mgAllImage');
 			 		}else{
 			 			doUpload();
+			 			header('location:index.php?p=contentmgt');
 
 			 		}
 			 		break;

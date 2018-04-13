@@ -140,7 +140,9 @@ class dbcon
 
 
 	function execute($query){
+		$this->connect();
 		mysqli_query($this->conn,$query)or die(mysqli_error($this->conn));
+		$this->close();
 		
 
 	}
