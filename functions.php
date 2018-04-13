@@ -163,77 +163,161 @@ function show_about(){
 	echo "this is the about page";
 }
 
-//show upload Image
-function show_upImage(){
-	?>
-	<div class="modal" >
-		<div class="content">
-			<div class="header">
-				Upload Image
-			</div>
-	<form action="index.php?p=doUpload" method="post" enctype="multipart/form-data">
-		<table width="100%" style="margin:auto;">
-			<tr>
-				<td rowspan="9" align="center">
-					<img src="#" id="preview" width="375px" height="450px">
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<input type="file" name="image" id="imageIn">
-					<script type="text/javascript">
-						$("#imageIn").change(function() {
-							readURL(this);
-						});
-					</script>
-				</td>
-			</tr>
-			<tr>
-				<td>Title :</td>
-				<td><input type="text" name="title"></td>
-			</tr>
-			<tr>
-				<td>Category :</td>
-				<td>
-					<select name =level>
-						<option value="1">Letters</option>
-						<option value="2">Words</option>
-						<option value="3">Phrases</option>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<td>English :</td>
-				<td><input type="text" name="english"></td>
-			</tr>
-			<tr>
-				<td>Tagalog :</td>
-				<td>
-					<input type="text" name="tagalog">
-				</td>
-			</tr>
-			<tr>
-				<td>Bicol :</td>
-				<td><input type="text" name="bicol"></td>
-			</tr>
-			<tr>
-				<td>Notes :</td>
-				<td><textarea type="text" rows="10" name="note"></textarea></td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<input type="submit" name="submit" value="upload">
-				</td>
-			</tr>
-		</table>
-	</form>
-			<div class="footer">
-				<button onclick="toggleModal()"> Close</button>
-				<script type="text/javascript" src="js/functions.js"></script>
-			</div>
-		</div>
-		</div>
-	<?php
+//show upload Image for uploading and editing
+
+function show_upImage($id=4){
+	
+	if($id == null ){
+		?>
+			<div class="modal" >
+				<div class="content">
+					<div class="header">
+						Upload Image
+					</div>
+					<form action="index.php?p=doUpload" method="post" enctype="multipart/form-data">
+						<table width="100%" style="margin:auto;">
+							<tr>
+								<td rowspan="9" align="center">
+									<img src="#" id="preview" width="375px" height="450px">
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<input type="file" name="image" id="imageIn">
+									<script type="text/javascript">
+										$("#imageIn").change(function() {
+											readURL(this);
+										});
+									</script>
+								</td>
+							</tr>
+							<tr>
+								<td>Title :</td>
+								<td><input type="text" name="title"></td>
+							</tr>
+							<tr>
+								<td>Category :</td>
+								<td>
+									<select name =level>
+										<option value="1">Letters</option>
+										<option value="2">Words</option>
+										<option value="3">Phrases</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td>English :</td>
+								<td><input type="text" name="english"></td>
+							</tr>
+							<tr>
+								<td>Tagalog :</td>
+								<td>
+									<input type="text" name="tagalog">
+								</td>
+							</tr>
+							<tr>
+								<td>Bicol :</td>
+								<td><input type="text" name="bicol"></td>
+							</tr>
+							<tr>
+								<td>Notes :</td>
+								<td><textarea type="text" rows="10" name="note"></textarea></td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<input type="submit" name="submit" value="upload">
+								</td>
+							</tr>
+						</table>
+					</form>
+					<div class="footer">
+						<button onclick="toggleModal()"> Close</button>
+						<script type="text/javascript" src="js/functions.js"></script>
+					</div>
+				</div>
+				</div>
+			<?php
+
+	}else{
+		global $c;
+		$result = $c->select('content','id',$id);
+		$key = $result[0];
+		?>
+			<div class="modal" >
+				<div class="content">
+					<div class="header">
+						Upload Image
+					</div>
+					<form action="index.php?p=doUpload" method="post" enctype="multipart/form-data">
+						<table width="100%" style="margin:auto;">
+							<tr>
+								<td rowspan="9" align="center">
+									<?php
+										echo '<img src="media/images/'.$key['media_link'].'" id="preview" width="375px" height="450px">';
+									?>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<input type="file" name="image" id="imageIn">
+									<script type="text/javascript">
+										$("#imageIn").change(function() {
+											readURL(this);
+										});
+									</script>
+								</td>
+							</tr>
+							<tr>
+								<td>Title :</td>
+								<td>
+									<?php echo '<input type="text" name="title" value="'.$key['title'].'">';?>
+									
+								</td>
+							</tr>
+							<tr>
+								<td>Category :</td>
+								<td>
+									<select name =level>
+										<option value="1">Letters</option>
+										<option value="2">Words</option>
+										<option value="3">Phrases</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td>English :</td>
+								<td><input type="text" name="english"></td>
+							</tr>
+							<tr>
+								<td>Tagalog :</td>
+								<td>
+									<input type="text" name="tagalog">
+								</td>
+							</tr>
+							<tr>
+								<td>Bicol :</td>
+								<td><input type="text" name="bicol"></td>
+							</tr>
+							<tr>
+								<td>Notes :</td>
+								<td><textarea type="text" rows="10" name="note"></textarea></td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<input type="submit" name="submit" value="upload">
+								</td>
+							</tr>
+						</table>
+					</form>
+					<div class="footer">
+						<button onclick="toggleModal()"> Close</button>
+						<script type="text/javascript" src="js/functions.js"></script>
+					</div>
+				</div>
+				</div>
+			<?php
+
+	}
 }
 
 //do the uploading of images to the database and the file folder
