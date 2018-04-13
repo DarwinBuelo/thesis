@@ -237,6 +237,7 @@ function show_upImage(){
 }
 
 //do the uploading of images to the database and the file folder
+//Insert and edit
 function doUpload($data=null){
 	$upImage = new Upload($_FILES['image']);
 	$upImage->file_new_name_body = "dclcwq";
@@ -266,9 +267,9 @@ function doUpload($data=null){
 				 ,'".$_POST['level']."'
 
 					)" ;
-				$conn = new dbcon();
-				$conn->connect();
-				$conn->execute($query);
+				global $c;
+				$c->connect();
+				$c->execute($query);
 			}else{
 				echo 'error occured: '.$upImage->error;
 			}
@@ -352,9 +353,9 @@ function do_deleteImage($id,$filename){
 	global $c;
  	$c->delete('content',$id);
  	$path = "media/images/".$filename;
-
  	unlink($path);
-
-
 }
+
+
+
 ?>
