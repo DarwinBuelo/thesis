@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 07, 2018 at 02:42 AM
+-- Generation Time: Apr 13, 2018 at 04:17 AM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 7.2.1
 
@@ -27,6 +27,26 @@ USE `thesis`;
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `category`
+--
+
+CREATE TABLE `category` (
+  `id` int(11) NOT NULL,
+  `label` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `category`
+--
+
+INSERT INTO `category` (`id`, `label`) VALUES
+(1, 'Letter'),
+(2, 'Words'),
+(3, 'Phrases');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `content`
 --
 
@@ -38,8 +58,20 @@ CREATE TABLE `content` (
   `note` varchar(255) NOT NULL,
   `english` varchar(255) NOT NULL,
   `tagalog` varchar(255) NOT NULL,
-  `bicol` varchar(255) NOT NULL
+  `bicol` varchar(255) NOT NULL,
+  `level` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `content`
+--
+
+INSERT INTO `content` (`id`, `userid`, `title`, `media_link`, `note`, `english`, `tagalog`, `bicol`, `level`) VALUES
+(1, 0, 'Note', '3d-abstract-art-light-points-wallpaper.jpg', 'Note here', 'englsih', 'tagalog', 'bicol', 0),
+(2, 0, 'Note', 'dclcwq_5.jpg', 'Note here', 'englsih', 'tagalog', 'bicol', 0),
+(3, 0, 'Mabel', 'dclcwq_6.jpg', 'Try lang muna', 'Cejes', 'mabel', 'cejes', 0),
+(4, 0, 'CS', 'dclcwq.gif', 'try lang', 'Logo', 'logo', 'logo', 1),
+(5, 2, 'JellyFish', 'dclcwq_7.jpg', 'try lang ulit', 'JellyFish', 'jellyisda', 'labog', 1);
 
 -- --------------------------------------------------------
 
@@ -70,6 +102,7 @@ CREATE TABLE `user` (
   `name` varchar(45) NOT NULL,
   `lastname` varchar(45) NOT NULL,
   `mname` varchar(45) NOT NULL,
+  `gender` varchar(6) NOT NULL,
   `datereg` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `lastlogin` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `birthday` date NOT NULL
@@ -79,13 +112,19 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id`, `username`, `password`, `type`, `name`, `lastname`, `mname`, `datereg`, `lastlogin`, `birthday`) VALUES
-(2, 'admin', '21232f297a57a5a743894a0e4a801fc3', 1, '', '', '', '2018-04-04 14:38:54', '2018-04-05 01:19:06', '0000-00-00'),
-(3, 'darwin', '416c13a5d48fa9ed41e9518c2a2c4a39', 0, 'Darwin', 'Buelo', 'Buelva', '2018-04-07 00:28:20', '2018-04-07 00:28:20', '1994-09-09');
+INSERT INTO `user` (`id`, `username`, `password`, `type`, `name`, `lastname`, `mname`, `gender`, `datereg`, `lastlogin`, `birthday`) VALUES
+(2, 'admin', '21232f297a57a5a743894a0e4a801fc3', 1, '', '', '', '', '2018-04-04 14:38:54', '2018-04-13 02:12:49', '0000-00-00'),
+(3, 'darwin', '416c13a5d48fa9ed41e9518c2a2c4a39', 0, 'Darwin', 'Buelo', 'Buelva', '', '2018-04-07 00:28:20', '2018-04-12 12:46:30', '1994-09-09');
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `category`
+--
+ALTER TABLE `category`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `content`
@@ -110,10 +149,16 @@ ALTER TABLE `user`
 --
 
 --
+-- AUTO_INCREMENT for table `category`
+--
+ALTER TABLE `category`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `content`
 --
 ALTER TABLE `content`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `progress`
