@@ -49,7 +49,11 @@ class dbcon
 		}
 		
 		$result = mysqli_query($this->conn,$query);
-		return $result->fetch_all(MYSQLI_ASSOC);
+		if($result->num_rows == 0){
+			return false;
+		}else{
+			return $result->fetch_all(MYSQLI_ASSOC);
+		}
 		$this->close();
 
 	}
