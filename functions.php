@@ -231,7 +231,7 @@ function show_upImage($id=null){
 						</table>
 					</form>
 					<div class="footer">
-						<button onclick="toggleModal()"> Close</button>
+						<button onclick="toggleModal('modal')"> Close</button>
 						<script type="text/javascript" src="js/functions.js"></script>
 					</div>
 				</div>
@@ -357,7 +357,7 @@ function show_upImage($id=null){
 						</table>
 					</form>
 					<div class="footer">
-						<button onclick="toggleModal()"> Close</button>
+						<button onclick="toggleModal('modal')"> Close</button>
 						<script type="text/javascript" src="js/functions.js"></script>
 					</div>
 				</div>
@@ -367,57 +367,6 @@ function show_upImage($id=null){
 	}
 }
 
-//do the uploading of images to the database and the file folder
-//Insert and edit
-function doUpload($data=null){
-	$upImage = new Upload($_FILES['image']);
-	$upImage->file_new_name_body = "dclcwq";
-
-	if($data==null){
-		if($upImage->uploaded){
-			$upImage->Process('media/images');
-			if($upImage->processed){
-				echo 'original image copied';
-				$query= "INSERT INTO content
-					(userid, 
-					 title,
-					 media_link,
-					 note,
-					 english,
-					 tagalog,
-					 bicol,
-					 level)
-				 VALUES (
-				 '".$_SESSION['id']."',
-				 '".$_POST['title']."',
-				 '".$upImage->file_dst_name."'
-				 ,'".$_POST['note']."'
-				 ,'".$_POST['english']."'
-				 ,'".$_POST['tagalog']."'
-				 ,'".$_POST['bicol']."'
-				 ,'".$_POST['level']."'
-
-					)" ;
-				global $c;
-				$c->execute($query);
-			}else{
-				echo 'error occured: '.$upImage->error;
-			}
-		}
-	}else{
-		$query= "UPDATE content SET 
-					userid='".$_SESSION['id']."',
-					title='".$_POST['title']."',
-					note='".$_POST['note']."',
-					english='".$_POST['english']."',
-					tagalog='".$_POST['tagalog']."',
-					bicol='".$_POST['bicol']."',
-					level='".$_POST['level']."' 
-					WHERE id = '".$data."'";
-		global $c;
-		$c->execute($query);
-	} 
-}
 
 
 //shows the Content Manager
@@ -428,6 +377,7 @@ function show_ContentMgt(){
 
 	<?php
 }
+
 
 //show All images  'mgAllImage' task
 function show_searchInput(){
@@ -479,18 +429,35 @@ function show_searchResult($data=null){
 						echo "<a href=\"index.php?p=upImage&id=".$key['id']."&t=edit\"
 				>Edit</a>";
 					?>
-					<?php echo "<a href=\"index.php?p=mgAllImage&id=".$key['id']."&file=".$key['media_link']."\"
+					<?php echo "<a href=\"index.php?p=mgAllImage&task=del&id=".$key['id']."&file=".$key['media_link']."\"
 				>Delete</a>";
 				?>
 					
 				</td>
 			</tr>
 			<?php
-		}
+			}
 		}
 
-		?>
-	</table><?php			
+			?>
+		</table><?php			
+}
+
+function show_msgModal($msg){
+	?>
+		<div class="modal2">
+			<div class="content center">
+				<?php echo '<h3>'.$msg.'</h3>';?>
+				<div class="footer">
+					<button onclick="toggleModal('modal2')"> Close</button>
+					<script type="text/javascript" src="js/functions.js"></script>
+				</div>
+			</div>	
+		</div>
+
+
+
+	<?php
 }
 
 //delete Image from table content with the id
@@ -501,6 +468,61 @@ function do_deleteImage($id,$filename){
  	unlink($path);
 }
 
+//do the uploading of images to the database and the file folder
+//Insert and edit
+function do_upload($data=null){
+	$upImage = new Upload($_FILES['image']);
+	$upImage->file_new_name_body = "dclcwq";
 
+	if($data==null){
+		if($upImage->uploaded){
+			$upImage->Process('media/images');
+			if($upImage->processed){
+				echo 'original image copied';
+				$query= "INSERT INTO content
+					(userid, 
+					 title,
+					 media_link,
+					 note,
+					 english,
+					 tagalog,
+					 bicol,
+					 level)
+				 VALUES (
+				 '".$_SESSION['id']."',
+				 '".$_POST['title']."',
+				 '".$upImage->file_dst_name."'
+				 ,'".$_POST['note']."'
+				 ,'".$_POST['english']."'
+				 ,'".$_POST['tagalog']."'
+				 ,'".$_POST['bicol']."'
+				 ,'".$_POST['level']."'
+
+					)" ;
+				global $c;
+				$c->execute($query);
+				return 'Upload Complete';
+			}else{
+				return 'error occured: '.$upImage->error;
+			}
+		}
+	}else{
+		$query= "UPDATE content SET 
+					userid='".$_SESSION['id']."',
+					title='".$_POST['title']."',
+					note='".$_POST['note']."',
+					english='".$_POST['english']."',
+					tagalog='".$_POST['tagalog']."',
+					bicol='".$_POST['bicol']."',
+					level='".$_POST['level']."' 
+					WHERE id = '".$data."'";
+		global $c;
+		if ($c->execute($query)){
+			return 'Update Complete';
+		}else{
+			return "Error Occured while uploading";
+		}
+	} 
+}
 
 ?>

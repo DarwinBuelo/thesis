@@ -104,52 +104,71 @@
 
 			 		break;
 
+
+			 	//do the uploading of data
 			 	case 'doUpload':
-			 		//do the uploading of data
 			 		$task = getParam('t');
 			 		if(is_numeric($task)){
-			 			doUpload($task);
-			 			header('location:index.php?p=mgAllImage');
+			 			$msg = do_upload($task);
+			 			header('location:index.php?p=mgAllImage&task=msg&msg='.$msg);
 			 		}else{
-			 			doUpload();
-			 			header('location:index.php?p=contentmgt');
-
+			 			$msg = do_upload();
+			 			header('location:index.php?p=contentmgt&task=msg&msg='.$msg);
 			 		}
 			 		break;
+			 	
 			 	case 'profile':
 			 		//shows profile
 			 		profile();
 			 		break;
+			 	
 			 	case 'about':
 			 		//show about 
 			 		show_about();
 			 		break;
+			 	
 			 	case 'logout';
 			 		//logout from session
 			 		unset($_SESSION['user']);
 			 		header("location:index.php");
 			 		break;
+			 	
 			 	case 'contentmgt';
 			 		//shows content management
+			 		$task =getParam('task');
+			 		$msg = getParam('msg');
+			 		if ($task<> null) {
+			 			show_msgModal($msg);
+			 		}
 			 		show_ContentMgt();
 			 		break;
+			 	
 			 	//mange all image
 			 	case 'mgAllImage';
 			 		show_searchInput();
+			 		$task = getParam('task');
 			 		$id = getParam('id');
 			 		$filename = getParam('file');
-			 		
-			 		if (is_numeric($id)){
-			 			do_deleteImage($id,$filename);
-			 			header('location:index.php?p=mgAllImage');
-			 		}
+			 		$msg = getParam('msg');
 
-			 		if (isset($_POST['searchInput'])) {			 		show_searchResult($_POST['searchInput']);
-			 		}else{
-			 			show_searchResult();
+			 		switch ($task) {
+			 			case 'msg':
+			 				show_msgModal($msg);
+			 				break;
+			 			case 'del':
+							if (is_numeric($id)&&isset($filename)){
+								do_deleteImage($id,$filename);
+					 			header('location:index.php?p=mgAllImage&task=msg&msg=deleted');
+					 		}
+			 				break;
 			 		}
 			 		
 
+					if (isset($_POST['searchInput'])) {			 		show_searchResult($_POST['searchInput']);
+				 	}else{
+						show_searchResult();
+		 			}		 		
+			 		
 
 			 		break;
 

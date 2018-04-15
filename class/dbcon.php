@@ -143,6 +143,7 @@ class dbcon
 		$this->connect();
 		mysqli_query($this->conn,$query)or die(mysqli_error($this->conn));
 		$this->close();
+		return true;
 		
 
 	}
