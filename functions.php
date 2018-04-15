@@ -163,118 +163,210 @@ function show_about(){
 	echo "this is the about page";
 }
 
-//show upload Image
-function show_upImage(){
-	?>
-	<div class="modal" >
-		<div class="content">
-			<div class="header">
-				Upload Image
-			</div>
-	<form action="index.php?p=doUpload" method="post" enctype="multipart/form-data">
-		<table width="100%" style="margin:auto;">
-			<tr>
-				<td rowspan="9" align="center">
-					<img src="#" id="preview" width="375px" height="450px">
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<input type="file" name="image" id="imageIn">
-					<script type="text/javascript">
-						$("#imageIn").change(function() {
-							readURL(this);
-						});
-					</script>
-				</td>
-			</tr>
-			<tr>
-				<td>Title :</td>
-				<td><input type="text" name="title"></td>
-			</tr>
-			<tr>
-				<td>Category :</td>
-				<td>
-					<select name =level>
-						<option value="1">Letters</option>
-						<option value="2">Words</option>
-						<option value="3">Phrases</option>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<td>English :</td>
-				<td><input type="text" name="english"></td>
-			</tr>
-			<tr>
-				<td>Tagalog :</td>
-				<td>
-					<input type="text" name="tagalog">
-				</td>
-			</tr>
-			<tr>
-				<td>Bicol :</td>
-				<td><input type="text" name="bicol"></td>
-			</tr>
-			<tr>
-				<td>Notes :</td>
-				<td><textarea type="text" rows="10" name="note"></textarea></td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<input type="submit" name="submit" value="upload">
-				</td>
-			</tr>
-		</table>
-	</form>
-			<div class="footer">
-				<button onclick="toggleModal()"> Close</button>
-				<script type="text/javascript" src="js/functions.js"></script>
-			</div>
-		</div>
-		</div>
-	<?php
+//show upload Image for uploading and editing
+
+function show_upImage($id=null){
+	
+	if($id == null ){
+		?>
+			<div class="modal" >
+				<div class="content">
+					<div class="header">
+						Upload Image
+					</div>
+					<form action="index.php?p=doUpload" method="post" enctype="multipart/form-data">
+						<table width="100%" style="margin:auto;">
+							<tr>
+								<td rowspan="9" align="center">
+									<img src="#" id="preview" width="375px" height="450px">
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<input type="file" name="image" id="imageIn">
+									<script type="text/javascript">
+										$("#imageIn").change(function() {
+											readURL(this);
+										});
+									</script>
+								</td>
+							</tr>
+							<tr>
+								<td>Title :</td>
+								<td><input type="text" name="title"></td>
+							</tr>
+							<tr>
+								<td>Category :</td>
+								<td>
+									<select name =level>
+										<option value="1">Letters</option>
+										<option value="2">Words</option>
+										<option value="3">Phrases</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td>English :</td>
+								<td><input type="text" name="english"></td>
+							</tr>
+							<tr>
+								<td>Tagalog :</td>
+								<td>
+									<input type="text" name="tagalog">
+								</td>
+							</tr>
+							<tr>
+								<td>Bicol :</td>
+								<td><input type="text" name="bicol"></td>
+							</tr>
+							<tr>
+								<td>Notes :</td>
+								<td><textarea type="text" rows="10" name="note"></textarea></td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<input type="submit" name="submit" value="upload">
+								</td>
+							</tr>
+						</table>
+					</form>
+					<div class="footer">
+						<button onclick="toggleModal('modal')"> Close</button>
+						<script type="text/javascript" src="js/functions.js"></script>
+					</div>
+				</div>
+				</div>
+			<?php
+
+	}else{
+		# editting page
+		global $c;
+		$result = $c->select('content','id',$id);
+		$key = $result[0];
+
+		?>
+			<div class="modal" >
+				<div class="content">
+					<div class="header">
+						Upload Image
+					</div>
+					<form action="index.php?p=doUpload" method="post" enctype="multipart/form-data">
+					<?php
+						echo "<input type='hidden' name='t' value='".$key['id']."'>";
+					?>
+						<table width="100%" style="margin:auto;">
+							<tr>
+								<td rowspan="9" align="center">
+									<?php
+										echo '<img src="media/images/'.$key['media_link'].'" id="preview" width="375px" height="450px">';
+									?>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<input type="file" name="image" id="imageIn">
+									<script type="text/javascript">
+										$("#imageIn").change(function() {
+											readURL(this);
+										});
+									</script>
+								</td>
+							</tr>
+							<tr>
+								<td>Title :</td>
+								<td>
+									<?php echo '<input type="text" name="title" value="'.$key['title'].'">';?>
+									
+								</td>
+							</tr>
+							<tr>
+								<td>Category :</td>
+								<td>
+									<select name =level>
+										<?php 
+											switch ($key['level']) {
+												case '1':
+													echo '
+														<option value="1" selected>Letters</option>
+														<option value="2">Words</option>
+														<option value="3">Phrases</option>';
+													break;
+												case '2':
+													echo '
+														<option value="1" >Letters</option>
+														<option value="2" selected>Words</option>
+														<option value="3">Phrases</option>';
+													break;
+												case '3':
+													echo '
+														<option value="1" >Letters</option>
+														<option value="2">Words</option>
+														<option value="3" selected>Phrases</option>';
+													break;
+												
+												default:
+													echo '
+														<option value="1" >Letters</option>
+														<option value="2">Words</option>
+														<option value="3" selected>Phrases</option>';
+													break;
+											}
+										?>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td>English :</td>
+								<td>
+									<?php
+										echo '<input type="text" name="english" value="'.$key['english'].'">'
+									?>
+									
+								</td>
+							</tr>
+							<tr>
+								<td>Tagalog :</td>
+								<td>
+									<?php
+										echo '<input type="text" name="tagalog" value="'.$key['tagalog'].'">'
+									?>
+								</td>
+							</tr>
+							<tr>
+								<td>Bicol :</td>
+								<td>
+									<?php
+										echo '<input type="text" name="bicol" value="'.$key['bicol'].'">'
+									?>
+								</td>
+							</tr>
+							<tr>
+								<td>Notes :</td>
+								<td>
+									<?php
+										echo '<textarea type="text" rows="10" name="note">'.$key['note'].'</textarea>'
+									?>
+									
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<input type="submit" name="submit" value="upload">
+								</td>
+							</tr>
+						</table>
+					</form>
+					<div class="footer">
+						<button onclick="toggleModal('modal')"> Close</button>
+						<script type="text/javascript" src="js/functions.js"></script>
+					</div>
+				</div>
+				</div>
+			<?php
+
+	}
 }
 
-//do the uploading of images to the database and the file folder
-function doUpload($data=null){
-	$upImage = new Upload($_FILES['image']);
-	$upImage->file_new_name_body = "dclcwq";
-
-	if($data==null){
-		if($upImage->uploaded){
-			$upImage->Process('media/images');
-			if($upImage->processed){
-				echo 'original image copied';
-				$query= "INSERT INTO content
-					(userid, 
-					 title,
-					 media_link,
-					 note,
-					 english,
-					 tagalog,
-					 bicol,
-					 level)
-				 VALUES (
-				 '".$_SESSION['id']."',
-				 '".$_POST['title']."',
-				 '".$upImage->file_dst_name."'
-				 ,'".$_POST['note']."'
-				 ,'".$_POST['english']."'
-				 ,'".$_POST['tagalog']."'
-				 ,'".$_POST['bicol']."'
-				 ,'".$_POST['level']."'
-
-					)" ;
-				$conn = new dbcon();
-				$conn->connect();
-				$conn->execute($query);
-			}else{
-				echo 'error occured: '.$upImage->error;
-			}
-		}
-	} 
-}
 
 
 //shows the Content Manager
@@ -285,6 +377,7 @@ function show_ContentMgt(){
 
 	<?php
 }
+
 
 //show All images  'mgAllImage' task
 function show_searchInput(){
@@ -332,16 +425,104 @@ function show_searchResult($data=null){
 				<td><?php echo $key['tagalog']?></td>
 				<td><?php echo $key['note']?></td>
 				<td>
-					<button>Edit</button>
-					<button>Delete</button>
+					<?php 
+						echo "<a href=\"index.php?p=upImage&id=".$key['id']."&t=edit\"
+				>Edit</a>";
+					?>
+					<?php echo "<a href=\"index.php?p=mgAllImage&task=del&id=".$key['id']."&file=".$key['media_link']."\"
+				>Delete</a>";
+				?>
+					
 				</td>
 			</tr>
 			<?php
-		}
+			}
 		}
 
-		?>
-	</table><?php			
+			?>
+		</table><?php			
+}
+
+function show_msgModal($msg){
+	?>
+		<div class="modal2">
+			<div class="content center">
+				<?php echo '<h3>'.$msg.'</h3>';?>
+				<div class="footer">
+					<button onclick="toggleModal('modal2')"> Close</button>
+					<script type="text/javascript" src="js/functions.js"></script>
+				</div>
+			</div>	
+		</div>
+
+
+
+	<?php
+}
+
+//delete Image from table content with the id
+function do_deleteImage($id,$filename){
+	global $c;
+ 	$c->delete('content',$id);
+ 	$path = "media/images/".$filename;
+ 	unlink($path);
+}
+
+//do the uploading of images to the database and the file folder
+//Insert and edit
+function do_upload($data=null){
+	$upImage = new Upload($_FILES['image']);
+	$upImage->file_new_name_body = "dclcwq";
+
+	if($data==null){
+		if($upImage->uploaded){
+			$upImage->Process('media/images');
+			if($upImage->processed){
+				echo 'original image copied';
+				$query= "INSERT INTO content
+					(userid, 
+					 title,
+					 media_link,
+					 note,
+					 english,
+					 tagalog,
+					 bicol,
+					 level)
+				 VALUES (
+				 '".$_SESSION['id']."',
+				 '".$_POST['title']."',
+				 '".$upImage->file_dst_name."'
+				 ,'".$_POST['note']."'
+				 ,'".$_POST['english']."'
+				 ,'".$_POST['tagalog']."'
+				 ,'".$_POST['bicol']."'
+				 ,'".$_POST['level']."'
+
+					)" ;
+				global $c;
+				$c->execute($query);
+				return 'Upload Complete';
+			}else{
+				return 'error occured: '.$upImage->error;
+			}
+		}
+	}else{
+		$query= "UPDATE content SET 
+					userid='".$_SESSION['id']."',
+					title='".$_POST['title']."',
+					note='".$_POST['note']."',
+					english='".$_POST['english']."',
+					tagalog='".$_POST['tagalog']."',
+					bicol='".$_POST['bicol']."',
+					level='".$_POST['level']."' 
+					WHERE id = '".$data."'";
+		global $c;
+		if ($c->execute($query)){
+			return 'Update Complete';
+		}else{
+			return "Error Occured while uploading";
+		}
+	} 
 }
 
 ?>

@@ -13,12 +13,12 @@ function readURL(input) {
 
 
 
-function toggleModal(){
-	 var modal = $('.modal').css('display');
+function toggleModal(modal){
+	 var modalStat = $('.'+modal).css('display');
 	 
-	 if (modal == 'block'){
-	 	$('.modal').css('display','none');
+	 if (modalStat == 'block'){
+	 	$('.'+modal).css('display','none');
 	 }else{
-	 	$('.modal').css('display','block');
+	 	$('.'+ modal).css('display','block');
 	 }
 }

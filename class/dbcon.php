@@ -140,9 +140,20 @@ class dbcon
 
 
 	function execute($query){
+		$this->connect();
 		mysqli_query($this->conn,$query)or die(mysqli_error($this->conn));
+		$this->close();
+		return true;
 		
 
+	}
+
+
+	//delete the file from database
+	function delete($table,$id){
+		$this->connect;
+		$query ="DELETE FROM $table WHERE id = '$id'";
+		mysqli_query($this->conn,$query)or die(mysqli_error($this->conn));
 	}
 
 	//just making debug easier
