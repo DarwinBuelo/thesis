@@ -398,6 +398,7 @@ function show_searchInput(){
 //do the searching for mgAllImage
 function show_searchResult($data=null){
 		?>
+		<div class="overflowY">
 		<table width="100%">
 		<?php
 		$c = new dbcon();
@@ -440,7 +441,9 @@ function show_searchResult($data=null){
 		}
 
 			?>
-		</table><?php			
+
+		</table>
+		</div><?php			
 }
 
 function show_msgModal($msg){
