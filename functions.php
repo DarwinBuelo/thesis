@@ -4,13 +4,49 @@
 	$c->connect();
 
 
-
-//do Registration
-function doReg(){
-	global $c;
-	$result = $c->register($_POST);	
+function getParam($page){
+	@$page = $_REQUEST[$page];
+	if($page == ""){
+		return "";
+	}else{
+		return $page;
+	}
+}
+ 	
+function index(){
+ 	if(isset($_SESSION['user'])){
+ 		echo "Welcome ".	$_SESSION['user']."<br>";
+ 	}
+ 	else{
+ 		echo "Welcome Guest";
+ 	}
 }
 
+
+function profile(){
+	?>
+
+	<table width="100%">
+		<tr>
+			<td>Name</td>
+			<td>
+				<?php 
+					echo $_SESSION['name']." ".$_SESSION['mname']." ".$_SESSION['lastname'] ;
+				?></td>
+			<td>&nbsp</td>
+		</tr>
+		<tr>
+			<td>Birthday</td>
+			<td><?php  echo $_SESSION['bday']; ?></td>
+		</tr>
+	</table>
+
+
+
+	<?php
+}
+
+/* This part make the page front end with the Prefix Show*/
 
 function show_register(){
 	//just shows the registration
@@ -83,7 +119,6 @@ function show_register(){
 }
 
 
-
 //show login
 function show_login(){
 	?>
@@ -100,63 +135,7 @@ function show_login(){
 	</div>
 
 	<?php
-
 }
-
-function getParam($page){
-	@$page = $_REQUEST[$page];
-	if($page == ""){
-		return "";
-	}else{
-		return $page;
-	}
-}
- 	
-function index(){
- 	if(isset($_SESSION['user'])){
- 		echo "Welcome ".	$_SESSION['user']."<br>";
- 	}
- 	else{
- 		echo "Welcome Guest";
- 	}
-}
-
-function doLogin($username,$password){
-	global $c;
-	$check = $c->verifyUser($username,$password);
-	if ($check== true){
-		echo "welcome";
-		header("location:index.php");
-	}else{
-		echo "error";
-		show_login();
-	}
- }
-
-
-function profile(){
-	?>
-
-	<table width="100%">
-		<tr>
-			<td>Name</td>
-			<td>
-				<?php 
-					echo $_SESSION['name']." ".$_SESSION['mname']." ".$_SESSION['lastname'] ;
-				?></td>
-			<td>&nbsp</td>
-		</tr>
-		<tr>
-			<td>Birthday</td>
-			<td><?php  echo $_SESSION['bday']; ?></td>
-		</tr>
-	</table>
-
-
-
-	<?php
-}
-
 
 //about page
 function show_about(){
@@ -164,7 +143,6 @@ function show_about(){
 }
 
 //show upload Image for uploading and editing
-
 function show_upImage($id=null){
 	
 	if($id == null ){
@@ -239,7 +217,7 @@ function show_upImage($id=null){
 			<?php
 
 	}else{
-		# editting page
+		# editing page
 		global $c;
 		$result = $c->select('content','id',$id);
 		$key = $result[0];
@@ -368,7 +346,6 @@ function show_upImage($id=null){
 }
 
 
-
 //shows the Content Manager
 function show_ContentMgt(){
 	?>
@@ -463,6 +440,26 @@ function show_msgModal($msg){
 	<?php
 }
 
+
+// Show the video uploading form
+
+function show_upVideo($file,$update=false){
+	?>
+	<!-- initial muna  -->
+	<form>
+		<table>
+			
+
+		</table>		
+	</form>
+		
+
+	<?php
+}
+
+/* This area provides the work or the do the processing of data */
+
+
 //delete Image from table content with the id
 function do_deleteImage($id,$filename){
 	global $c;
@@ -527,5 +524,26 @@ function do_upload($data=null){
 		}
 	} 
 }
+
+
+function doLogin($username,$password){
+	global $c;
+	$check = $c->verifyUser($username,$password);
+	if ($check== true){
+		echo "welcome";
+		header("location:index.php");
+	}else{
+		echo "error";
+		show_login();
+	}
+}
+
+
+//do Registration
+function doReg(){
+	global $c;
+	$result = $c->register($_POST);	
+}
+
 
 ?>
