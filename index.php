@@ -62,6 +62,14 @@
 
 			//Just Shows the Content
 
+			/* Some reserved parameters for the program
+				-p = page 		==== this refer to the page to be display or to the action to make
+				-t = task 		==== this refers to the action to make in the page
+				-id = id 		==== refers to the id of the specific file or data in the database
+				-file = file 	==== indicates the file name 
+
+			*/
+
 			 $task = getParam('p');
 
 			 switch ($task) {

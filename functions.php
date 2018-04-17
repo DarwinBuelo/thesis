@@ -446,7 +446,7 @@ function show_msgModal($msg){
 function show_upVideo($file,$update=false){
 	?>
 	<!-- initial muna  -->
-	<form>
+	<form action="index.php?s">
 		<table>
 			
 
