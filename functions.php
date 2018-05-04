@@ -37,8 +37,7 @@ function profile(){
 		</tr>
 		<tr>
 			<td>Birthday</td>
-			<td><?php  echo $_SESSION['bday']; ?></td>
-		</tr>
+			<td><?php  echo $_SESSION['bday']; ?></td
 	</table>
 
 
@@ -404,11 +403,14 @@ function show_searchResult($data=null){
 				<td><?php echo $key['note']?></td>
 				<td>
 					<?php 
+					echo "<a href=\"#\"> View </a>";
+					if ($_SESSION['privilage'] == 1){
 						echo "<a href=\"index.php?p=upImage&id=".$key['id']."&t=edit\"
-				>Edit</a>";
-					?>
-					<?php echo "<a href=\"index.php?p=mgAllImage&task=del&id=".$key['id']."&file=".$key['media_link']."\"
+					
+				>Edit </a>";
+					 echo "<a href=\"index.php?p=mgAllImage&task=del&id=".$key['id']."&file=".$key['media_link']."\"
 				>Delete</a>";
+			}
 				?>
 					
 				</td>

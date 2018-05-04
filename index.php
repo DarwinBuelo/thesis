@@ -42,11 +42,17 @@
 					echo "<a href=\"index.php?p=reg\">Register</a>";
 
 				}else{
-					echo "<a href=\"index.php?p=logout\">Logout</a>";
-					
-					echo "<a href=\"index.php?p=profile\">Profile</a>";
 					if ($_SESSION['privilage'] == 1){
-						echo "<a href=\"index.php?p=contentmgt\">Manage Content</a>";	
+						echo "<a href=\"index.php?p=logout\">Logout</a>";
+						echo "<a href=\"index.php?p=profile\">Profile</a>";
+						echo "<a href=\"index.php?p=contentmgt\">Manage Content</a>";
+
+					}else if($_SESSION['privilage'] == 0) {
+					echo "<a href=\"index.php?p=logout\">Logout</a>";
+					echo "<a href=\"index.php?p=profile\">Profile</a>";
+					echo "<a href=\"index.php\">Study</a>";
+					echo "<a href=\"index.php?p=mgAllImage\">Reference</a>";	
+					
 					}
 
 					
@@ -172,7 +178,8 @@
 			 		}
 			 		
 
-					if (isset($_POST['searchInput'])) {			 		show_searchResult($_POST['searchInput']);
+					if (isset($_POST['searchInput'])) {
+						show_searchResult($_POST['searchInput']);
 				 	}else{
 						show_searchResult();
 		 			}		 		
