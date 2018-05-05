@@ -37,7 +37,7 @@ function profile(){
 		</tr>
 		<tr>
 			<td>Birthday</td>
-			<td><?php  echo $_SESSION['bday']; ?></td
+			<td><?php  echo $_SESSION['bday']; ?></td>
 	</table>
 
 
@@ -403,7 +403,8 @@ function show_searchResult($data=null){
 				<td><?php echo $key['note']?></td>
 				<td>
 					<?php 
-					echo "<a href=\"#\"> View </a>";
+					echo "<a href=\"index.php?p=mgAllImage&\"> View </a>";
+
 					if ($_SESSION['privilage'] == 1){
 						echo "<a href=\"index.php?p=upImage&id=".$key['id']."&t=edit\"
 					
@@ -448,7 +449,7 @@ function show_msgModal($msg){
 function show_upVideo($file,$update=false){
 	?>
 	<!-- initial muna  -->
-	<form action="index.php?s">
+	<form action="index.php?">
 		<table>
 			
 
