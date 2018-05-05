@@ -175,6 +175,9 @@
 					 			header('location:index.php?p=mgAllImage&task=msg&msg=deleted');
 					 		}
 			 				break;
+			 			case 'view':
+			 				show_viewDetails($id);
+			 				break;
 			 		}
 			 		
 
