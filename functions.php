@@ -4,13 +4,48 @@
 	$c->connect();
 
 
-
-//do Registration
-function doReg(){
-	global $c;
-	$result = $c->register($_POST);	
+function getParam($page){
+	@$page = $_REQUEST[$page];
+	if($page == ""){
+		return "";
+	}else{
+		return $page;
+	}
+}
+ 	
+function index(){
+ 	if(isset($_SESSION['user'])){
+ 		echo "Welcome ".	$_SESSION['user']."<br>";
+ 	}
+ 	else{
+ 		echo "Welcome Guest";
+ 	}
 }
 
+
+function profile(){
+	?>
+
+	<table width="100%">
+		<tr>
+			<td>Name</td>
+			<td>
+				<?php 
+					echo $_SESSION['name']." ".$_SESSION['mname']." ".$_SESSION['lastname'] ;
+				?></td>
+			<td>&nbsp</td>
+		</tr>
+		<tr>
+			<td>Birthday</td>
+			<td><?php  echo $_SESSION['bday']; ?></td>
+	</table>
+
+
+
+	<?php
+}
+
+/* This part make the page front end with the Prefix Show*/
 
 function show_register(){
 	//just shows the registration
@@ -83,7 +118,6 @@ function show_register(){
 }
 
 
-
 //show login
 function show_login(){
 	?>
@@ -100,63 +134,7 @@ function show_login(){
 	</div>
 
 	<?php
-
 }
-
-function getParam($page){
-	@$page = $_REQUEST[$page];
-	if($page == ""){
-		return "";
-	}else{
-		return $page;
-	}
-}
- 	
-function index(){
- 	if(isset($_SESSION['user'])){
- 		echo "Welcome ".	$_SESSION['user']."<br>";
- 	}
- 	else{
- 		echo "Welcome Guest";
- 	}
-}
-
-function doLogin($username,$password){
-	global $c;
-	$check = $c->verifyUser($username,$password);
-	if ($check== true){
-		echo "welcome";
-		header("location:index.php");
-	}else{
-		echo "error";
-		show_login();
-	}
- }
-
-
-function profile(){
-	?>
-
-	<table width="100%">
-		<tr>
-			<td>Name</td>
-			<td>
-				<?php 
-					echo $_SESSION['name']." ".$_SESSION['mname']." ".$_SESSION['lastname'] ;
-				?></td>
-			<td>&nbsp</td>
-		</tr>
-		<tr>
-			<td>Birthday</td>
-			<td><?php  echo $_SESSION['bday']; ?></td>
-		</tr>
-	</table>
-
-
-
-	<?php
-}
-
 
 //about page
 function show_about(){
@@ -164,7 +142,6 @@ function show_about(){
 }
 
 //show upload Image for uploading and editing
-
 function show_upImage($id=null){
 	
 	if($id == null ){
@@ -239,7 +216,7 @@ function show_upImage($id=null){
 			<?php
 
 	}else{
-		# editting page
+		# editing page
 		global $c;
 		$result = $c->select('content','id',$id);
 		$key = $result[0];
@@ -368,7 +345,6 @@ function show_upImage($id=null){
 }
 
 
-
 //shows the Content Manager
 function show_ContentMgt(){
 	?>
@@ -395,9 +371,135 @@ function show_searchInput(){
 	<?php
 }
 
+function show_viewDetails($id){
+	?>
+<div class="modal" >
+				<div class="content">
+					<div class="header">
+						Upload Image
+					</div>
+					<form action="index.php?p=doUpload" method="post" enctype="multipart/form-data">
+					<?php
+						echo "<input type='hidden' name='t' value='".$key['id']."'>";
+					?>
+						<table width="100%" style="margin:auto;">
+							<tr>
+								<td rowspan="9" align="center">
+									<?php
+										echo '<img src="media/images/'.$key['media_link'].'" id="preview" width="375px" height="450px">';
+									?>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<input type="file" name="image" id="imageIn">
+									<script type="text/javascript">
+										$("#imageIn").change(function() {
+											readURL(this);
+										});
+									</script>
+								</td>
+							</tr>
+							<tr>
+								<td>Title :</td>
+								<td>
+									<?php echo '<input type="text" name="title" value="'.$key['title'].'">';?>
+									
+								</td>
+							</tr>
+							<tr>
+								<td>Category :</td>
+								<td>
+									<select name =level>
+										<?php 
+											switch ($key['level']) {
+												case '1':
+													echo '
+														<option value="1" selected>Letters</option>
+														<option value="2">Words</option>
+														<option value="3">Phrases</option>';
+													break;
+												case '2':
+													echo '
+														<option value="1" >Letters</option>
+														<option value="2" selected>Words</option>
+														<option value="3">Phrases</option>';
+													break;
+												case '3':
+													echo '
+														<option value="1" >Letters</option>
+														<option value="2">Words</option>
+														<option value="3" selected>Phrases</option>';
+													break;
+												
+												default:
+													echo '
+														<option value="1" >Letters</option>
+														<option value="2">Words</option>
+														<option value="3" selected>Phrases</option>';
+													break;
+											}
+										?>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td>English :</td>
+								<td>
+									<?php
+										echo '<input type="text" name="english" value="'.$key['english'].'">'
+									?>
+									
+								</td>
+							</tr>
+							<tr>
+								<td>Tagalog :</td>
+								<td>
+									<?php
+										echo '<input type="text" name="tagalog" value="'.$key['tagalog'].'">'
+									?>
+								</td>
+							</tr>
+							<tr>
+								<td>Bicol :</td>
+								<td>
+									<?php
+										echo '<input type="text" name="bicol" value="'.$key['bicol'].'">'
+									?>
+								</td>
+							</tr>
+							<tr>
+								<td>Notes :</td>
+								<td>
+									<?php
+										echo '<textarea type="text" rows="10" name="note">'.$key['note'].'</textarea>'
+									?>
+									
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<input type="submit" name="submit" value="upload">
+								</td>
+							</tr>
+						</table>
+					</form>
+					<div class="footer">
+						<button onclick="toggleModal('modal')"> Close</button>
+						<script type="text/javascript" src="js/functions.js"></script>
+					</div>
+				</div>
+				</div>
+
+
+
+	<?php
+}
+
 //do the searching for mgAllImage
 function show_searchResult($data=null){
 		?>
+		<div class="overflowY">
 		<table width="100%">
 		<?php
 		$c = new dbcon();
@@ -426,11 +528,15 @@ function show_searchResult($data=null){
 				<td><?php echo $key['note']?></td>
 				<td>
 					<?php 
+					echo "<a href=\"index.php?p=mgAllImage&task=view&id=".$key['id']."\"> View </a>";
+
+					if ($_SESSION['privilage'] == 1){
 						echo "<a href=\"index.php?p=upImage&id=".$key['id']."&t=edit\"
-				>Edit</a>";
-					?>
-					<?php echo "<a href=\"index.php?p=mgAllImage&task=del&id=".$key['id']."&file=".$key['media_link']."\"
+					
+				>Edit </a>";
+					 echo "<a href=\"index.php?p=mgAllImage&task=del&id=".$key['id']."&file=".$key['media_link']."\"
 				>Delete</a>";
+			}
 				?>
 					
 				</td>
@@ -440,7 +546,9 @@ function show_searchResult($data=null){
 		}
 
 			?>
-		</table><?php			
+
+		</table>
+		</div><?php			
 }
 
 function show_msgModal($msg){
@@ -459,6 +567,26 @@ function show_msgModal($msg){
 
 	<?php
 }
+
+
+// Show the video uploading form
+
+function show_upVideo($file,$update=false){
+	?>
+	<!-- initial muna  -->
+	<form action="index.php?">
+		<table>
+			
+
+		</table>		
+	</form>
+		
+
+	<?php
+}
+
+/* This area provides the work or the do the processing of data */
+
 
 //delete Image from table content with the id
 function do_deleteImage($id,$filename){
@@ -524,5 +652,26 @@ function do_upload($data=null){
 		}
 	} 
 }
+
+
+function doLogin($username,$password){
+	global $c;
+	$check = $c->verifyUser($username,$password);
+	if ($check== true){
+		echo "welcome";
+		header("location:index.php");
+	}else{
+		echo "error";
+		show_login();
+	}
+}
+
+
+//do Registration
+function doReg(){
+	global $c;
+	$result = $c->register($_POST);	
+}
+
 
 ?>

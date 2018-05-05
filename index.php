@@ -42,11 +42,17 @@
 					echo "<a href=\"index.php?p=reg\">Register</a>";
 
 				}else{
-					echo "<a href=\"index.php?p=logout\">Logout</a>";
-					
-					echo "<a href=\"index.php?p=profile\">Profile</a>";
 					if ($_SESSION['privilage'] == 1){
-						echo "<a href=\"index.php?p=contentmgt\">Manage Content</a>";	
+						echo "<a href=\"index.php?p=logout\">Logout</a>";
+						echo "<a href=\"index.php?p=profile\">Profile</a>";
+						echo "<a href=\"index.php?p=contentmgt\">Manage Content</a>";
+
+					}else if($_SESSION['privilage'] == 0) {
+					echo "<a href=\"index.php?p=logout\">Logout</a>";
+					echo "<a href=\"index.php?p=profile\">Profile</a>";
+					echo "<a href=\"index.php\">Study</a>";
+					echo "<a href=\"index.php?p=mgAllImage\">Reference</a>";	
+					
 					}
 
 					
@@ -61,6 +67,14 @@
 			<?php
 
 			//Just Shows the Content
+
+			/* Some reserved parameters for the program
+				-p = page 		==== this refer to the page to be display or to the action to make
+				-t = task 		==== this refers to the action to make in the page
+				-id = id 		==== refers to the id of the specific file or data in the database
+				-file = file 	==== indicates the file name 
+
+			*/
 
 			 $task = getParam('p');
 
@@ -164,7 +178,8 @@
 			 		}
 			 		
 
-					if (isset($_POST['searchInput'])) {			 		show_searchResult($_POST['searchInput']);
+					if (isset($_POST['searchInput'])) {
+						show_searchResult($_POST['searchInput']);
 				 	}else{
 						show_searchResult();
 		 			}		 		

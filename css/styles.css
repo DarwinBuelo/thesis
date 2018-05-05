@@ -246,4 +246,7 @@ body{
 	padding-top:10px;
 }
 
-
+.overflowY{
+	overflow-y: scroll;
+	height: 568px;
+}
