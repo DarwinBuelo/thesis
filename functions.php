@@ -371,6 +371,131 @@ function show_searchInput(){
 	<?php
 }
 
+function show_viewDetails($id){
+	?>
+<div class="modal" >
+				<div class="content">
+					<div class="header">
+						Upload Image
+					</div>
+					<form action="index.php?p=doUpload" method="post" enctype="multipart/form-data">
+					<?php
+						echo "<input type='hidden' name='t' value='".$key['id']."'>";
+					?>
+						<table width="100%" style="margin:auto;">
+							<tr>
+								<td rowspan="9" align="center">
+									<?php
+										echo '<img src="media/images/'.$key['media_link'].'" id="preview" width="375px" height="450px">';
+									?>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<input type="file" name="image" id="imageIn">
+									<script type="text/javascript">
+										$("#imageIn").change(function() {
+											readURL(this);
+										});
+									</script>
+								</td>
+							</tr>
+							<tr>
+								<td>Title :</td>
+								<td>
+									<?php echo '<input type="text" name="title" value="'.$key['title'].'">';?>
+									
+								</td>
+							</tr>
+							<tr>
+								<td>Category :</td>
+								<td>
+									<select name =level>
+										<?php 
+											switch ($key['level']) {
+												case '1':
+													echo '
+														<option value="1" selected>Letters</option>
+														<option value="2">Words</option>
+														<option value="3">Phrases</option>';
+													break;
+												case '2':
+													echo '
+														<option value="1" >Letters</option>
+														<option value="2" selected>Words</option>
+														<option value="3">Phrases</option>';
+													break;
+												case '3':
+													echo '
+														<option value="1" >Letters</option>
+														<option value="2">Words</option>
+														<option value="3" selected>Phrases</option>';
+													break;
+												
+												default:
+													echo '
+														<option value="1" >Letters</option>
+														<option value="2">Words</option>
+														<option value="3" selected>Phrases</option>';
+													break;
+											}
+										?>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td>English :</td>
+								<td>
+									<?php
+										echo '<input type="text" name="english" value="'.$key['english'].'">'
+									?>
+									
+								</td>
+							</tr>
+							<tr>
+								<td>Tagalog :</td>
+								<td>
+									<?php
+										echo '<input type="text" name="tagalog" value="'.$key['tagalog'].'">'
+									?>
+								</td>
+							</tr>
+							<tr>
+								<td>Bicol :</td>
+								<td>
+									<?php
+										echo '<input type="text" name="bicol" value="'.$key['bicol'].'">'
+									?>
+								</td>
+							</tr>
+							<tr>
+								<td>Notes :</td>
+								<td>
+									<?php
+										echo '<textarea type="text" rows="10" name="note">'.$key['note'].'</textarea>'
+									?>
+									
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<input type="submit" name="submit" value="upload">
+								</td>
+							</tr>
+						</table>
+					</form>
+					<div class="footer">
+						<button onclick="toggleModal('modal')"> Close</button>
+						<script type="text/javascript" src="js/functions.js"></script>
+					</div>
+				</div>
+				</div>
+
+
+
+	<?php
+}
+
 //do the searching for mgAllImage
 function show_searchResult($data=null){
 		?>
@@ -403,7 +528,7 @@ function show_searchResult($data=null){
 				<td><?php echo $key['note']?></td>
 				<td>
 					<?php 
-					echo "<a href=\"index.php?p=mgAllImage&\"> View </a>";
+					echo "<a href=\"index.php?p=mgAllImage&task=view&id=".$key['id']."\"> View </a>";
 
 					if ($_SESSION['privilage'] == 1){
 						echo "<a href=\"index.php?p=upImage&id=".$key['id']."&t=edit\"
