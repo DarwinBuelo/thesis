@@ -42,12 +42,12 @@
 					echo "<a href=\"index.php?p=reg\">Register</a>";
 
 				}else{
-					if ($_SESSION['privilage'] == 1){
+					if ($_SESSION['privilege'] == 1){
 						echo "<a href=\"index.php?p=logout\">Logout</a>";
 						echo "<a href=\"index.php?p=profile\">Profile</a>";
 						echo "<a href=\"index.php?p=contentmgt\">Manage Content</a>";
 
-					}else if($_SESSION['privilage'] == 0) {
+					}else if($_SESSION['privilege'] == 0) {
 					echo "<a href=\"index.php?p=logout\">Logout</a>";
 					echo "<a href=\"index.php?p=profile\">Profile</a>";
 					echo "<a href=\"index.php\">Study</a>";

@@ -91,7 +91,7 @@ class dbcon
 			//Set all session variables needed
 			$_SESSION['user'] = $obj->username;
 			$_SESSION['id'] = $obj->id;
-			$_SESSION['privilage'] = $obj->type;
+			$_SESSION['privilege'] = $obj->type;
 			$_SESSION['name'] = $obj->name;
 			$_SESSION['lastname'] = $obj->lastname;
 			$_SESSION['mname'] = $obj->mname;

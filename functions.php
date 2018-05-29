@@ -143,7 +143,7 @@ function show_about(){
 
 //show upload Image for uploading and editing
 function show_upImage($id=null){
-	
+	if ($_SESSION['privilege'] == 1){
 	if($id == null ){
 		?>
 			<div class="modal" >
@@ -342,7 +342,7 @@ function show_upImage($id=null){
 			<?php
 
 	}
-}
+}}
 
 
 //shows the Content Manager
@@ -377,8 +377,7 @@ function show_viewDetails($id){
 	global $c;
 	$result = $c->select('content','id',$id);
 
-	var_dump($result);
-
+	//create the view for the user
 	?>
 
 	<div class="modal" >
@@ -454,7 +453,7 @@ function show_searchResult($data=null){
 					<?php 
 					echo "<a href=\"index.php?p=mgAllImage&task=view&id=".$key['id']."\"> View </a>";
 
-					if ($_SESSION['privilage'] == 1){
+					if ($_SESSION['privilege'] == 1){
 						echo "<a href=\"index.php?p=upImage&id=".$key['id']."&t=edit\"
 					
 				>Edit </a>";
