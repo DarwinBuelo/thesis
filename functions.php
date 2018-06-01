@@ -1,5 +1,7 @@
 <?php
 //function
+ 	require 'init.php';
+
  	$c = new dbcon();
 	$c->connect();
 
@@ -123,13 +125,20 @@ function show_login(){
 	?>
 	<div class="obj-center">
 		<form action="index.php" method="post" >
-			<label for="email">Email address:</label>
 			<input type="hidden" name="p" value="doLogin">
-			<input type="text" class="form-control" name="username">
-	  		<br>
-		    <label for="pwd">Password:</label>
-			<input type="text" name="password">
-			 <br><input type="submit" value="Submit">
+			<table>
+				<tr>
+					<td><label for="email">Email address:</label></td>
+					<td><input type="text" class="form-control" name="username"></td>
+				</tr>
+				<tr>
+					<td><label for="pwd">Password:</label></td>
+					<td><input type="text" name="password"></td>
+				</tr>
+				<tr>
+					<td colspan="2" class="center"><input type="submit" value="Submit"></td>
+				</tr>
+			</table>
 		</form>
 	</div>
 
@@ -596,5 +605,24 @@ function doReg(){
 	$result = $c->register($_POST);	
 }
 
+function do_cert(){
+	
+	define('FPDF_FONTPATH','font');
 
+	$pdf = new FPDF();
+	$pdf->AddPage('L','Letter');
+	$pdf->AddFont('ananda','R');
+	$pdf->SetFont('ananda','R',40);
+	$pdf->Image('media/images/cert.jpg',0,0,-300,-300);
+	$pdf->SetXY(13,118);
+	$pdf->SetTextColor(45,50,125);
+	$pdf->Cell(10,0,'Darwin Buelo',0,0,'L');
+	return $pdf->Output();
+
+}
+
+function is_logged(){
+	global $c;
+	return $c->is_logged();
+}
 ?>

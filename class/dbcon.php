@@ -181,6 +181,16 @@ class dbcon
 		mysqli_close($this->conn);
 	}
 
+	function is_logged(){
+			if(isset($_SESSION['user'])){
+				if($_SESSION['privilege'] == 1){
+				return 1;
+			}else{
+				return 0;
+			}}else{
+				return 404;
+			}	
+	}
 
-
-}?>
+}
+?>

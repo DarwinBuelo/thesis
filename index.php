@@ -40,6 +40,7 @@
 				if(!isset($_SESSION['user'])){
 					echo '<a href="index.php?p=login">Login</a>';
 					echo "<a href=\"index.php?p=reg\">Register</a>";
+					echo "<a href=\"index.php?p=cert\">Test Certificate Function</a>";
 
 				}else{
 					if ($_SESSION['privilege'] == 1){
@@ -189,6 +190,9 @@
 			 		
 
 			 		break;
+			 	case 'cert':
+			 	header('Location : fpdftest.php');
+			 	break;
 
 			 	default:
 			 		index();
