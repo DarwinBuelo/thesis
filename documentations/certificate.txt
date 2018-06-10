@@ -1,0 +1,3 @@
+certificate.php
+
+***** this  generates the certificate from to the user  we just use the  pdf generator from the website www.fpdf.org  then just modify some code for fine tunning the to my own prefferences.

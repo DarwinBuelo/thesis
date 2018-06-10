@@ -8,25 +8,14 @@
 
 class dbcon
 {
-	//difine the variable needed
+	//define the variable needed
 	protected $host = '127.0.0.1';
 	protected $username = 'darwin';
 	protected $password = '12345';
 	protected $dbname = 'thesis';
 
-	public $conn;
+	protected $conn;
 
-	//creates a constructor for the class
-/*	function __construct($dbname,$host=null,$username = null ,$password= null){
-		//assigning the values
-		$this->host = $host;
-		$this->username = $username;
-		$this->password = $password;
-		$this->dbname = $dbname;
-
-
-
-	} */
 
 	//Connect to the database
 	function connect(){
@@ -37,15 +26,15 @@ class dbcon
 		}
 	}
 
-	function search($data=null){
+	function search($data=null,$table='content'){
 		$this->connect();
 		$data = $this->clean($data);
-		$table = 'content';
+		
 
 		if ($data == "") {
 			$query = "SELECT * FROM $table";
 		}else{
-			$query = "SELECT * FROM $table WHERE note LIKE '$data' or note LIKE '%".$data."' or note LIKE '%".$data."%' or note LIKE '".$data."%'";	
+			$query = "SELECT * FROM $table WHERE note LIKE '%$data%' OR title LIKE '%$data%' OR english LIKE '%$data%' OR tagalog LIKE '%$data%' OR bicol LIKE '%$data%'";	
 		}
 		
 		$result = mysqli_query($this->conn,$query);
@@ -91,7 +80,7 @@ class dbcon
 			//Set all session variables needed
 			$_SESSION['user'] = $obj->username;
 			$_SESSION['id'] = $obj->id;
-			$_SESSION['privilage'] = $obj->type;
+			$_SESSION['privilege'] = $obj->type;
 			$_SESSION['name'] = $obj->name;
 			$_SESSION['lastname'] = $obj->lastname;
 			$_SESSION['mname'] = $obj->mname;
@@ -167,11 +156,23 @@ class dbcon
 
 	//clean the data before posting it to the data base
 	function clean($x){
-	$x = stripcslashes($x);
-	$x = mysqli_real_escape_string($this->conn,$x);
-	return $x;
+		$x = stripcslashes($x);
+		$x = mysqli_real_escape_string($this->conn,$x);
+		return $x;
 	}
-
+	
+	function is_logged(){
+		if(isset($_SESSION['user'])){
+			if($_SESSION['privilege'] == 1){
+				return 1;
+			}else{
+				return 0;
+			}
+		}else{
+			return 404;
+			}	
+	}
+	
 	function close(){
 		mysqli_close($this->conn);
 	}
@@ -183,4 +184,5 @@ class dbcon
 
 
 
-}?>
+}
+?>

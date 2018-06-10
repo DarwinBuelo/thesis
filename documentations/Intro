@@ -1,0 +1,15 @@
+
+
+Introduction to Word Quiz Development
+
+	This was a rappid software development project, so us much as we wanted to hardcode everything from scratch we really can't it because of the project duration, we only got some limit amount of time to develop a prototype  and make the content. I was the only one making the programs and the two other members of the team are making the content.  Thats why I just decided to reuse some the class I already used in some of my project to make thing much faster in developing the programs. Here are some of the class i use :
+
+dbcon.php --- Explained in dbcon.txt in the documentation
+
+fpdf.php from www.fpdf.com  
+		- I use this to generate the pdf for the certificate just to make thing much more faster with some available library..
+
+upload.php from www.verot.net
+		- I use this to handle uploading images in the site. i use this in particular because it is fast in resizing and handling images.
+
+

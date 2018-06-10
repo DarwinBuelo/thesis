@@ -1,5 +1,7 @@
 <?php
 //function
+ 	require 'init.php';
+
  	$c = new dbcon();
 	$c->connect();
 
@@ -12,7 +14,7 @@ function getParam($page){
 		return $page;
 	}
 }
- 	
+
 function index(){
  	if(isset($_SESSION['user'])){
  		echo "Welcome ".	$_SESSION['user']."<br>";
@@ -123,13 +125,20 @@ function show_login(){
 	?>
 	<div class="obj-center">
 		<form action="index.php" method="post" >
-			<label for="email">Email address:</label>
 			<input type="hidden" name="p" value="doLogin">
-			<input type="text" class="form-control" name="username">
-	  		<br>
-		    <label for="pwd">Password:</label>
-			<input type="text" name="password">
-			 <br><input type="submit" value="Submit">
+			<table>
+				<tr>
+					<td><label for="email">Email address:</label></td>
+					<td><input type="text" class="form-control" name="username"></td>
+				</tr>
+				<tr>
+					<td><label for="pwd">Password:</label></td>
+					<td><input type="password" name="password"></td>
+				</tr>
+				<tr>
+					<td colspan="2" class="center"><input type="submit" value="Submit"></td>
+				</tr>
+			</table>
 		</form>
 	</div>
 
@@ -143,7 +152,7 @@ function show_about(){
 
 //show upload Image for uploading and editing
 function show_upImage($id=null){
-	
+	if ($_SESSION['privilege'] == 1){
 	if($id == null ){
 		?>
 			<div class="modal" >
@@ -342,7 +351,7 @@ function show_upImage($id=null){
 			<?php
 
 	}
-}
+}}
 
 
 //shows the Content Manager
@@ -372,128 +381,51 @@ function show_searchInput(){
 }
 
 function show_viewDetails($id){
+	
+	//fetch data from the database according to $id
+	global $c;
+	$result = $c->select('content','id',$id);
+
+	//create the view for the user
 	?>
-<div class="modal" >
-				<div class="content">
-					<div class="header">
-						Upload Image
-					</div>
-					<form action="index.php?p=doUpload" method="post" enctype="multipart/form-data">
-					<?php
-						echo "<input type='hidden' name='t' value='".$key['id']."'>";
-					?>
-						<table width="100%" style="margin:auto;">
-							<tr>
-								<td rowspan="9" align="center">
-									<?php
-										echo '<img src="media/images/'.$key['media_link'].'" id="preview" width="375px" height="450px">';
-									?>
-								</td>
-							</tr>
-							<tr>
-								<td colspan="2">
-									<input type="file" name="image" id="imageIn">
-									<script type="text/javascript">
-										$("#imageIn").change(function() {
-											readURL(this);
-										});
-									</script>
-								</td>
-							</tr>
-							<tr>
-								<td>Title :</td>
-								<td>
-									<?php echo '<input type="text" name="title" value="'.$key['title'].'">';?>
-									
-								</td>
-							</tr>
-							<tr>
-								<td>Category :</td>
-								<td>
-									<select name =level>
-										<?php 
-											switch ($key['level']) {
-												case '1':
-													echo '
-														<option value="1" selected>Letters</option>
-														<option value="2">Words</option>
-														<option value="3">Phrases</option>';
-													break;
-												case '2':
-													echo '
-														<option value="1" >Letters</option>
-														<option value="2" selected>Words</option>
-														<option value="3">Phrases</option>';
-													break;
-												case '3':
-													echo '
-														<option value="1" >Letters</option>
-														<option value="2">Words</option>
-														<option value="3" selected>Phrases</option>';
-													break;
-												
-												default:
-													echo '
-														<option value="1" >Letters</option>
-														<option value="2">Words</option>
-														<option value="3" selected>Phrases</option>';
-													break;
-											}
-										?>
-									</select>
-								</td>
-							</tr>
-							<tr>
-								<td>English :</td>
-								<td>
-									<?php
-										echo '<input type="text" name="english" value="'.$key['english'].'">'
-									?>
-									
-								</td>
-							</tr>
-							<tr>
-								<td>Tagalog :</td>
-								<td>
-									<?php
-										echo '<input type="text" name="tagalog" value="'.$key['tagalog'].'">'
-									?>
-								</td>
-							</tr>
-							<tr>
-								<td>Bicol :</td>
-								<td>
-									<?php
-										echo '<input type="text" name="bicol" value="'.$key['bicol'].'">'
-									?>
-								</td>
-							</tr>
-							<tr>
-								<td>Notes :</td>
-								<td>
-									<?php
-										echo '<textarea type="text" rows="10" name="note">'.$key['note'].'</textarea>'
-									?>
-									
-								</td>
-							</tr>
-							<tr>
-								<td colspan="2">
-									<input type="submit" name="submit" value="upload">
-								</td>
-							</tr>
-						</table>
-					</form>
-					<div class="footer">
-						<button onclick="toggleModal('modal')"> Close</button>
-						<script type="text/javascript" src="js/functions.js"></script>
-					</div>
-				</div>
-				</div>
 
-
-
+	<div class="modal" >
+		<div class="content">
+			<div class="header">
+				Details of <?php echo $result[0]['title'];?>
+			</div>
+			<table width="100%" >
+				<tr>
+					<td rowspan="5" width="50%" class="center">
+						<?php
+							echo '<img src="media/images/'.$result[0]['media_link'].'" width="375px" height="450px">';
+						?>
+					</td>
+					<td width="25%" class="center">English : </td>
+					<td width="25%" class="center"><?php echo $result[0]['english'];?></td>
+				</tr>
+				<tr>
+					<td class="center"> Tagalog : </td>
+					<td class="center"> <?php echo $result[0]['tagalog'];?> </td>
+				</tr>
+				<tr>
+					<td class="center"> Bicol : </td>
+					<td class="center"> <?php echo $result[0]['bicol'];?> </td>
+				</tr>
+				<tr>
+					<td class="center" rowspan="2"> Note : </td>
+					<td class="center" rowspan="2"> <?php echo $result[0]['note'];?> </td>
+				</tr>
+				
+			</table>
+			<div class="footer">
+				<button onclick="toggleModal('modal')"> Close</button>
+				<script type="text/javascript" src="js/functions.js"></script>
+			</div>
+		</div>
+	</div>
 	<?php
+	
 }
 
 //do the searching for mgAllImage
@@ -502,7 +434,7 @@ function show_searchResult($data=null){
 		<div class="overflowY">
 		<table width="100%">
 		<?php
-		$c = new dbcon();
+		global $c;
 		$result = $c->search($data);
 		
 		?>
@@ -530,7 +462,7 @@ function show_searchResult($data=null){
 					<?php 
 					echo "<a href=\"index.php?p=mgAllImage&task=view&id=".$key['id']."\"> View </a>";
 
-					if ($_SESSION['privilage'] == 1){
+					if ($_SESSION['privilege'] == 1){
 						echo "<a href=\"index.php?p=upImage&id=".$key['id']."&t=edit\"
 					
 				>Edit </a>";
@@ -673,5 +605,24 @@ function doReg(){
 	$result = $c->register($_POST);	
 }
 
+function do_cert(){
+	
+	define('FPDF_FONTPATH','font');
 
+	$pdf = new FPDF();
+	$pdf->AddPage('L','Letter');
+	$pdf->AddFont('ananda','R');
+	$pdf->SetFont('ananda','R',40);
+	$pdf->Image('media/images/cert.jpg',0,0,-300,-300);
+	$pdf->SetXY(13,118);
+	$pdf->SetTextColor(45,50,125);
+	$pdf->Cell(10,0,'Darwin Buelo',0,0,'L');
+	return $pdf->Output();
+
+}
+
+function is_logged(){
+	global $c;
+	return $c->is_logged();
+}
 ?>

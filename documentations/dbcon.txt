@@ -1,0 +1,84 @@
+dbcon.php
+
+
+dbcon stands for database communication it is intended to make a database communication easier to manange.
+
+
+some variables that are added to dbcon
+
+--- $host  			-- this variable holds the host name
+--- $username 		-- this defines the username in the database 
+--- $password		-- this defines the password of the database
+--- $dbname 		-- this variable holds the database name
+
+
+-- $conn 			-- this variable holds the object of connection to the database. it is made for easy use
+
+
+
+***** Functions ******
+
+-- connect() - this function is intended to make a connection to the database.
+
+-- search(data=[string],table=[strings]) 
+	- this function is used to retrieve data from the database this take two parameters	
+		* $data - this is the variable that holds the value to be search in the database
+		* $table - holds the data to where to search or in what table to search the given value.
+
+		****   Note   *****
+		this function was optimize to only search the following data :
+			- note
+			- title
+			- english
+			- tagalog
+			- bicol
+
+	this function returns an all the data in the database if the parameter $data is set to null which is the default and an array of data when a result is found
+
+-- select($table=[string],$data=[string],$value)
+	- this function is used to retrive specific data from database
+		* $table - this parameter holds the specific data where to search the data
+		* $ data - this is the paramater that holds what kind of data is to search ex : name , lastname
+		* $value - this holds the value to be search.
+
+		this function returns an array of result and error if the data is not found
+
+-- verifyUser($username,$password)
+	- this function is used to verify user with the help of the two parameters. this also set the following SESSION variables :	
+			-- user - 	the current user that has been verified and logged
+			-- id 	-	the id of the user
+			-- privilege - this is holds the users previlage to the system ex: user, admin, modetor
+			-- name -	firstname of the user
+			-- lastname - last name of the user
+			-- mname - the middle name of the user
+			-- bday - date of birth of the current user
+	this  function returns true when the credentials are correct and verified and false if not
+
+
+-- register($data[array])
+	-this function registers the user to the database
+	the parameter $data is an array with the following arrangement username, password, lastname, middlename and birthday
+
+-- execute() 
+	-this function execute specific mysql query
+
+-- delete($table[string], $id[int])
+	-this function delete specific data from the given parameter table by the use of the $id of the item
+		* $table - is the table where the data is located
+		* $id - is the unique id of the item to be deleted.
+
+-- debug($data)
+	this function is only use to debug a variable, to know the data type and the value it holds..
+		* $data - is the data to be debug. it can take all kinds of data to be debug.
+
+
+-- clean($x[string])
+	-this function clean the data before it can be process , this prevents sql injection and xss attacks that would potentially exposed data of the users. returns the  data that has been cleaned
+
+-- is_logged() 
+	this function verifies if the user is logged or not and also check for their previlege.
+	this fucntion returns "1" is the user is an admin ,"0" if the user is a regular user, and "404" if the user is not logged
+
+
+-- close() and __destruct()
+	this two function closed the connection to the database. 

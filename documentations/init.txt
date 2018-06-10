@@ -1,0 +1,6 @@
+################################################
+############ INIT.php #########################
+
+
+
+the primary function of the init.php is to initialize all the functions to that can be use anywhere in the program. the init.php should be required to all the program
