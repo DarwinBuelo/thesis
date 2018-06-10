@@ -14,10 +14,6 @@
 <body>
 	<?php
 		require 'init.php';
-		require 'functions.php';
-
-
-	
 		session_start ();
 
 	?>
@@ -40,7 +36,7 @@
 				if(!isset($_SESSION['user'])){
 					echo '<a href="index.php?p=login">Login</a>';
 					echo "<a href=\"index.php?p=reg\">Register</a>";
-					echo "<a href=\"index.php?p=cert\">Test Certificate Function</a>";
+					//echo "<a href=\"index.php?p=cert\">Test Certificate Function</a>";
 
 				}else{
 					if ($_SESSION['privilege'] == 1){
@@ -52,7 +48,8 @@
 					echo "<a href=\"index.php?p=logout\">Logout</a>";
 					echo "<a href=\"index.php?p=profile\">Profile</a>";
 					echo "<a href=\"index.php\">Study</a>";
-					echo "<a href=\"index.php?p=mgAllImage\">Reference</a>";	
+					echo "<a href=\"index.php?p=mgAllImage\">Reference</a>";
+					echo "<a href=\"certificate.php\" target=\"_blank\">Get Certificate</a>";	
 					
 					}
 

@@ -14,7 +14,7 @@ function getParam($page){
 		return $page;
 	}
 }
- 	
+
 function index(){
  	if(isset($_SESSION['user'])){
  		echo "Welcome ".	$_SESSION['user']."<br>";
@@ -133,7 +133,7 @@ function show_login(){
 				</tr>
 				<tr>
 					<td><label for="pwd">Password:</label></td>
-					<td><input type="text" name="password"></td>
+					<td><input type="password" name="password"></td>
 				</tr>
 				<tr>
 					<td colspan="2" class="center"><input type="submit" value="Submit"></td>
