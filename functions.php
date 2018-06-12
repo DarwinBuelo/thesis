@@ -133,8 +133,22 @@ function show_login(){
 				</tr>
 				<tr>
 					<td><label for="pwd">Password:</label></td>
-					<td><input type="password" name="password"></td>
+					<td><input type="password" name="password" id="passinput"> </td>
+					
 				</tr>
+				<tr>
+					<td colspan="2" align="center"><input type="checkbox" onclick="showpass()">Show Password</td>	
+				</tr>
+				<script type="text/javascript">
+						function showpass() {
+						    var x = document.getElementById("passinput");
+						    if (x.type === "password") {
+						        x.type = "text";
+						    } else {
+						        x.type = "password";
+						    }
+						}
+					</script>
 				<tr>
 					<td colspan="2" class="center"><input type="submit" value="Submit"></td>
 				</tr>
