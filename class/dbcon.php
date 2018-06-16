@@ -17,7 +17,18 @@ class dbcon
 	protected $conn;
 
 
+	public $userId;
+	public $user ;
+	public $fname;
+	public $lname;
+	public $privilege;
+	public $mname;
+
+
+
 	//Connect to the database
+
+
 	function connect(){
 		try {
 			$this->conn = mysqli_connect($this->host,$this->username,$this->password,$this->dbname);	
@@ -66,33 +77,51 @@ class dbcon
 		$this->close();
 	}
 
+	function setdata(){
+		$_SESSION['user'] 		= $this->user ;
+		$_SESSION['id']			= $this->userId;
+		$_SESSION['privilege']	= $this->privilege;
+		$_SESSION['name']		= $this->fname;
+		$_SESSION['lastname']	= $this->lname ;
+		$_SESSION['mname'] 		= $this->mname;
+		
+	}
+
 	//for Login Verification
 	function verifyUser($username,$password){
 		$username = $this->clean($username);
 		$password = $this->clean($password);
 
-		$result =mysqli_query($this->conn,"SELECT * FROM user WHERE username ='$username' AND password = md5('$password')");
+		$result =mysqli_query($this->conn,"SELECT * FROM user WHERE username ='$username' AND password = md5('$password')") ;
 		$count=mysqli_num_rows($result);
 
 		if ($count > 0){
 			$obj = $result->fetch_object();
 
 			//Set all session variables needed
-			$_SESSION['user'] = $obj->username;
-			$_SESSION['id'] = $obj->id;
-			$_SESSION['privilege'] = $obj->type;
-			$_SESSION['name'] = $obj->name;
-			$_SESSION['lastname'] = $obj->lastname;
-			$_SESSION['mname'] = $obj->mname;
-			$_SESSION['bday'] = $obj->birthday;
+			
+			$this->user 		= $obj->username;
+			$this->userId 		= $obj->id;
+			$this->fname 		= $obj->name;
+			$this->lname 		= $obj->lastname;
+			$this->privilege 	= $obj->type;
+			$this->mname 		= $obj->mname;
+			
+			$_SESSION['user'] 		= $this->user ;
+			$_SESSION['id']			= $this->userId;
+			$_SESSION['privilege']	= $this->privilege;
+			$_SESSION['name']		= $this->fname;
+			$_SESSION['lastname']	= $this->lname ;
+			$_SESSION['mname'] 		= $this->mname;
 			
 			mysqli_query($this->conn,"UPDATE user SET lastlogin = now() WHERE id = $obj->id");
 			return true;
 		}else{
 			return false;
 		}
+		
+		
 	}
-
 
 	// Do The Registration
 	function register($data){
@@ -130,19 +159,19 @@ class dbcon
 
 	function execute($query){
 		$this->connect();
-		mysqli_query($this->conn,$query)or die(mysqli_error($this->conn));
+		if ($result = mysqli_query($this->conn,$query) or die(mysqli_error($this->conn))){
+			return $result;
+		}else{
+			false;
+		}
 		$this->close();
-		return true;
-		
-
 	}
 
 
 	//delete the file from database
 	function delete($table,$id){
-		$this->connect;
 		$query ="DELETE FROM $table WHERE id = '$id'";
-		mysqli_query($this->conn,$query)or die(mysqli_error($this->conn));
+		$this->execute($query);
 	}
 
 	//just making debug easier
@@ -156,9 +185,15 @@ class dbcon
 
 	//clean the data before posting it to the data base
 	function clean($x){
+		if ($x <> null){
+
 		$x = stripcslashes($x);
 		$x = mysqli_real_escape_string($this->conn,$x);
 		return $x;
+		}else{
+			return false;
+		}
+
 	}
 	
 	function is_logged(){
@@ -172,6 +207,39 @@ class dbcon
 			return 404;
 			}	
 	}
+
+	function show_progress($id){
+		$query = "SELECT * FROM user_study_guide WHERE userid = '$id'";
+		$result = $this->execute($query);
+		$row = mysqli_num_rows($result); 
+		if ($row > 0){
+			return true;
+		}else{
+			return false;
+		}
+
+	}
+
+	function get_max($data=null,$table='content'){
+		if ($data == null){
+			$query = "SELECT * FROM $table";
+		}else{
+			$query = "SELECT * FROM $table WHERE level='$data'";
+		}
+		$result = $this->execute($query);
+		$row = mysqli_num_rows($result);
+		return $row;
+	}
+
+	function set_study_guide($json,$level=1,$stat='ongoing'){
+
+		$user = $_SESSION['id'];
+		$query = "INSERT INTO user_study_guide (userid,studyResource,level,stat) VALUES ('$user','$json','$level','$stat')";
+		
+		$this->execute($query);
+	}
+
+	
 	
 	function close(){
 		mysqli_close($this->conn);
@@ -182,6 +250,9 @@ class dbcon
 		mysqli_close($this->conn);
 	}
 
+	function set(){
+		$this->user =$_SESSION['user'];
+	}
 
 
 }

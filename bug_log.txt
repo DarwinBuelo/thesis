@@ -1,0 +1,13 @@
+
+
+-------------------
+Here I list all the bugs in the system
+-------------------
+
+
+
+*** 06.14.2018
+*** Login Bug
+---- this bug occurs when the login credentials is empty... the error occured when we submit an empty field... this can potentially ruined the systems credibility.
+	############
+	( this bug was already fixed)

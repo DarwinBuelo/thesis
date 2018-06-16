@@ -1,8 +1,9 @@
 <?php
 require_once("init.php");
 
-if(!is_logged() == 404){
-	echo 'not logged';
+if(is_logged() == 404){
+	echo"not logged";
+	header("location:index.php?p=403");
 }else{
 define('FPDF_FONTPATH','font');
 

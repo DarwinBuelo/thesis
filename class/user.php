@@ -10,13 +10,20 @@
 /**
 * 
 */
-class user
+class user extends dbcon
 {
-	
-	function __construct(argument)
-	{
-		# code...
+	public $user = 'new user';
+
+
+
+	function set(){
+		$this->user = 'none';
+		
 	}
+
+	function show(){
+		return $this->user;
+	} 
 }
 
 

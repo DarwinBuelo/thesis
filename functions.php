@@ -2,9 +2,8 @@
 //function
  	require 'init.php';
 
- 	$c = new dbcon();
-	$c->connect();
-
+ 	$c = new dbcon 	;
+ 	$c->connect();
 
 function getParam($page){
 	@$page = $_REQUEST[$page];
@@ -21,6 +20,7 @@ function index(){
  	}
  	else{
  		echo "Welcome Guest";
+
  	}
 }
 
@@ -531,6 +531,21 @@ function show_upVideo($file,$update=false){
 	<?php
 }
 
+
+function show_403(){
+	?>
+
+	<img src="media/images/403.png" width="100%" height="100%">
+
+	<?php
+}
+
+
+
+
+##########################################################################################
+##########################################################################################
+
 /* This area provides the work or the do the processing of data */
 
 
@@ -603,6 +618,7 @@ function do_upload($data=null){
 function doLogin($username,$password){
 	global $c;
 	$check = $c->verifyUser($username,$password);
+	
 	if ($check== true){
 		echo "welcome";
 		header("location:index.php");
@@ -639,4 +655,95 @@ function is_logged(){
 	global $c;
 	return $c->is_logged();
 }
+
+function do_logout(){
+   session_unset();
+   session_destroy();
+}
+
+
+function rand_string( $length ) {
+    $length += 3;
+    $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";  
+    $str= "";
+    $size = strlen( $chars );
+    for( $i = 0; $i < $length; $i++ ) {
+            if($i == 5 || $i == 11 || $i == 17 )
+                $str .= '-';
+            else
+                $str .= $chars[ rand( 0, $size - 1 ) ];
+    }
+
+    return $str;
+}
+
+
+
+#################################################
+###### FUNCTION for the Study Program	#########
+#################################################
+	// first get the users progress in database
+	// 2nd decide what to show by randomly picking 20 items from the database and showing it to the user one by one
+
+	//data field in user_study_guide table
+#### id , userid , studyResource, date, level, stat
+	
+
+function show_study(){
+	global $c;
+	
+
+	if($c->show_progress($_SESSION['id'])){
+		echo 'Welcome back... You quite busy at the time';
+		$c->debug(show_studyMaterial($_SESSION['id']));
+
+
+	}else{
+
+		echo 'you are new to this site.';
+		generate_Study(1);
+
+		show_studyMaterial($_SESSION['id']);
+		echo $c->user;
+	}
+}
+
+
+function generate_Study($level){
+	global $c;
+	$max = $c->get_max($level);
+	$array = randomGen(1,$max,20);
+	$list = array();
+
+	foreach($array as $key){
+		$result = $c->select('content','level',$level);
+		$list[] =$result[$key-1]['id'];
+		}
+	$c->set_study_guide(json_encode($list));
+
+}
+
+function randomGen($min, $max, $quantity) {
+    $numbers = range($min, $max);
+    shuffle($numbers);
+    return array_slice($numbers, 0, $quantity);
+}
+
+function show_studyMaterial($id,$current=0){
+	global $c;
+	//fetch the list of study guide in the database
+	$user_guide = $c->select('user_study_guide','userid',$id);
+	//fetch the actual json list and decode it to array
+	$guideList = json_decode($user_guide[0]['studyResource']);
+	//fetch the resources
+	$resource = $c->select('content','id',$guideList[1]);
+	return $resource;
+	 
+}
+
+
+
+
+
+
 ?>

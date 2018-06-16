@@ -47,7 +47,7 @@
 					}else if($_SESSION['privilege'] == 0) {
 					echo "<a href=\"index.php?p=logout\">Logout</a>";
 					echo "<a href=\"index.php?p=profile\">Profile</a>";
-					echo "<a href=\"index.php\">Study</a>";
+					echo "<a href=\"index.php?p=study\">Study</a>";
 					echo "<a href=\"index.php?p=mgAllImage\">Reference</a>";
 					echo "<a href=\"certificate.php\" target=\"_blank\">Get Certificate</a>";	
 					
@@ -141,7 +141,7 @@
 			 	
 			 	case 'logout';
 			 		//logout from session
-			 		unset($_SESSION['user']);
+			 		do_logout();
 			 		header("location:index.php");
 			 		break;
 			 	
@@ -188,8 +188,17 @@
 
 			 		break;
 			 	case 'cert':
-			 	header('Location : fpdftest.php');
-			 	break;
+				 	header('Location : fpdftest.php');
+				 	break;
+
+			 	case '403':
+				 	show_403();
+				 	break;
+				
+				// case the user click study
+				case 'study';
+					show_study();
+					break;
 
 			 	default:
 			 		index();
