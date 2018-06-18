@@ -208,7 +208,7 @@ class dbcon
 			}	
 	}
 
-	function show_progress($id){
+	function get_progress($id){
 		$query = "SELECT * FROM user_study_guide WHERE userid = '$id'";
 		$result = $this->execute($query);
 		$row = mysqli_num_rows($result); 

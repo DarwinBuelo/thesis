@@ -22,3 +22,13 @@ function toggleModal(modal){
 	 	$('.'+ modal).css('display','block');
 	 }
 }
+
+function toggleModalId(modal){
+	 var modalStat = $('#'+modal).css('display');
+	 
+	 if (modalStat == 'block'){
+	 	$('#'+modal).css('display','none');
+	 }else{
+	 	$('#'+ modal).css('display','block');
+	 }
+}

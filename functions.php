@@ -689,22 +689,62 @@ function rand_string( $length ) {
 #### id , userid , studyResource, date, level, stat
 	
 
-function show_study(){
+function show_study($current){
 	global $c;
-	
 
-	if($c->show_progress($_SESSION['id'])){
-		echo 'Welcome back... You quite busy at the time';
-		$c->debug(show_studyMaterial($_SESSION['id']));
+	echo '<p>Hello '.$_SESSION['name'].'</p>';
 
-
+	// check if the user already had a record in the database
+	if($c->get_progress($_SESSION['id'])){
+		$array = get_studyMaterial($_SESSION['id']);
+		show_studyList($array);
+		
 	}else{
 
-		echo 'you are new to this site.';
+		echo 'You are new to this site.';
 		generate_Study(1);
+		get_studyMaterial($_SESSION['id']);
+		
+	}
+}
 
-		show_studyMaterial($_SESSION['id']);
-		echo $c->user;
+function show_studyList($array){
+	global $c;
+	//check if the array is not null and is an actual array
+	if (is_array($array) and $array !== null){
+		?>
+		<table width="100%">
+		<?php
+		foreach ($array as $key) {
+			$result = $c->select('content','id',$key);
+			?>
+
+				<tr> 
+					<td><?php echo '<img src="media/images/'.$result[0]['media_link'].'" width="100px" height="125px">'?>
+					</td>
+					<td>
+						<?php echo '<h2>'.$result[0]['title'].'</h2>'?>
+					</td>
+					<td>
+
+						<?php echo "<button onclick=\"toggleModalId('modal_".$key."')\">View</button>" ?>
+
+					</td>
+				</tr>
+				
+			<?php
+		}
+		?></table>
+		<?php 
+
+		//generate the modal.. by running another foreach loop to the array
+		// we cannot include this one to the foreach load from the top because t
+		// this includes  different html tags does making the modal in appropriate to view
+		foreach ($array as $key) {
+			# code...
+			generate_modal($key);
+		}
+		
 	}
 }
 
@@ -719,6 +759,7 @@ function generate_Study($level){
 		$result = $c->select('content','level',$level);
 		$list[] =$result[$key-1]['id'];
 		}
+
 	$c->set_study_guide(json_encode($list));
 
 }
@@ -729,20 +770,59 @@ function randomGen($min, $max, $quantity) {
     return array_slice($numbers, 0, $quantity);
 }
 
-function show_studyMaterial($id,$current=0){
+function get_studyMaterial($id){
 	global $c;
 	//fetch the list of study guide in the database
 	$user_guide = $c->select('user_study_guide','userid',$id);
 	//fetch the actual json list and decode it to array
 	$guideList = json_decode($user_guide[0]['studyResource']);
 	//fetch the resources
-	$resource = $c->select('content','id',$guideList[1]);
-	return $resource;
-	 
+
+	return $guideList;
+ 	
+	
 }
 
-
-
+function generate_modal($id){
+	global $c ;
+	$result = $c->select('content','id',$id);
+	?>
+	<div class="modal" id=<?php echo '"modal_'.$id.'"';?>>
+		<div class="content">
+			<table width="100%" >
+				<tr>
+					<td rowspan="5" width="50%" class="center">
+						<?php
+							echo '<img src="media/images/'.$result[0]['media_link'].'" width="375px" height="450px">';
+						?>
+					</td>
+					<td width="25%" class="center">English : </td>
+					<td width="25%" class="center"><?php echo $result[0]['english'];?></td>
+				</tr>
+				<tr>
+					<td class="center"> Tagalog : </td>
+					<td class="center"> <?php echo $result[0]['tagalog'];?> </td>
+				</tr>
+				<tr>
+					<td class="center"> Bicol : </td>
+					<td class="center"> <?php echo $result[0]['bicol'];?> </td>
+				</tr>
+				<tr>
+					<td class="center" rowspan="2"> Note : </td>
+					<td class="center" rowspan="2"> <?php echo $result[0]['note'];?> </td>
+				</tr>
+				
+			</table>
+			<div class="footer">
+				<?php
+				echo	"<button onclick=\"toggleModalId('modal_".$id."')\"> Close</button>";
+				?>
+				
+			</div>
+		</div>
+	</div>
+	<?php 
+}
 
 
 

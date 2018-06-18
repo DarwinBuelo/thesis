@@ -2,10 +2,13 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
 	<title>Thesis</title>
 
 	<link rel="stylesheet" type="text/css" href="css/styles.css">
+
+
 
 	<script type="text/javascript" src="js/angular.min.js"></script>
 	<script type="text/javascript" src="js/jquery.min.js"></script>
@@ -20,16 +23,17 @@
 
 	<div class="container">
 		<!--header-->
-		<div class="header orange">
-			<h1>Word quiz Sign Language</h1>
-			<p>where everything has trust</p>
-			
-			<?php 
-				if (isset($_SESSION['user'])){
-					echo "<p class='right'>".$_SESSION['user']."</p>";
-				}
-			?>
-		</div>
+			<div class="header orange">
+				<h1>Word quiz Sign Language</h1>
+				<p>where everything has trust</p>
+				
+				<?php 
+					if (isset($_SESSION['user'])){
+						echo "<p class='right'>".$_SESSION['user']."</p>";
+					}
+				?>
+			</div>
+
 		<!-- Sidebar -->
 		<div class="sidenav emerald">
 			<?php
@@ -197,7 +201,13 @@
 				
 				// case the user click study
 				case 'study';
-					show_study();
+					$state = getParam('st');
+					if (is_null($state) or !is_numeric($state)){
+						show_study(0);	
+					}else{
+						show_study($state);
+					}
+					
 					break;
 
 			 	default:
