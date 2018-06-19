@@ -132,22 +132,20 @@ class dbcon
 			$x++;
 		}
 		$x=0;
-
 		$query = " INSERT INTO user
 			(username
-			,password
 			,name
 			,lastname
 			,mname
-			,birthday)
+			,birthday
+			,password)
 			VALUES 
 			('$result[1]',
-			MD5('$result[2]'),
+			'$result[2]',
+			'$result[3]',
 			'$result[4]',
 			'$result[5]',
-			'$result[6]',
-			'$result[7]')";
-
+			MD5('$result[6]'))";
 		try {
 			mysqli_query($this->conn,$query)or die(mysqli_error($this->conn));
 

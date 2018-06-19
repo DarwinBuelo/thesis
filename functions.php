@@ -156,7 +156,12 @@ function index(){
 					<img src="image/logo.png" width="250px" style="float:left;padding:10px;">
 				</p>
 				<p style="padding:10px;"><br>
-					Word Quiz is an Educational Material / Tools that provides references to the users and make things much more easier and faster. This will provide as tool for the teacher to assest users progress in the asl (American Sign Language). This will also provide that
+					Word Quiz is an Educational Material / Tool that provides references to the users and make things much more easier and faster in understanding sign language.This will provide as tool for the teacher to assest users progress in the asl (American Sign Language). This will also provide as a references to the users showing information such as English Translation , Tagalog Translation, Bicol Translation and  the some information about the sign.
+				</p>
+				<p style="padding:10px">
+					The content of this web application was based on the book Love Signs - The Sign Language in English and Pilipino by REV. S. WAYNE SHANEYFELT.
+				</p>
+				<p>
 				</p>
 			</div>
 
@@ -195,107 +200,182 @@ function show_register(){
 	//just shows the registration
 
 	?>
-	<form action="index.php" method="post">
-		<table>
-			<input type="hidden" name="p" value="doReg">
-			<tr>
-				<td>
-					Username 
-				</td>
-				<td colspan="2">
-					<input type="text" name="username" placeholder="username">
-				</td>
+	<div class="content mt-3">
+		    <div class="sufee-login d-flex align-content-center flex-wrap">
+        <div class="container">
+            <div class="login-content">
+            	<div class="login-logo">
+            		<h2>Registration Form</h2>
+                </div>
+                <div class="login-form">
+                	*NOTE: Registration Button will only show once all information has properly filled
+                    <form action="index.php" method="post" id="regform">
+                    	<input type="hidden" name="p" value="doReg">
+                        <div class="form-group">
+                            <label>*User Name</label>
+                            <input required type="text" class="form-control" placeholder="User Name" name="username">
+                            <span></span>
+                        </div>
+                        <div class="form-group">
+                            <label>*Firstname</label>
+                            <input required type="text" class="form-control" placeholder="First name" name="name">
+                        </div>
+                        <div class="form-group">
+                            <label>*LASTNAME</label>
+                            <input required type="text" class="form-control" placeholder="Last name" name="lastname">
+                        </div>
+                        <div class="form-group">
+                            <label>*MIDDLENAME</label>
+                            <input  required type="text" class="form-control" placeholder="Middle name" name="middlename">
+                        </div>
+                            <label>*Birthday</label>
+                        <div class="form-group">
+                            <input required type="date" class="form-control" placeholder="Birthday"name="birthday">
+                        </div>
 
-			</tr>
-			<tr>
-				<td>Password</td>
-				<td colspan="2">
-					<input type="password" name="password" id="password">
-				</td>
-			</tr>
-			<tr>
-				<td>Re-Password</td>	
-				<td colspan="2">
-					<input type="password" name="password1" id= "password1">
-				</td>
-			</tr>
-			<tr>
-				<td>Name</td>
-				<td colspan="2">
-					<input type="text" name="name">
-				</td>
-			</tr>
-			<tr>
-				<td>Lastname</td>
-				<td colspan=ss"2">
-					<input type="text" name="Lastname">
-				</td>
-			</tr>
-			<tr>
-				<td>
-					Middle Names
-				</td>
-				<td colspan="2">
-					<input type="text" name="middlename">
-				</td>
-			</tr>
-			<tr>
-				<td>
-					Birthday
-				</td>
-				<td colspan="2">
-					<input type="date" name="Birthday">
-				</td>
-			</tr>
-			<tr>
-				<td><br></td>
-				<td><input type="submit" name="submit" Value="Submit"></td>
-				<td><br></td>
-			</tr>
-		</table>
-	</form>
+                        <div class="form-group">
+                            <label>*Password</label>
+                            <input required type="password" class="form-control" placeholder="Password"name="password" id="pass1" onchange=>
+                            <div  id="pswd_info" >
+                            		It is important to use a strong password
+                                  <p class="mb-0"><ul class="error">
+											        <li id="letter" class="invalid">At least <strong>one letter</strong></li>
+											        <li id="capital" class="invalid">At least <strong>one capital letter</strong></li>
+											        <li id="number" class="invalid">At least <strong>one number</strong></li>
+											        <li id="length" class="invalid">Be at least <strong>8 characters</strong></li>
+											    </ul>
+											</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>*Retype Password</label>
+                            <input required type="password" class="form-control" placeholder="Password" id="pass2">
+                            <div  id="pswd_match">
+                            	<p >Password Not Match</p>
 
+                            </div>
+                        </div>
+                        <script type="text/javascript">
 
+                        </script>
+                        <button type="submit" class="btn btn-primary btn-flat m-b-30 m-t-30" id="button">Register</button>
 
+                        <div class="register-link m-t-15 text-center">
+                            <p>Already have account ? <a href="index.php?p=login"> Sign in</a></p>
+                        </div>
+                    </form>
+                    <script type="text/javascript">
+                    	jQuery(document).ready(function(){
+                    		jQuery('#pass1').keyup(function() {
+							    var pswd = jQuery(this).val();
+							    
+
+							 	if ( pswd.length < 8 ) {
+								   jQuery('#length').removeClass('valid').addClass('invalid');
+								} else {
+								    jQuery('#length').removeClass('invalid').addClass('valid');
+								    
+								}
+								//validate letter
+								if ( pswd.match(/[A-z]/) ) {
+								    jQuery('#letter').removeClass('invalid').addClass('valid');
+								    
+
+								} else {
+								    jQuery('#letter').removeClass('valid').addClass('invalid');
+								}
+
+								//validate capital letter
+								if ( pswd.match(/[A-Z]/) ) {
+								    jQuery('#capital').removeClass('invalid').addClass('valid');
+								    
+								} else {
+								    jQuery('#capital').removeClass('valid').addClass('invalid');
+								}
+
+								//validate number
+								if ( pswd.match(/\d/) ) {
+								    jQuery('#number').removeClass('invalid').addClass('valid');
+								    
+								} else {
+								    jQuery('#number').removeClass('valid').addClass('invalid');
+								}
+							}).focus(function() {
+							    jQuery('#pswd_info').show();
+
+							    
+							}).blur(function() {
+							    jQuery('#pswd_info').hide();
+							});
+
+							jQuery('#pass2').keyup(function(){
+								
+								var pass1 = jQuery("#pass1").val();
+								var pass2 = jQuery(this).val();
+
+								if (pass1 == pass2 ){
+									jQuery('#pswd_match').hide();
+									jQuery("#button").show();
+								}else{
+									jQuery('#pswd_match').show();
+									jQuery("#button").hide();
+								}
+							}).blur(function(){
+								jQuery('#pswd_match').hide();
+							});
+						});
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
 
 	<?php
 }
 
 
 //show login
-function show_login(){
+function show_login($message=null){
 	?>
-	<div class="obj-center">
-		<form action="index.php" method="post" >
-			<input type="hidden" name="p" value="doLogin">
-			<table>
-				<tr>
-					<td><label for="email">Email address:</label></td>
-					<td><input type="text" class="form-control" name="username"></td>
-				</tr>
-				<tr>
-					<td><label for="pwd">Password:</label></td>
-					<td><input type="password" name="password" id="passinput"> </td>
-					
-				</tr>
-				<tr>
-					<td colspan="2" align="center"><input type="checkbox" onclick="showpass()">Show Password</td>	
-				</tr>
-				<script type="text/javascript">
-						function showpass() {
-						    var x = document.getElementById("passinput");
-						    if (x.type === "password") {
-						        x.type = "text";
-						    } else {
-						        x.type = "password";
-						    }
-						}
-					</script>
-				<tr>
-					<td colspan="2" class="center"><input type="submit" value="Submit"></td>
-				</tr>
-			</table>
-		</form>
+	
+ <div class=" sufee-login d-flex align-content-center flex-wrap content " >
+        <div class="content" >
+            <div class="login-content">
+            	<?php 		if($message !== null){
+            		echo '<div class="sufee-alert alert with-close alert-danger alert-dismissible fade show">
+                                            <span class="badge badge-pill badge-danger">Error</span> Incorrect Username or Password
+                                              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                              </div>';}?>
+           		<div class="login-logo">
+                    <a href="index.php">
+                        <img class="align-content" src="images/logo.png" alt="">
+                    </a>
+                </div>
+                <div class="login-form " >
+                    <form action="index.php" method="post">
+                    	<input type="hidden" name="p" value="doLogin">
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input type="text" class="form-control" placeholder="Username" name="username">
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" class="form-control" placeholder="Password" name="password">
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox"> Remember Me
+                            </label>
+                            <label class="pull-right">
+                                <a href="#">Forgotten Password?</a>
+                            </label>
+
+                        </div>
+                        <button type="submit" class="btn btn-success btn-flat m-b-30 m-t-30">Sign in</button>
+                    </form>
+                </div>
+            </div>
+        </div>
 	</div>
 
 	<?php
@@ -756,8 +836,8 @@ function doLogin($username,$password){
 		//header("location:index.php");
 		redirect('index.php');
 	}else{
-		//echo "error";
-		show_login();
+
+		show_login('error');
 	}
 }
 
