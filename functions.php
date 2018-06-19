@@ -16,7 +16,7 @@ function getParam($page){
 }
 
 function index(){
- 	if(isset($_SESSION['user'])){
+ 	if(is_logged() !== 404){
  		?>
 		<!-- Header-->
       <header id="header" class="header">
@@ -105,7 +105,7 @@ function index(){
                 <div class="col-sm-5">
                     <div class="user-area dropdown float-right">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img class="user-avatar rounded-circle" src="images/admin.jpg" alt="User Avatar">
+                            <img class="user-avatar rounded-circle" src="image/avatar   .jpg" alt="User Avatar">
                         </a>
 
                         <div class="user-menu dropdown-menu">
@@ -849,8 +849,11 @@ function doReg(){
 }
 
 function do_cert(){
-	
-	define('FPDF_FONTPATH','font');
+    echo "<div class='content mt-3'>";
+	echo "<embed src=\"certificate.php\" width=\"100%\" height=\"800px\">";
+    echo "</div>";
+
+    /*define('FPDF_FONTPATH','font');
 
 	$pdf = new FPDF();
 	$pdf->AddPage('L','Letter');
@@ -860,8 +863,8 @@ function do_cert(){
 	$pdf->SetXY(13,118);
 	$pdf->SetTextColor(45,50,125);
 	$pdf->Cell(10,0,'Darwin Buelo',0,0,'L');
-	return $pdf->Output();
-
+	$pdf->Output();
+    */
 }
 
 function is_logged(){

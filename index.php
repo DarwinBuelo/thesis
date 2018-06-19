@@ -259,7 +259,8 @@
 
 			 		break;
 			 	case 'cert':
-			 		redirect('certificate.php');
+			 		do_cert();
+			 		//redirect('certificate.php');
 				 	//header('Location : fpdftest.php');
 				 	break;
 
