@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
+	<!--<meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 	<title>Thesis</title>
@@ -13,6 +13,66 @@
 	<script type="text/javascript" src="js/angular.min.js"></script>
 	<script type="text/javascript" src="js/jquery.min.js"></script>
 	<script type="text/javascript" src="js/functions.js"></script>
+-->
+
+<!-- This will be the new UI  this is included in the theme-->
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>ASL Word Quiz</title>
+    <meta name="description" content="Sufee Admin - HTML5 Admin Template">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <link rel="apple-touch-icon" href="apple-icon.png">
+    <link rel="shortcut icon" href="favicon.ico">
+
+    <link rel="stylesheet" href="assets/css/normalize.css">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/themify-icons.css">
+    <link rel="stylesheet" href="assets/css/flag-icon.min.css">
+    <link rel="stylesheet" href="assets/css/cs-skin-elastic.css">
+    <!-- <link rel="stylesheet" href="assets/css/bootstrap-select.less"> -->
+    <link rel="stylesheet" href="assets/scss/style.css">
+    <link href="assets/css/lib/vector-map/jqvmap.min.css" rel="stylesheet">
+
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
+
+
+   <script src="assets/js/vendor/jquery-2.1.4.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
+   <script src="assets/js/plugins.js"></script>
+    <script src="assets/js/main.js"></script>
+
+
+    <script src="assets/js/lib/chart-js/Chart.bundle.js"></script>
+    <script src="assets/js/dashboard.js"></script>
+    <script src="assets/js/widgets.js"></script>
+    <script src="assets/js/lib/vector-map/jquery.vmap.js"></script>
+    <script src="assets/js/lib/vector-map/jquery.vmap.min.js"></script>
+    <script src="assets/js/lib/vector-map/jquery.vmap.sampledata.js"></script>
+    <script src="assets/js/lib/vector-map/country/jquery.vmap.world.js"></script>
+    <script>
+        ( function ( $ ) {
+            "use strict";
+
+            jQuery( '#vmap' ).vectorMap( {
+                map: 'world_en',
+                backgroundColor: null,
+                color: '#ffffff',
+                hoverOpacity: 0.7,
+                selectedColor: '#1de9b6',
+                enableZoom: true,
+                showTooltip: true,
+                values: sample_data,
+                scaleColors: [ '#1de9b6', '#03a9f5' ],
+                normalizeFunction: 'polynomial'
+            } );
+        } )( jQuery );
+    </script>
+
+
+
 </head>
 <body>
 	<?php
@@ -21,52 +81,59 @@
 
 	?>
 
-	<div class="container">
-		<!--header-->
-			<div class="header orange">
-				<h1>Word quiz Sign Language</h1>
-				<p>where everything has trust</p>
-				
-				<?php 
-					if (isset($_SESSION['user'])){
-						echo "<p class='right'>".$_SESSION['user']."</p>";
-					}
-				?>
-			</div>
+<!-- Left Panel start-->
+    <aside id="left-panel" class="left-panel">
+        <nav class="navbar navbar-expand-sm navbar-default">
 
-		<!-- Sidebar -->
-		<div class="sidenav emerald">
-			<?php
-				if(!isset($_SESSION['user'])){
-					echo '<a href="index.php?p=login">Login</a>';
-					echo "<a href=\"index.php?p=reg\">Register</a>";
-					//echo "<a href=\"index.php?p=cert\">Test Certificate Function</a>";
+            <div class="navbar-header">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-menu" aria-controls="main-menu" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand" href="./"><img src="image/logo.png" alt="Logo"></a>
+                <a class="navbar-brand hidden" href="./"><img src="image/logo.png" alt="Logo" width="30px"></a>
+            </div>
 
-				}else{
-					if ($_SESSION['privilege'] == 1){
-						echo "<a href=\"index.php?p=logout\">Logout</a>";
-						echo "<a href=\"index.php?p=profile\">Profile</a>";
-						echo "<a href=\"index.php?p=contentmgt\">Manage Content</a>";
+            <div id="main-menu" class="main-menu collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+	                <?php
+						if(!isset($_SESSION['user'])){
+							echo '<li><a href="index.php?p=login"><i class="menu-icon fa fa-sign-in"></i>Login </a></li>';
+							echo '<li><a href="index.php?p=reg"><i class="menu-icon fa fa-sign-in"></i>Register</a></li>';
+						}else{
+							if ($_SESSION['privilege'] == 1){
+								echo '<li><a href="index.php?p=logout"><i class="menu-icon fa fa-sign-in"></i>Login </a></li>';
+								echo '<li><a href="index.php?p=profile"><i class="menu-icon fa fa-sign-in"></i>Register</a></li>';
+								echo '<li><a href="index.php?p=contentmgt"><i class="menu-icon fa fa-sign-in"></i>Manage Content</a></li>';
+						
 
-					}else if($_SESSION['privilege'] == 0) {
-					echo "<a href=\"index.php?p=logout\">Logout</a>";
-					echo "<a href=\"index.php?p=profile\">Profile</a>";
-					echo "<a href=\"index.php?p=study\">Study</a>";
-					echo "<a href=\"index.php?p=mgAllImage\">Reference</a>";
-					echo "<a href=\"certificate.php\" target=\"_blank\">Get Certificate</a>";	
-					
-					}
+							}else if($_SESSION['privilege'] == 0) {
+								echo '<li><a href="index.php?p=logout"><i class="menu-icon fa fa-sign-in"></i>Logout</a></li>';
+								echo '<li><a href="index.php?p=profile"><i class="menu-icon fa fa-user"></i>Profile</a></li>';
+								echo '<li><a href="index.php?p=study"><i class="menu-icon fa fa-book"></i>Study</a></li>';
+								echo '<li><a href="index.php?p=mgAllImage"><i class="menu-icon fa fa-book"></i>Reference</a></li>';
+								echo '<li><a href="index.php?p=cert" target="blank"><i class="menu-icon fa fa-certificate"></i>Get Certificate</a></li>';
+							
+							}
 
-					
-				}
-			?>
-			<a href="index.php?p=about">About</a>
-		</div>
+							
+						}
+					?>
+                    <li>
+                    	<a href="index.php?p=about"><i class="menu-icon fa fa-info-circle"></i>About
+                    	</a>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </nav>
+    </aside>
+
+<!-- Left Panel Ends-->
 
 
-		<!-- Main content-->
-		<div class="content clouds">
-			<?php
+
+<!-- Right Panel Start-->
+   <div id="right-panel" class="right-panel">
+   		<?php
 
 			//Just Shows the Content
 
@@ -86,10 +153,12 @@
 			 		//Show the Login menu
 			 		show_login();
 			 		break;
+
 			 	case 'doLogin':
 			 		//verify Users Credentials
 			 		doLogin($_POST['username'],$_POST['password']);
 			 		break;
+
 			 	case 'reg':
 			 		//shows registration form
 			 		show_register();
@@ -146,7 +215,8 @@
 			 	case 'logout';
 			 		//logout from session
 			 		do_logout();
-			 		header("location:index.php");
+			 		redirect('index.php');
+			 		//header("location:index.php");
 			 		break;
 			 	
 			 	case 'contentmgt';
@@ -192,7 +262,8 @@
 
 			 		break;
 			 	case 'cert':
-				 	header('Location : fpdftest.php');
+			 		redirect('certificate.php');
+				 	//header('Location : fpdftest.php');
 				 	break;
 
 			 	case '403':
@@ -217,13 +288,13 @@
 
 
 			?>
-		</div>
-		<div class="footer asbestos">
-			<center>
-				<p>footer</p>
-			</center>
-		</div>
-	</div>
+
+   </div><!-- /#right-panel -->
+
+
+
+<!-- Right Panel Ends-->
+
 
 
 </body>
