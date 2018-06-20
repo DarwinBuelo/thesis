@@ -878,22 +878,6 @@ function do_logout(){
 }
 
 
-function rand_string( $length ) {
-    $length += 3;
-    $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";  
-    $str= "";
-    $size = strlen( $chars );
-    for( $i = 0; $i < $length; $i++ ) {
-            if($i == 5 || $i == 11 || $i == 17 )
-                $str .= '-';
-            else
-                $str .= $chars[ rand( 0, $size - 1 ) ];
-    }
-
-    return $str;
-}
-
-
 
 #################################################
 ###### FUNCTION for the Study Program	#########

@@ -1,0 +1,31 @@
+todo.txt
+
+
+====================================== 
+list of things to do.. 
+
+ ####-- code the study generating system.. 
+
+
+-- fix the certificate layout .. add some serial no. to the certificate and save the serial no. and certificate meta to the database.. 
+
+
+-- fix the UI of the site... make it more attractive.
+
+
+-- add the examming procedure.	
+
+	how the exam will work.....
+	// get the users log.. ( the actual time the user spend to a certain page.. thats the time he/she is currently studying the resource.)
+
+
+-- fix the registration.. 
+	-- auto capitalize the first name, last name and middle initial.
+	-- the password and repassword must also realtime checking
+	-- fix the user name checking.. for existing username in the database. 
+
+-- fix the database 
+	-- username must be unique.
+
+
+-- redesign the web app
