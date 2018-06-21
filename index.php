@@ -72,7 +72,7 @@
     </script>
 
 </head>
-<body>
+<body class="open">
 	<?php
 		require 'init.php';
 		session_start ();
@@ -108,7 +108,7 @@
 								echo '<li><a href="index.php?p=profile"><i class="menu-icon fa fa-user"></i>Profile</a></li>';
 								echo '<li><a href="index.php?p=study"><i class="menu-icon fa fa-book"></i>Study</a></li>';
 								echo '<li><a href="index.php?p=mgAllImage"><i class="menu-icon fa fa-book"></i>Reference</a></li>';
-								echo '<li><a href="index.php?p=cert" target="blank"><i class="menu-icon fa fa-certificate"></i>Get Certificate</a></li>';
+								echo '<li><a href="index.php?p=cert"><i class="menu-icon fa fa-certificate"></i>Get Certificate</a></li>';
 							
 							}
 
@@ -130,6 +130,66 @@
 
 <!-- Right Panel Start-->
    <div id="right-panel" class="right-panel">
+   	<?php if(is_logged() !== 404){
+?>   				<!-- Header-->
+      <header id="header" class="header">
+
+            <div class="header-menu">
+
+                <div class="col-sm-7">
+                    <a id="menuToggle" class="menutoggle pull-left"><i class="fa fa fa-tasks"></i></a>
+                    
+                  Welcome to Word Quiz Sign Language
+                </div>
+
+                <div class="col-sm-5">
+                    <div class="user-area dropdown float-right">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img class="user-avatar rounded-circle" src="image/avatar.jpg" alt="User Avatar">
+                        </a>
+
+
+                        
+
+                        <div class="user-menu dropdown-menu">
+                                <a class="nav-link" href="#"><i class="fa fa- user"></i>My Profile</a>
+
+                                <a class="nav-link" href="#"><i class="fa fa- user"></i>Notifications <span class="count">13</span></a>
+
+                                <a class="nav-link" href="#"><i class="fa fa -cog"></i>Settings</a>
+
+                                <a class="nav-link" href="index.php?p=logout"><i class="fa fa-power -off"></i>Logout</a>
+                        </div>
+                    </div>
+
+                    <div class="language-select dropdown" id="language-select">
+                        <a class="dropdown-toggle" href="#" data-toggle="dropdown"  id="language" aria-haspopup="true" aria-expanded="true">
+                            <i class="flag-icon flag-icon-us"></i>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="language" >
+                            <div class="dropdown-item">
+                                <span class="flag-icon flag-icon-fr"></span>
+                            </div>
+                            <div class="dropdown-item">
+                                <i class="flag-icon flag-icon-es"></i>
+                            </div>
+                            <div class="dropdown-item">
+                                <i class="flag-icon flag-icon-us"></i>
+                            </div>
+                            <div class="dropdown-item">
+                                <i class="flag-icon flag-icon-it"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </header>
+
+   <?php	}
+   		?>
+   	<div  class="content">
    		<?php
 
 			//Just Shows the Content
@@ -249,10 +309,11 @@
 			 				break;
 			 		}
 			 		
-
+			 			//when the user search something
 					if (isset($_POST['searchInput'])) {
 						show_searchResult($_POST['searchInput']);
 				 	}else{
+				 		//defualt display
 						show_searchResult();
 		 			}		 		
 			 		
@@ -260,8 +321,6 @@
 			 		break;
 			 	case 'cert':
 			 		do_cert();
-			 		//redirect('certificate.php');
-				 	//header('Location : fpdftest.php');
 				 	break;
 
 			 	case '403':
@@ -286,7 +345,6 @@
 
 
 			?>
-
    </div><!-- /#right-panel -->
 
 

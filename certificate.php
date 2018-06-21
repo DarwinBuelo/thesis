@@ -6,8 +6,7 @@ if(is_logged() == 404){
 	global $c;
 	$c->debug(is_logged());
 	echo"not logged";
-	
-	//header("location:index.php?p=403");
+	header("location:index.php?p=403");
 }else{
 define('FPDF_FONTPATH','font');
 $data = $c->select('user','id',$_SESSION['id']);
