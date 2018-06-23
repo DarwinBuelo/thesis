@@ -72,7 +72,7 @@
     </script>
 
 </head>
-<body class="open">
+<body >
 	<?php
 		require 'init.php';
 		session_start ();
@@ -98,15 +98,15 @@
 							echo '<li><a href="index.php?p=reg"><i class="menu-icon fa fa-sign-in"></i>Register</a></li>';
 						}else{
 							if ($_SESSION['privilege'] == 1){
-								echo '<li><a href="index.php?p=logout"><i class="menu-icon fa fa-sign-in"></i>Login </a></li>';
+								//echo '<li><a href="index.php?p=logout"><i class="menu-icon fa fa-sign-in"></i>Login </a></li>';
 								echo '<li><a href="index.php?p=profile"><i class="menu-icon fa fa-sign-in"></i>Register</a></li>';
 								echo '<li><a href="index.php?p=contentmgt"><i class="menu-icon fa fa-sign-in"></i>Manage Content</a></li>';
 						
 
 							}else if($_SESSION['privilege'] == 0) {
-								echo '<li><a href="index.php?p=logout"><i class="menu-icon fa fa-sign-in"></i>Logout</a></li>';
+								//echo '<li><a href="index.php?p=logout"><i class="menu-icon fa fa-sign-in"></i>Logout</a></li>';
 								echo '<li><a href="index.php?p=profile"><i class="menu-icon fa fa-user"></i>Profile</a></li>';
-								echo '<li><a href="index.php?p=study"><i class="menu-icon fa fa-book"></i>Study</a></li>';
+								echo '<li><a href="index.php?p=study"><i class="menu-icon ti-blackboard"></i>Study</a></li>';
 								echo '<li><a href="index.php?p=mgAllImage"><i class="menu-icon fa fa-book"></i>Reference</a></li>';
 								echo '<li><a href="index.php?p=cert"><i class="menu-icon fa fa-certificate"></i>Get Certificate</a></li>';
 							
@@ -130,8 +130,7 @@
 
 <!-- Right Panel Start-->
    <div id="right-panel" class="right-panel">
-   	<?php if(is_logged() !== 404){
-?>   				<!-- Header-->
+				<!-- Header-->
       <header id="header" class="header">
 
             <div class="header-menu">
@@ -141,7 +140,8 @@
                     
                   Welcome to Word Quiz Sign Language
                 </div>
-
+   	<?php if(is_logged() !== 404){
+?>   
                 <div class="col-sm-5">
                     <div class="user-area dropdown float-right">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -152,11 +152,7 @@
                         
 
                         <div class="user-menu dropdown-menu">
-                                <a class="nav-link" href="#"><i class="fa fa- user"></i>My Profile</a>
 
-                                <a class="nav-link" href="#"><i class="fa fa- user"></i>Notifications <span class="count">13</span></a>
-
-                                <a class="nav-link" href="#"><i class="fa fa -cog"></i>Settings</a>
 
                                 <a class="nav-link" href="index.php?p=logout"><i class="fa fa-power -off"></i>Logout</a>
                         </div>
@@ -183,12 +179,13 @@
                     </div>
 
                 </div>
+
+   <?php	}
+   		?>
             </div>
 
         </header>
 
-   <?php	}
-   		?>
    	<div  class="content">
    		<?php
 

@@ -25,6 +25,8 @@ class dbcon
 	public $mname;
 
 
+	public $limit = 2 ;
+
 
 	//Connect to the database
 
@@ -36,19 +38,21 @@ class dbcon
 			echo "<pre>".$e."</pre>";
 		}
 	}
-
-	function search($data=null,$table='content'){
+// make some pagination in this area
+	function search($data=null,$offset,$table='content'){
 		$this->connect();
 		$data = $this->clean($data);
-		
+		$offset = 0;
 
 		if ($data == "") {
-			$query = "SELECT * FROM $table";
+			$query = "SELECT * FROM $table LIMIT  ".$this->limit ." OFFSET  ".$offset;
+			$this->debug($query);
 		}else{
-			$query = "SELECT * FROM $table WHERE note LIKE '%$data%' OR title LIKE '%$data%' OR english LIKE '%$data%' OR tagalog LIKE '%$data%' OR bicol LIKE '%$data%'";	
+			$query = "SELECT * FROM $table WHERE note LIKE '%$data%' OR title LIKE '%$data%' OR english LIKE '%$data%' OR tagalog LIKE '%$data%' OR bicol LIKE '%$data%' ";	
 		}
 		
-		$result = mysqli_query($this->conn,$query);
+		$result = $this->execute($query);
+		return $result->fetch_all(MYSQLI_ASSOC);
 		if($result->num_rows == 0){
 			return false;
 		}else{
@@ -252,6 +256,12 @@ class dbcon
 		$this->user =$_SESSION['user'];
 	}
 
+	function page_selectAll($offset =1,$rowsperpage=1){
+		$query ='SELECT * FROM content LIMIT 3 OFFSET 0';
 
+		$data = mysqli_fetch_assoc($this->execute($query));
+
+		return $data;
+	}
 }
 ?>

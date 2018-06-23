@@ -17,11 +17,9 @@ function getParam($page){
 
 function index(){
  	if(is_logged() !== 404){
- 		?>
-
-        <!-- Header-->
-		
- 		<?php
+ 		global $c;
+        $data = $c->page_selectAll(1);
+        $c->debug($data);
  	}
  	else{
  		?>
@@ -48,29 +46,35 @@ function index(){
 
 
 function profile(){
+    global $c;
+    $userProgress = $c->select('progress','id',$_SESSION['id']);
+
 	?>
-
-	<table width="100%">
-		<tr>
-			<td>Name</td>
-			<td>
-				<?php 
-					echo $_SESSION['name']." ".$_SESSION['mname']." ".$_SESSION['lastname'] ;
-				?></td>
-			<td>&nbsp</td>
-		</tr>
-		<tr>
-			<td>Birthday</td>
-			<td><?php  echo $_SESSION['bday']; ?></td>
-	</table>
-
-
-
+    <div class="col-sm-4">
+    <div class="card">
+        <div class="card-header">
+           <strong class="card-title mb-3">Profile Card </strong>
+        </div>
+        <div class="card-body">
+            <div class="mx-auto d-block">
+                <img class="rounded-circle mx-auto d-block" src="image/avatar.jpg" alt="Card image cap">
+                <h5 class="text-sm-center mt-2 mb-1"><?php 
+                    echo $_SESSION['name']." ".$_SESSION['mname']." ".$_SESSION['lastname'] ;
+                ?></h5>
+                <table class="table">
+                    <tr>
+                        <td>Level</td>
+                        <td><?php echo (sizeof($userProgress) !== 0) ? $userProgress['level'] : '1';?></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+	</div>
 	<?php
 }
 
 /* This part make the page front end with the Prefix Show*/
-
 function show_register(){
 	//just shows the registration
 
@@ -213,7 +217,7 @@ function show_register(){
 function show_login($message=null){
 	?>
 	
- <div class=" sufee-login d-flex align-content-center flex-wrap content " >
+    <div class=" sufee-login d-flex align-content-center flex-wrap content " >
         <div class="content" >
             <div class="login-content">
             	<?php 		if($message !== null){
@@ -237,15 +241,7 @@ function show_login($message=null){
                             <label>Password</label>
                             <input type="password" class="form-control" placeholder="Password" name="password">
                         </div>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox"> Remember Me
-                            </label>
-                            <label class="pull-right">
-                                <a href="#">Forgotten Password?</a>
-                            </label>
 
-                        </div>
                         <button type="submit" class="btn btn-success btn-flat m-b-30 m-t-30">Sign in</button>
                     </form>
                 </div>
@@ -505,39 +501,42 @@ function show_viewDetails($id){
 
 	//create the view for the user
 	?>
+    
 
-	<div class="modal" >
-		<div class="content">
+    <?php echo'<div class="modal_new" id="'.$result[0]['id'].'">';  ?>
+	
+		<div class="modalContent">
 			<div class="header">
 				Details of <?php echo $result[0]['title'];?>
 			</div>
-			<table width="100%" >
+			<table class="table">
 				<tr>
-					<td rowspan="5" width="50%" class="center">
+					<td rowspan="5" >
 						<?php
 							echo '<img src="media/images/'.$result[0]['media_link'].'" width="375px" height="450px">';
 						?>
 					</td>
-					<td width="25%" class="center">English : </td>
-					<td width="25%" class="center"><?php echo $result[0]['english'];?></td>
+					<td>English : </td>
+					<td><?php echo $result[0]['english'];?></td>
 				</tr>
 				<tr>
-					<td class="center"> Tagalog : </td>
-					<td class="center"> <?php echo $result[0]['tagalog'];?> </td>
+					<td > Tagalog : </td>
+					<td > <?php echo $result[0]['tagalog'];?> </td>
 				</tr>
 				<tr>
-					<td class="center"> Bicol : </td>
-					<td class="center"> <?php echo $result[0]['bicol'];?> </td>
+					<td > Bicol : </td>
+					<td > <?php echo $result[0]['bicol'];?> </td>
 				</tr>
 				<tr>
-					<td class="center" rowspan="2"> Note : </td>
-					<td class="center" rowspan="2"> <?php echo $result[0]['note'];?> </td>
+					<td > Note : </td>
+					<td > <?php echo $result[0]['note'];?> </td>
 				</tr>
 				
 			</table>
 			<div class="footer">
-				<button onclick="toggleModal('modal')"> Close</button>
-				<script type="text/javascript" src="js/functions.js"></script>
+				<button onclick="toggleModal(<?php echo $result[0]['id'] ?>)"> Close</button>
+
+ 
 			</div>
 		</div>
 	</div>
@@ -562,9 +561,8 @@ function show_searchResult($data=null){
                 <th scope="col">Id</th>
 				<th scope="col">Thumbnail</th>
 				<th scope="col">English</th>
-				<th scope="col">Tagalog</th>
-                <th scope="col">Bicol</th>
-				<th scope="col">Note</th>
+				<th scope="col" >Defination</th>
+                <th scope="col" >Tagalog</th>
 				<th scope="col">Options</th>
 			</tr>
 		<?php
@@ -579,32 +577,41 @@ function show_searchResult($data=null){
 					<img src=<?php echo "'media/images/".$key['media_link']."'" ?> width="75px" height="100px">
 				</td>
 				<td><?php echo $key['english']?></td>
-				<td><?php echo $key['tagalog']?></td>
-                <td><?php echo $key['bicol']?></td>
-				<td><?php echo $key['note']?></td>
+                <td><?php echo $key['tagalog']?></td>
+				<td><?php echo $key['defination']?></td>
+                
 				<td>
+                    <button class="btn btn-sm btn-primary"  onclick="toggleModal(<?php echo $key['id'] ?>)">View</button>
 					<?php 
-					echo "<a href=\"index.php?p=mgAllImage&task=view&id=".$key['id']."\"> View </a>";
-
 					if ($_SESSION['privilege'] == 1){
-						echo "<a href=\"index.php?p=upImage&id=".$key['id']."&t=edit\"
-					
-				>Edit </a>";
-					 echo "<a href=\"index.php?p=mgAllImage&task=del&id=".$key['id']."&file=".$key['media_link']."\"
-				>Delete</a>";
-			}
-				?>
-					
+						echo "<a href=\"index.php?p=upImage&id=".$key['id']."&t=edit\">Edit </a>";
+					 echo "<a href=\"index.php?p=mgAllImage&task=del&id=".$key['id']."&file=".$key['media_link']."\">Delete</a>";
+			         }
+				        ?>
 				</td>
 			</tr>
+            <tr>
+                <td colspan="7">
+                    <?php show_viewDetails($key['id'])?>
+                </td>
+            </tr>
 			<?php
-			}
-		}
-
+			} // close tag for foreach loop
+		} //close tag for else statement
 			?>
-
-		</table>
-		</div><?php			
+    	</table>
+        <!-- can be move to a different place so we do not repeat the code-->
+        <script type="text/javascript" > function toggleModal(id){
+             var modalStat = jQuery('#'+id).css('display');
+             
+             if (modalStat == 'block'){
+                jQuery('#'+ id).css('display','none');
+             }else{
+                jQuery('#'+ id).css('display','block');
+             }
+            }
+        </script>
+	</div><?php			
 }
 function show_msgModal($msg){
 	?>
@@ -723,7 +730,7 @@ function doLogin($username,$password){
 	if ($check == true){
 		//echo "welcome";
 		//header("location:index.php");
-		redirect('index.php');
+		redirect('index.php?p=profile');
 	}else{
 
 		show_login('error');
@@ -739,20 +746,6 @@ function doReg(){
 
 function do_cert(){
 	echo "<embed src=\"certificate.php\" width=\"100%\" height=\"800px\">";
-    
-
-    /*define('FPDF_FONTPATH','font');
-
-	$pdf = new FPDF();
-	$pdf->AddPage('L','Letter');
-	$pdf->AddFont('ananda','R');
-	$pdf->SetFont('ananda','R',40);
-	$pdf->Image('media/images/cert.jpg',0,0,-300,-300);
-	$pdf->SetXY(13,118);
-	$pdf->SetTextColor(45,50,125);
-	$pdf->Cell(10,0,'Darwin Buelo',0,0,'L');
-	$pdf->Output();
-    */
 }
 
 function is_logged(){
