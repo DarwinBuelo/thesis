@@ -17,9 +17,7 @@ function getParam($page){
 
 function index(){
  	if(is_logged() !== 404){
- 		global $c;
-        $data = $c->page_selectAll(1);
-        $c->debug($data);
+ 		redirect('index.php?p=profile');
  	}
  	else{
  		?>
@@ -49,6 +47,7 @@ function profile(){
     global $c;
     $userProgress = $c->select('progress','id',$_SESSION['id']);
 
+    show_msgModal('nenen');
 	?>
     <div class="col-sm-4">
     <div class="card">
@@ -260,73 +259,101 @@ function show_about(){
 //show upload Image for uploading and editing
 function show_upImage($id=null){
 	if ($_SESSION['privilege'] == 1){
+        if (!is_numeric($id)){
+
+            $msg = $id;
+            $id =null;
+            switch ($msg) {
+                case 'complete':    
+                ?>
+                    <div class="sufee-alert alert with-close alert-success alert-dismissible fade show">
+                        <span class="badge badge-pill badge-success">Success</span> Upload Complete
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                     </div>
+                <?php 
+                break;
+
+                case 'error':
+                ?>
+                    <div class="sufee-alert alert with-close alert-danger alert-dismissible fade show">
+                        <span class="badge badge-pill badge-danger">Error</span> Error occured while uploading
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                     </div>
+                <?php 
+
+                break;
+                
+                default:
+                    # code...
+                    break;
+            }
+        
+        }
+        
 	if($id == null ){
 		?>
-			<div class="modal" >
-				<div class="content">
-					<div class="header">
-						Upload Image
+			<div class="col-lg-12 col-md-4" >
+				<div class="card ">
+					<div class="card-header text-center">
+						<h2><b>Upload Image</b></h2>
 					</div>
-					<form action="index.php?p=doUpload" method="post" enctype="multipart/form-data">
-						<table width="100%" style="margin:auto;">
-							<tr>
-								<td rowspan="9" align="center">
-									<img src="#" id="preview" width="375px" height="450px">
-								</td>
-							</tr>
-							<tr>
-								<td colspan="2">
-									<input type="file" name="image" id="imageIn">
-									<script type="text/javascript">
-										$("#imageIn").change(function() {
-											readURL(this);
-										});
-									</script>
-								</td>
-							</tr>
-							<tr>
-								<td>Title :</td>
-								<td><input type="text" name="title"></td>
-							</tr>
-							<tr>
-								<td>Category :</td>
-								<td>
-									<select name =level>
-										<option value="1">Letters</option>
-										<option value="2">Words</option>
-										<option value="3">Phrases</option>
-									</select>
-								</td>
-							</tr>
-							<tr>
-								<td>English :</td>
-								<td><input type="text" name="english"></td>
-							</tr>
-							<tr>
-								<td>Tagalog :</td>
-								<td>
-									<input type="text" name="tagalog">
-								</td>
-							</tr>
-							<tr>
-								<td>Bicol :</td>
-								<td><input type="text" name="bicol"></td>
-							</tr>
-							<tr>
-								<td>Notes :</td>
-								<td><textarea type="text" rows="10" name="note"></textarea></td>
-							</tr>
-							<tr>
-								<td colspan="2">
-									<input type="submit" name="submit" value="upload">
-								</td>
-							</tr>
-						</table>
-					</form>
-					<div class="footer">
-						<button onclick="toggleModal('modal')"> Close</button>
-						<script type="text/javascript" src="js/functions.js"></script>
-					</div>
+                    <div class="card-body">
+                        <form action="index.php?p=doUpload" method="post" enctype="multipart/form-data">
+                        <table width="100%" style="margin:auto;">
+                            <tr>
+                                <td rowspan="9" align="center">
+                                    <img src="image/defualt-size.jpg" id="preview" class="imgholder">
+}
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <input type="file" name="image" id="imageIn">
+                                   
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Title :</td>
+                                <td><input type="text" name="title"></td>
+                            </tr>
+                            <tr>
+                                <td>Category :</td>
+                                <td>
+                                    <select name =level>
+                                        <option value="1">Letters</option>
+                                        <option value="2">Words</option>
+                                        <option value="3">Phrases</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>English :</td>
+                                <td><input type="text" name="english"></td>
+                            </tr>
+                            <tr>
+                                <td>Tagalog :</td>
+                                <td>
+                                    <input type="text" name="tagalog">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Bicol :</td>
+                                <td><input type="text" name="bicol"></td>
+                            </tr>
+                            <tr>
+                                <td>Notes :</td>
+                                <td><textarea type="text" rows="10" name="note"></textarea></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <input type="submit" name="submit" value="upload">
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                    </div>
+					
 				</div>
 				</div>
 			<?php
@@ -338,76 +365,82 @@ function show_upImage($id=null){
 		$key = $result[0];
 
 		?>
-			<div class="modal" >
-				<div class="content">
-					<div class="header">
-						Upload Image
-					</div>
+			<div class="col-lg-12 col-md-4" >
+                <div class="card animated fadeIn">
+                    <div class="card-header text-center">
+                        <h2><b>Edit Image</b></h2>
+                    </div>
+                    <div class="card-body">
 					<form action="index.php?p=doUpload" method="post" enctype="multipart/form-data">
-					<?php
-						echo "<input type='hidden' name='t' value='".$key['id']."'>";
-					?>
-						<table width="100%" style="margin:auto;">
-							<tr>
-								<td rowspan="9" align="center">
-									<?php
-										echo '<img src="media/images/'.$key['media_link'].'" id="preview" width="375px" height="450px">';
-									?>
-								</td>
-							</tr>
-							<tr>
-								<td colspan="2">
-									<input type="file" name="image" id="imageIn">
-									<script type="text/javascript">
-										$("#imageIn").change(function() {
-											readURL(this);
-										});
-									</script>
-								</td>
-							</tr>
-							<tr>
-								<td>Title :</td>
-								<td>
-									<?php echo '<input type="text" name="title" value="'.$key['title'].'">';?>
-									
-								</td>
-							</tr>
-							<tr>
-								<td>Category :</td>
-								<td>
-									<select name =level>
-										<?php 
-											switch ($key['level']) {
-												case '1':
-													echo '
-														<option value="1" selected>Letters</option>
-														<option value="2">Words</option>
-														<option value="3">Phrases</option>';
-													break;
-												case '2':
-													echo '
-														<option value="1" >Letters</option>
-														<option value="2" selected>Words</option>
-														<option value="3">Phrases</option>';
-													break;
-												case '3':
-													echo '
-														<option value="1" >Letters</option>
-														<option value="2">Words</option>
-														<option value="3" selected>Phrases</option>';
-													break;
-												
-												default:
-													echo '
-														<option value="1" >Letters</option>
-														<option value="2">Words</option>
-														<option value="3" selected>Phrases</option>';
-													break;
-											}
-										?>
-									</select>
-								</td>
-							</tr>
+    					<?php
+    						echo "<input type='hidden' name='t' value='".$key['id']."'>";
+    			 		?>
+                        <div class="col-sm-6 col-md-12 text-center">
+                            <div class="col-sm-6">
+                                <?php
+                                    echo '<img class="imgholder" src="media/images/'.$key['media_link'].'" id="preview" width="375px" height="450px">';
+                                ?>                
+                            </div>
+                        <!-- image input form -->
+                        <div class="col-md-6  col-sm-6 ">
+                            <div class="col-sm-2">
+                                File :    
+                            </div>
+                            <div class="col-sm-2   ml-auto">
+                            <input type="file" name="image" id="imageIn">
+                        </div>
+                        </div>
+                        <!---->
+                        <div class="col-md-6 col-sm-6">
+                            <div class="col-sm-2">
+                                Title :    
+                            </div>
+                            <div class="col-sm-2   ml-auto">
+                                <?php echo '<input type="text" name="title" value="'.$key['title'].'">';?>    
+                            </div>
+                        </div>
+                        <div class="col-md-6 offset-md-4  col-sm-6 ">
+                            <div class="col-sm-4 col-md-4">
+                                Category : 
+                            </div>
+                            <div class="col-sm-2   ml-auto">
+                            <select name =level>
+                                <?php 
+                                    switch ($key['level']) {
+                                        case '1':
+                                            echo '
+                                                <option value="1" selected>Letters</option>
+                                                <option value="2">Words</option>
+                                                <option value="3">Phrases</option>';
+                                                break;
+                                        case '2':
+                                            echo '
+                                                <option value="1" >Letters</option>
+                                                <option value="2" selected>Words</option>
+                                                <option value="3">Phrases</option>';
+                                             break;
+                                        case '3':
+                                            echo '
+                                                <option value="1" >Letters</option>
+                                                <option value="2">Words</option>
+                                                <option value="3" selected>Phrases</option>';
+                                            break;
+                                                
+                                        default:
+                                            echo '
+                                                <option value="1" >Letters</option>
+                                                <option value="2">Words</option>
+                                                <option value="3" selected>Phrases</option>';
+                                            break;
+                                        }
+                                ?>
+                            </select>
+                        </div>
+                        </div>
+                         </div>
+                       <!--
+                       <table>
+                       
 							<tr>
 								<td>English :</td>
 								<td>
@@ -447,14 +480,30 @@ function show_upImage($id=null){
 									<input type="submit" name="submit" value="upload">
 								</td>
 							</tr>
-						</table>
+						</table> -->
 					</form>
-					<div class="footer">
-						<button onclick="toggleModal('modal')"> Close</button>
-						<script type="text/javascript" src="js/functions.js"></script>
-					</div>
+
 				</div>
-				</div>
+			</div>
+        </div>
+
+         <script type="text/javascript">
+                jQuery("#imageIn").change(function() {
+                     readURL(this);
+                });
+
+                function readURL(input) {
+                    if (input.files && input.files[0]) {
+                        var reader = new FileReader();
+
+                        reader.onload = function(e) {
+                            jQuery('#preview').attr('src', e.target.result);
+                        }
+
+                        reader.readAsDataURL(input.files[0]);
+                        }
+                }
+        </script>
 			<?php
 
 	}
@@ -464,8 +513,27 @@ function show_upImage($id=null){
 //shows the Content Manager
 function show_ContentMgt(){
 	?>
-		<a href="index.php?p=upImage"> Upload New Image</a><br>
-		<a href="index.php?p=mgAllImage"> Show all Images</a>
+    <div class="col-lg-3">
+        <div class="card">
+            <a href="index.php?p=upImage">
+            <div class="card-body color-">
+                <h1 class="text-center"><i class="fa fa-upload"></i></h1>
+                <h3 class="text-center">Upload New Content</i></h3>
+            </div>
+        </a>
+        </div>
+    </div>
+        
+        <div class=" col-lg-3 col-md-4">
+        <div class="card">
+            <a href="index.php?p=mgAllImage">
+            <div class="card-body color-">
+                <h1 class="text-center"><i class="fa fa-upload"></i></h1>
+                <h3 class="text-center">Show All Content</i></h3>
+            </div>
+        </a>
+        </div>
+    </div>
 
 	<?php
 }
@@ -492,6 +560,95 @@ function show_searchInput(){
 	
 	<?php
 }
+//do the searching for mgAllImage
+function show_searchResult($data=null,$page=0){
+        // set the value of page to 1 if the value is smaller
+        // than 0 and set convert the string to integer if the
+        // $page is a string
+        intval($page )<= 0 ? $page = 1 : $page = intval($page);
+        
+        global $c;
+        $result = $c->search($data,$page);
+        ?>
+
+        <div class="card-header">
+            <strong class="card-title">Results</strong>
+        </div>
+        <div class="card-body">
+        <table class="table">
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Thumbnail</th>
+                <th scope="col">English</th>
+                <th scope="col" >Defination</th>
+                <th scope="col" >Tagalog</th>
+                <th scope="col">Options</th>
+            </tr>
+        <?php
+        if( $result == false){
+            echo "<tr class='center'><td colspan='5'><h2>No Record Found</h2></td></tr>";
+        
+        }else{
+
+            foreach ($result as $key) {
+            ?>
+            <tr class="center">
+                <th scope="row"><?php echo $key['id']?></th>
+                <td >
+                    <img src=<?php echo "'media/images/".$key['media_link']."'" ?>  class="zoom" width="75px" height="100px">
+                </td>
+                <td><?php echo $key['english']?></td>
+                <td><?php echo $key['tagalog']?></td>
+                <td><?php echo $key['defination']?></td>
+                
+                <td>
+                    <button class="btn btn-sm btn-primary"  onclick="toggleModal(<?php echo $key['id'] ?>)">View</button>
+                    <?php 
+                    if (is_logged() == 1){
+                        echo "<a href=\"index.php?p=upImage&id=".$key['id']."&task=edit\">Edit </a>";
+                     echo "<a href=\"index.php?p=mgAllImage&task=del&id=".$key['id']."&file=".$key['media_link']."\">Delete</a>";
+                     }
+                        ?>
+                </td>
+            </tr>
+            <tr class="pb-0">
+                <td colspan="7">
+                    <?php show_viewDetails($key['id'])?>
+                </td>
+            </tr>
+            <?php
+            } // close tag for foreach loop
+        } //close tag for else statement
+            ?>
+        </table>
+        <?php
+
+            //generate a pagination
+            $result = $c->execute("SELECT COUNT(id) FROM content");  
+            $row =mysqli_fetch_row($result);
+            $total_records = $row[0];  
+            $total_pages = ceil($total_records / $c->limits);  
+            $pagLink = "<nav ='nav-page'>Page:<ul class='pagination'>";  
+            for ($i=1; $i<=$total_pages; $i++) {  
+                         $pagLink .= "<li><a href='index.php?p=mgAllImage&page=".$i."'>".$i."</a></li>";  
+            };  
+            echo $pagLink . "</ul></nav>"; 
+            //echo "<a href='index.php?p=mgAllImage&page=2'>2</>";
+
+        ?>
+
+        <!-- Script for toggling the modal_new -->
+        <script type="text/javascript" > function toggleModal(id){
+             var modalStat = jQuery('#'+id).css('display');
+             
+             if (modalStat == 'block'){
+                jQuery('#'+ id).css('display','none');
+             }else{
+                jQuery('#'+ id).css('display','block');
+             }
+            }
+        </script></div><?php         
+}
 
 function show_viewDetails($id){
 	
@@ -503,7 +660,7 @@ function show_viewDetails($id){
 	?>
     
 
-    <?php echo'<div class="modal_new" id="'.$result[0]['id'].'">';  ?>
+    <?php echo'<div class="modal_new animated fadeIn" id="'.$result[0]['id'].'">';  ?>
 	
 		<div class="modalContent">
 			<div class="header">
@@ -513,7 +670,7 @@ function show_viewDetails($id){
 				<tr>
 					<td rowspan="5" >
 						<?php
-							echo '<img src="media/images/'.$result[0]['media_link'].'" width="375px" height="450px">';
+							echo '<img src="media/images/'.$result[0]['media_link'].'" width="375px" height="450px" class="zoom2">';
 						?>
 					</td>
 					<td>English : </td>
@@ -534,7 +691,7 @@ function show_viewDetails($id){
 				
 			</table>
 			<div class="footer">
-				<button onclick="toggleModal(<?php echo $result[0]['id'] ?>)"> Close</button>
+				<button class="btn btn-success"onclick="toggleModal(<?php echo $result[0]['id'] ?>)"> Close</button>
 
  
 			</div>
@@ -543,87 +700,27 @@ function show_viewDetails($id){
 	<?php
 }
 
-//do the searching for mgAllImage
-function show_searchResult($data=null){
-		?>
 
-		<div class="card-header">
-            <strong class="card-title">Results</strong>
-        </div>
-        <div class="card-body">
-		<table class="table">
-		<?php
-		global $c;
-		$result = $c->search($data);
-		
-		?>
-			<tr>
-                <th scope="col">Id</th>
-				<th scope="col">Thumbnail</th>
-				<th scope="col">English</th>
-				<th scope="col" >Defination</th>
-                <th scope="col" >Tagalog</th>
-				<th scope="col">Options</th>
-			</tr>
-		<?php
-		if( $result == false){
-			echo "<tr class='center'><td colspan='5'><h2>No Record Found</h2></td></tr>";
-		}else{
-			foreach ($result as $key) {
-			?>
-			<tr class="center">
-                <th scope="row"><?php echo $key['id']?></th>
-				<td >
-					<img src=<?php echo "'media/images/".$key['media_link']."'" ?> width="75px" height="100px">
-				</td>
-				<td><?php echo $key['english']?></td>
-                <td><?php echo $key['tagalog']?></td>
-				<td><?php echo $key['defination']?></td>
-                
-				<td>
-                    <button class="btn btn-sm btn-primary"  onclick="toggleModal(<?php echo $key['id'] ?>)">View</button>
-					<?php 
-					if ($_SESSION['privilege'] == 1){
-						echo "<a href=\"index.php?p=upImage&id=".$key['id']."&t=edit\">Edit </a>";
-					 echo "<a href=\"index.php?p=mgAllImage&task=del&id=".$key['id']."&file=".$key['media_link']."\">Delete</a>";
-			         }
-				        ?>
-				</td>
-			</tr>
-            <tr>
-                <td colspan="7">
-                    <?php show_viewDetails($key['id'])?>
-                </td>
-            </tr>
-			<?php
-			} // close tag for foreach loop
-		} //close tag for else statement
-			?>
-    	</table>
-        <!-- can be move to a different place so we do not repeat the code-->
-        <script type="text/javascript" > function toggleModal(id){
-             var modalStat = jQuery('#'+id).css('display');
-             
-             if (modalStat == 'block'){
-                jQuery('#'+ id).css('display','none');
-             }else{
-                jQuery('#'+ id).css('display','block');
-             }
-            }
-        </script>
-	</div><?php			
-}
 function show_msgModal($msg){
 	?>
-		<div class="modal2">
-			<div class="content center">
+		<div class="modal_new">
+			<div class="modalContent center">
 				<?php echo '<h3>'.$msg.'</h3>';?>
 				<div class="footer">
 					<button onclick="toggleModal('modal2')"> Close</button>
-					<script type="text/javascript" src="js/functions.js"></script>
+					
 				</div>
 			</div>	
 		</div>
+        <script type="text/javascript"> function toggleModal(modal){
+     var modalStat = jQuery('.'+modal).css('display');
+     
+     if (modalStat == 'block'){
+        jQuery('.'+modal).css('display','none');
+     }else{
+        jQuery('.'+ modal).css('display','block');
+     }
+}</script>
 
 
 
@@ -675,7 +772,6 @@ function do_upload($data=null){
 		if($upImage->uploaded){
 			$upImage->Process('media/images');
 			if($upImage->processed){
-				echo 'original image copied';
 				$query= "INSERT INTO content
 					(userid, 
 					 title,
@@ -698,10 +794,11 @@ function do_upload($data=null){
 					)" ;
 				global $c;
 				$c->execute($query);
-				return 'Upload Complete';
+				return 'complete';
 			}else{
-				return 'error occured: '.$upImage->error;
-			}
+				return 'error';
+
+            }
 		}
 	}else{
 		$query= "UPDATE content SET 
@@ -715,9 +812,9 @@ function do_upload($data=null){
 					WHERE id = '".$data."'";
 		global $c;
 		if ($c->execute($query)){
-			return 'Update Complete';
+			return 'complete';
 		}else{
-			return "Error Occured while uploading";
+			return "error";
 		}
 	} 
 }
@@ -736,7 +833,6 @@ function doLogin($username,$password){
 		show_login('error');
 	}
 }
-
 
 //do Registration
 function doReg(){
@@ -770,12 +866,15 @@ function do_logout(){
 #### id , userid , studyResource, date, level, stat
 	
 
+
+// this function show the study materials based on the database.
 function show_study($current){
 	global $c;
 
 	echo '<p>Hello '.$_SESSION['name'].'</p>';
 
 	// check if the user already had a record in the database
+    // if the user  has no record it will generate the study material.
 	if($c->get_progress($_SESSION['id'])){
 		$array = get_studyMaterial($_SESSION['id']);
 		show_studyList($array);
@@ -793,30 +892,26 @@ function show_studyList($array){
 	global $c;
 	//check if the array is not null and is an actual array
 	if (is_array($array) and $array !== null){
-		?>
-		<table width="100%">
-		<?php
-		foreach ($array as $key) {
-			$result = $c->select('content','id',$key);
-			?>
-
-				<tr> 
-					<td><?php echo '<img src="media/images/'.$result[0]['media_link'].'" width="100px" height="125px">'?>
-					</td>
-					<td>
-						<?php echo '<h2>'.$result[0]['title'].'</h2>'?>
-					</td>
-					<td>
-
-						<?php echo "<button onclick=\"toggleModalId('modal_".$key."')\">View</button>" ?>
-
-					</td>
-				</tr>
-				
-			<?php
-		}
-		?></table>
-		<?php 
+        foreach ($array as $key) {
+            $result = $c->select('content','id',$key);
+            ?>
+            <div class="col-lg-4 col-md-6">
+                <div class="card">
+                <div class="card-header">
+                    <stong class="card-title"><?php echo $result[0]['title']?></stong>
+                </div>
+                <div class="card-body">
+                    <div class="mx-auto d-block">
+                    <?php echo '<img class="mx-auto d-block zoom2" src="media/images/'.$result[0]['media_link'].'" width="100px" height="125px"></div>';   
+                          echo "<div class='text-sm-center'><a href='#' onclick=\"toggleModalId('modal_".$key."')\">View</a></div>";
+                    ?>
+                 </div> 
+                </div>
+            </div>
+     
+                <?php
+                }
+  
 
 		//generate the modal.. by running another foreach loop to the array
 		// we cannot include this one to the foreach load from the top because t
@@ -825,6 +920,20 @@ function show_studyList($array){
 			# code...
 			generate_modal($key);
 		}
+        ?>
+        <script type="text/javascript">
+            function toggleModalId(modal){
+                 var modalStat = jQuery('#'+modal).css('display');
+                 
+                 if (modalStat == 'block'){
+                    jQuery('#'+modal).css('display','none');
+                 }else{
+                    jQuery('#'+ modal).css('display','block');
+                 }
+            }
+        </script>
+
+        <?php
 		
 	}
 }
@@ -867,18 +976,25 @@ function get_studyMaterial($id){
 function generate_modal($id){
 	global $c ;
 	$result = $c->select('content','id',$id);
-	?>
-	<div class="modal" id=<?php echo '"modal_'.$id.'"';?>>
-		<div class="content">
-			<table width="100%" >
+	echo '<div class="modal_new_2 animated fadeIn" id="modal_'.$id.'">';
+    ?>
+   
+		<div class="modalContent "> 
+            <?php
+                echo "<a  href=\"#\"onclick=\"toggleModalId('modal_".$id."')\"><div class=\"close\">
+                x </div></a>";
+                
+                ?>
+           
+			<table class="table" >
 				<tr>
-					<td rowspan="5" width="50%" class="center">
+					<td rowspan="4" class="center">
 						<?php
-							echo '<img src="media/images/'.$result[0]['media_link'].'" width="375px" height="450px">';
+							echo '<img src="media/images/'.$result[0]['media_link'].'" width="375px" height="450px" >';
 						?>
 					</td>
-					<td width="25%" class="center">English : </td>
-					<td width="25%" class="center"><?php echo $result[0]['english'];?></td>
+					<td  class="center">English : </td>
+					<td  class="center"><?php echo $result[0]['english'];?></td>
 				</tr>
 				<tr>
 					<td class="center"> Tagalog : </td>
@@ -894,14 +1010,9 @@ function generate_modal($id){
 				</tr>
 				
 			</table>
-			<div class="footer">
-				<?php
-				echo	"<button onclick=\"toggleModalId('modal_".$id."')\"> Close</button>";
-				?>
-				
-			</div>
 		</div>
-	</div>
+
+    </div>
 	<?php 
 }
 

@@ -24,13 +24,12 @@
 
 
     <link rel="apple-touch-icon" href="apple-icon.png">
-    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="shortcut icon" href="image/favicon.png">
 
     <link rel="stylesheet" href="assets/css/normalize.css">
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/font-awesome.min.css">
     <link rel="stylesheet" href="assets/css/themify-icons.css">
-    <link rel="stylesheet" href="assets/css/flag-icon.min.css">
     <link rel="stylesheet" href="assets/css/cs-skin-elastic.css">
     <link rel="stylesheet" href="assets/css/bootstrap-select.less"> 
     <link rel="stylesheet" href="assets/scss/style.css">
@@ -48,7 +47,7 @@
     <script src="assets/js/lib/chart-js/Chart.bundle.js"></script>
     
     <script src="assets/js/widgets.js"></script>
-    <script src="assets/js/lib/vector-map/jquery.vmap.js"></script>
+    <!--<script src="assets/js/lib/vector-map/jquery.vmap.js"></script>
     <script src="assets/js/lib/vector-map/jquery.vmap.min.js"></script>
     <script src="assets/js/lib/vector-map/jquery.vmap.sampledata.js"></script>
     <script src="assets/js/lib/vector-map/country/jquery.vmap.world.js"></script>
@@ -70,9 +69,9 @@
             } );
         } )( jQuery );
     </script>
-
+-->
 </head>
-<body >
+<body  >
 	<?php
 		require 'init.php';
 		session_start ();
@@ -98,8 +97,7 @@
 							echo '<li><a href="index.php?p=reg"><i class="menu-icon fa fa-sign-in"></i>Register</a></li>';
 						}else{
 							if ($_SESSION['privilege'] == 1){
-								//echo '<li><a href="index.php?p=logout"><i class="menu-icon fa fa-sign-in"></i>Login </a></li>';
-								echo '<li><a href="index.php?p=profile"><i class="menu-icon fa fa-sign-in"></i>Register</a></li>';
+
 								echo '<li><a href="index.php?p=contentmgt"><i class="menu-icon fa fa-sign-in"></i>Manage Content</a></li>';
 						
 
@@ -223,22 +221,29 @@
 			 		break;
 			 	case 'upImage':
 			 		//show modal on uploading Images
-			 		$task = getParam('t');
-			 		$id = getParam('id');
-			 		switch ($task) {
-			 			case 'edit':
-
-			 				show_upImage($id);
-			 				show_searchInput();
-					 		$id = getParam('id');
-					 		$filename = getParam('file');
-			 				show_searchResult();
-			 				break;
-			 			
-			 			default:
-			 				show_upImage();
-			 				show_ContentMgt();
-			 				break;
+			 		if(is_logged()==1){
+			 			//show the modal uploading  form
+			 			//show editing mode if the id was not set
+				 		$task = getParam('task');
+				 		$id = getParam('id');
+				 		$msg = getParam('msg');
+				 		switch ($task) {
+				 			case 'complete':
+				 				show_upImage('complete');
+				 				break;
+				 			case 'error':
+				 				show_upImage('error');
+				 				break;
+				 			case 'edit':
+				 				show_upImage($id);
+				 		 	 		$id = getParam('id');
+						 		$filename = getParam('file');
+				 				break;
+				 			
+				 			default:
+				 				show_upImage();
+				 				break;
+				 		}
 			 		}
 
 			 		break;
@@ -249,10 +254,10 @@
 			 		$task = getParam('t');
 			 		if(is_numeric($task)){
 			 			$msg = do_upload($task);
-			 			header('location:index.php?p=mgAllImage&task=msg&msg='.$msg);
+			 			redirect('index.php?p=mgAllImage&task=msg&msg='.$msg);
 			 		}else{
 			 			$msg = do_upload();
-			 			header('location:index.php?p=contentmgt&task=msg&msg='.$msg);
+			 			redirect('index.php?p=upImage&task='.$msg);
 			 		}
 			 		break;
 			 	
@@ -275,12 +280,16 @@
 			 	
 			 	case 'contentmgt';
 			 		//shows content management
-			 		$task =getParam('task');
-			 		$msg = getParam('msg');
-			 		if ($task<> null) {
-			 			show_msgModal($msg);
+			 		if(is_logged() == 1 ){
+				 		$task =getParam('task');
+				 		$msg = getParam('msg');
+				 		if ($task<> null) {
+				 			show_msgModal($msg);
+				 		}
+				 		show_ContentMgt();
+			 		}else{
+			 			redirect('index.php?p=403');
 			 		}
-			 		show_ContentMgt();
 			 		break;
 			 	
 			 	//mange all image
@@ -290,6 +299,7 @@
 			 		$id = getParam('id');
 			 		$filename = getParam('file');
 			 		$msg = getParam('msg');
+			 		$page = getParam('page');
 
 			 		switch ($task) {
 			 			case 'msg':
@@ -298,20 +308,19 @@
 			 			case 'del':
 							if (is_numeric($id)&&isset($filename)){
 								do_deleteImage($id,$filename);
-					 			header('location:index.php?p=mgAllImage&task=msg&msg=deleted');
+					 			redirect('index.php?p=mgAllImage&task=msg&msg=deleted');
 					 		}
-			 				break;
-			 			case 'view':
-			 				show_viewDetails($id);
 			 				break;
 			 		}
 			 		
 			 			//when the user search something
 					if (isset($_POST['searchInput'])) {
-						show_searchResult($_POST['searchInput']);
+						show_searchResult($_POST['searchInput'],0);
 				 	}else{
 				 		//defualt display
-						show_searchResult();
+						
+						show_searchResult(null,$page);
+						
 		 			}		 		
 			 		
 

@@ -141,15 +141,101 @@ ul.error, li {
     margin-right: auto;
 }
 
+.pagination li{
+    padding-left: 5px;
+    padding-right: 5px;
+    background: #007bff;
+    margin-left: 5px;
+}
 
-.modalContent::before {
-    content: "\25B2";
-    position:relative;
-    top:-25px;
-    left:50%;
-    font-size:20px;
-    line-height:14px;
-    color:#575757;
-    text-shadow:none;
-    display:block;
+
+.pagination li:hover{
+    background: #0359b4;
+}
+.pagination li a{
+    color:#fff;
+}
+
+
+.modal_new_2{
+    position: absolute;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+    background: rgba(25,25,25,.7);
+    z-index: 999999999;
+    display: none;
+
+}
+
+.modal_new_2 .modalContent{
+    padding: 5px;
+    max-width: 800px;
+    max-height: 500px;
+    height: 100%;
+    width: 100%; 
+    border-radius: 10px;
+    margin: auto;
+    margin-top: 50px;
+    background: #fff;
+}
+
+.modal_new_2 .header{
+    text-align: center;
+    padding: 5px;
+    font-weight: bold;
+    font-size: 25px;
+}
+
+.modal_new_2 .close{
+    width: 40px;
+    background: red;
+    height: 40px;
+    text-align: center;
+    padding: 5px;
+    border-radius: 100px;
+    opacity: 1;
+}
+.modal_new_2 .close:hover{
+    color: black;
+    opacity: .75;
+}
+
+.modal_new_2 img{
+    max-width: 300px;
+    max-height: 420px;
+    width: 100%;
+    height: 100%;
+    margin-left:auto;
+    margin-right: auto;
+}
+
+.zoom {
+
+    transition: transform .2s; /* Animation */
+    margin: 0 auto;
+}
+.zoom:hover {
+    transform: scale(3); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+    box-shadow: 2px 2px 10px black;
+
+}
+
+.zoom2 {
+
+    transition: transform .2s; /* Animation */
+    margin: 0 auto;
+}
+.zoom2:hover {
+    transform: scale(2); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+    box-shadow: 2px 2px 10px black;
+    z-index: 1000;  
+}
+
+img.imgholder{
+    max-width: 300px;
+    max-height: 420px;
+    width: 100%;
+    height: 100%;
 }

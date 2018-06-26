@@ -24,8 +24,9 @@ class dbcon
 	public $privilege;
 	public $mname;
 
-
-	public $limit = 2 ;
+	// this sets the limit in searching making 
+	// pagination
+	public $limits = 10 ;
 
 
 	//Connect to the database
@@ -38,15 +39,15 @@ class dbcon
 			echo "<pre>".$e."</pre>";
 		}
 	}
-// make some pagination in this area
-	function search($data=null,$offset,$table='content'){
+// do some searching
+	function search( $data=null , $offset = 1,$table='content'){
 		$this->connect();
 		$data = $this->clean($data);
-		$offset = 0;
-
+		if($offset !== null){
+			$offset = ($offset-1)*$this->limits;
+		}
 		if ($data == "") {
-			$query = "SELECT * FROM $table LIMIT  ".$this->limit ." OFFSET  ".$offset;
-			$this->debug($query);
+			$query = "SELECT * FROM $table LIMIT  ".$this->limits ." OFFSET  ".$offset;
 		}else{
 			$query = "SELECT * FROM $table WHERE note LIKE '%$data%' OR title LIKE '%$data%' OR english LIKE '%$data%' OR tagalog LIKE '%$data%' OR bicol LIKE '%$data%' ";	
 		}
@@ -103,6 +104,7 @@ class dbcon
 			$obj = $result->fetch_object();
 
 			//Set all session variables needed
+			// and also sets the object variables
 			
 			$this->user 		= $obj->username;
 			$this->userId 		= $obj->id;
