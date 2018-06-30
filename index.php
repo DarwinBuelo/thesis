@@ -1,19 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<!--<meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-	<title>Thesis</title>
-
-	<link rel="stylesheet" type="text/css" href="css/styles.css">
-
-
-
-	<script type="text/javascript" src="js/angular.min.js"></script>
-	<script type="text/javascript" src="js/jquery.min.js"></script>
-	<script type="text/javascript" src="js/functions.js"></script>
--->
 
 <!-- This will be the new UI  this is included in the theme-->
 	<meta charset="utf-8">
@@ -36,44 +24,21 @@
     <link href="assets/css/lib/vector-map/jqvmap.min.css" rel="stylesheet">
 
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
+	
+	<script src="js/jquery.min.js"></script>
+	<script src="js/main.js"></script>
+
+<!-- Customize the theme-->
 	<link rel="stylesheet" type="text/css" href="css/styles_new.css">
+	<script src="js/functions.js"></script>
 
-   <script src="assets/js/vendor/jquery-2.1.4.min.js"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
-   <script src="assets/js/plugins.js"></script>
-   <script src="assets/js/main.js"></script>
 
-	<script src="assets/js/dashboard.js"></script>
-    <script src="assets/js/lib/chart-js/Chart.bundle.js"></script>
-    
-    <script src="assets/js/widgets.js"></script>
-    <!--<script src="assets/js/lib/vector-map/jquery.vmap.js"></script>
-    <script src="assets/js/lib/vector-map/jquery.vmap.min.js"></script>
-    <script src="assets/js/lib/vector-map/jquery.vmap.sampledata.js"></script>
-    <script src="assets/js/lib/vector-map/country/jquery.vmap.world.js"></script>
-    <script>
-        ( function ( $ ) {
-            "use strict";
 
-            jQuery( '#vmap' ).vectorMap( {
-                map: 'world_en',
-                backgroundColor: null,
-                color: '#ffffff',
-                hoverOpacity: 0.7,
-                selectedColor: '#1de9b6',
-                enableZoom: true,
-                showTooltip: true,
-                values: sample_data,
-                scaleColors: [ '#1de9b6', '#03a9f5' ],
-                normalizeFunction: 'polynomial'
-            } );
-        } )( jQuery );
-    </script>
--->
+
 </head>
 <body  >
 	<?php
-		require 'init.php';
+		require_once'init.php';
 		session_start ();
 
 	?>
@@ -99,18 +64,16 @@
 							if ($_SESSION['privilege'] == 1){
 
 								echo '<li><a href="index.php?p=contentmgt"><i class="menu-icon fa fa-sign-in"></i>Manage Content</a></li>';
-						
+								echo '<li><a href="index.php?p=logout"><i class="menu-icon fa fa-sign-in"></i>Logout</a></li>';
 
 							}else if($_SESSION['privilege'] == 0) {
-								//echo '<li><a href="index.php?p=logout"><i class="menu-icon fa fa-sign-in"></i>Logout</a></li>';
+								
 								echo '<li><a href="index.php?p=profile"><i class="menu-icon fa fa-user"></i>Profile</a></li>';
 								echo '<li><a href="index.php?p=study"><i class="menu-icon ti-blackboard"></i>Study</a></li>';
 								echo '<li><a href="index.php?p=mgAllImage"><i class="menu-icon fa fa-book"></i>Reference</a></li>';
 								echo '<li><a href="index.php?p=cert"><i class="menu-icon fa fa-certificate"></i>Get Certificate</a></li>';
-							
+							echo '<li><a href="index.php?p=logout"><i class="menu-icon fa fa-sign-in"></i>Logout</a></li>';
 							}
-
-							
 						}
 					?>
                     <li>
@@ -138,48 +101,6 @@
                     
                   Welcome to Word Quiz Sign Language
                 </div>
-   	<?php if(is_logged() !== 404){
-?>   
-                <div class="col-sm-5">
-                    <div class="user-area dropdown float-right">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img class="user-avatar rounded-circle" src="image/avatar.jpg" alt="User Avatar">
-                        </a>
-
-
-                        
-
-                        <div class="user-menu dropdown-menu">
-
-
-                                <a class="nav-link" href="index.php?p=logout"><i class="fa fa-power -off"></i>Logout</a>
-                        </div>
-                    </div>
-
-                    <div class="language-select dropdown" id="language-select">
-                        <a class="dropdown-toggle" href="#" data-toggle="dropdown"  id="language" aria-haspopup="true" aria-expanded="true">
-                            <i class="flag-icon flag-icon-us"></i>
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="language" >
-                            <div class="dropdown-item">
-                                <span class="flag-icon flag-icon-fr"></span>
-                            </div>
-                            <div class="dropdown-item">
-                                <i class="flag-icon flag-icon-es"></i>
-                            </div>
-                            <div class="dropdown-item">
-                                <i class="flag-icon flag-icon-us"></i>
-                            </div>
-                            <div class="dropdown-item">
-                                <i class="flag-icon flag-icon-it"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-   <?php	}
-   		?>
             </div>
 
         </header>
@@ -253,9 +174,11 @@
 			 	case 'doUpload':
 			 		$task = getParam('t');
 			 		if(is_numeric($task)){
+			 			// editing content
 			 			$msg = do_upload($task);
-			 			redirect('index.php?p=mgAllImage&task=msg&msg='.$msg);
+			 			redirect('index.php?p=mgAllImage&task='.$msg);
 			 		}else{
+			 			//uploading new content
 			 			$msg = do_upload();
 			 			redirect('index.php?p=upImage&task='.$msg);
 			 		}
@@ -317,7 +240,7 @@
 					if (isset($_POST['searchInput'])) {
 						show_searchResult($_POST['searchInput'],0);
 				 	}else{
-				 		//defualt display
+				 		//default display
 						
 						show_searchResult(null,$page);
 						

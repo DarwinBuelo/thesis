@@ -49,6 +49,7 @@ function profile(){
 
     show_msgModal('nenen');
 	?>
+    <button class="btn btn-primary" onclick="tracker(2,true)">Click</button>
     <div class="col-sm-4">
     <div class="card">
         <div class="card-header">
@@ -276,7 +277,7 @@ function show_upImage($id=null){
                 case 'error':
                 ?>
                     <div class="sufee-alert alert with-close alert-danger alert-dismissible fade show">
-                        <span class="badge badge-pill badge-danger">Error</span> Error occured while uploading
+                        <span class="badge badge-pill badge-danger">Error</span> Error occurred while uploading
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
                      </div>
                 <?php 
@@ -298,60 +299,102 @@ function show_upImage($id=null){
 						<h2><b>Upload Image</b></h2>
 					</div>
                     <div class="card-body">
-                        <form action="index.php?p=doUpload" method="post" enctype="multipart/form-data">
-                        <table width="100%" style="margin:auto;">
-                            <tr>
-                                <td rowspan="9" align="center">
-                                    <img src="image/defualt-size.jpg" id="preview" class="imgholder">
-}
+                        <form class="form-horizontal" action="index.php?p=doUpload" method="post" enctype="multipart/form-data">
 
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
-                                    <input type="file" name="image" id="imageIn">
-                                   
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Title :</td>
-                                <td><input type="text" name="title"></td>
-                            </tr>
-                            <tr>
-                                <td>Category :</td>
-                                <td>
-                                    <select name =level>
-                                        <option value="1">Letters</option>
-                                        <option value="2">Words</option>
-                                        <option value="3">Phrases</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>English :</td>
-                                <td><input type="text" name="english"></td>
-                            </tr>
-                            <tr>
-                                <td>Tagalog :</td>
-                                <td>
-                                    <input type="text" name="tagalog">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Bicol :</td>
-                                <td><input type="text" name="bicol"></td>
-                            </tr>
-                            <tr>
-                                <td>Notes :</td>
-                                <td><textarea type="text" rows="10" name="note"></textarea></td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
-                                    <input type="submit" name="submit" value="upload">
-                                </td>
-                            </tr>
-                        </table>
-                    </form>
+                            <div class="col-md-5">
+                                <div class="text-center">
+                                    <img src="image/default-size.jpg" id="preview" class="imgholder">
+                                </div>
+                            </div>
+
+                            <div class="col-md-7">
+                                <!--image input-->
+                                <div class="row form-group">
+                                    <div class="col col-md-2">
+                                        <label for="image" class="form-control-label">File</label>
+                                    </div>
+                                    <div class="col-12 col-md-9">
+                                        <input type="file" class="form-control-file" name="image" id="imageIn">
+                                    </div>
+                                </div>
+                                <!-- Input for title -->
+                                <div class="row form-group">
+                                    <div class="col col-md-2">
+                                        <label for="title" class="form-control-label">Title</label>
+                                    </div>
+                                     <div class="col-12 col-md-9">
+                                        <input class="form-control" type="text" name="title">
+                                    </div>
+                                </div>
+                                <!-- Input for category -->
+                                <div class="row form-group">
+                                    <div class="col col-md-2">
+                                        <label for="level" class="form-control-label">Category</label>
+                                    </div>
+                                     <div class="col-12 col-md-9">
+                                        <select class="form-control" name="level">
+                                            <option value="1">Letters</option>
+                                            <option value="2">Words</option>
+                                            <option value="3">Phrases</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Input for English -->
+                                <div class="row form-group">
+                                    <div class="col col-md-2">
+                                        <label for="english" class="form-control-label">English</label>
+                                    </div>
+                                     <div class="col-12 col-md-9">
+                                        <input type="text" class="form-control" name="english">
+                                    </div>
+                                </div>
+                                <!-- Input for Tagalog -->
+                                <div class="row form-group">
+                                    <div class="col col-md-2">
+                                        <label for="tagalog" class="form-control-label">Tagalog</label>
+                                    </div>
+                                     <div class="col-12 col-md-9">
+                                        <input type="text" class="form-control" name="tagalog">
+                                    </div>
+                                </div>
+                                
+                                <!-- Input for Bicol -->
+                                <div class="row form-group">
+                                    <div class="col col-md-2">
+                                        <label for="bicol" class="form-control-label">Bicol</label>
+                                    </div>
+                                     <div class="col-12 col-md-9">
+                                        <input type="text" class="form-control" name="bicol">
+                                    </div>
+                                </div>
+                                <!-- Input for definition-->
+                                <div class="row form-group">
+                                    <div class="col col-md-2">
+                                        <label for="definition" class="form-control-label">Definition</label>
+                                    </div>
+                                     <div class="col-12 col-md-9">
+                                        <textarea class="form-control" type="text" name="definition" ></textarea>
+                                    </div>
+                                </div>
+
+                                <!-- Input for definition-->
+                                <div class="row form-group">
+                                    <div class="col col-md-2">
+                                        <label for="note" class="form-control-label">Note</label>
+                                    </div>
+                                     <div class="col-12 col-md-9">
+                                        <textarea class="form-control" type="text" name="note" ></textarea>
+                                    </div>
+                                </div>
+                                
+                                </div><!-- end of col-->
+
+                            </div><!-- End of Card Body-->
+                            <div class="card-footer text-center">
+                                <button class="btn btn-primary btn-sm"type="submit" name="submit">Upload</button>
+                            </div>
+                        </form>
                     </div>
 					
 				</div>
@@ -363,124 +406,142 @@ function show_upImage($id=null){
 		global $c;
 		$result = $c->select('content','id',$id);
 		$key = $result[0];
+        
 
 		?>
 			<div class="col-lg-12 col-md-4" >
                 <div class="card animated fadeIn">
                     <div class="card-header text-center">
-                        <h2><b>Edit Image</b></h2>
+                        <h2><b>Edit Image <?php echo $key['title']?></b></h2>
                     </div>
                     <div class="card-body">
-					<form action="index.php?p=doUpload" method="post" enctype="multipart/form-data">
+					<form class="form-horizontal" action="index.php?p=doUpload" method="post" enctype="multipart/form-data">
     					<?php
     						echo "<input type='hidden' name='t' value='".$key['id']."'>";
     			 		?>
-                        <div class="col-sm-6 col-md-12 text-center">
-                            <div class="col-sm-6">
+                        <div class="col-md-5 ">
+                            <div class="text-center">   
                                 <?php
-                                    echo '<img class="imgholder" src="media/images/'.$key['media_link'].'" id="preview" width="375px" height="450px">';
+                                    echo '<img class="imgholder" src="media/images/'.$key['media_link'].'" id="preview" >';
                                 ?>                
                             </div>
+                        </div><!--End of col-md-12 text-center-->
+                        
+                    <div class="col-md-7">
+
                         <!-- image input form -->
-                        <div class="col-md-6  col-sm-6 ">
-                            <div class="col-sm-2">
-                                File :    
+                        <div class="row form-group">
+                            <div class="col col-md-2">
+                               <label class="form-control-label" for="image">File </label> 
                             </div>
-                            <div class="col-sm-2   ml-auto">
-                            <input type="file" name="image" id="imageIn">
-                        </div>
-                        </div>
-                        <!---->
-                        <div class="col-md-6 col-sm-6">
-                            <div class="col-sm-2">
-                                Title :    
-                            </div>
-                            <div class="col-sm-2   ml-auto">
-                                <?php echo '<input type="text" name="title" value="'.$key['title'].'">';?>    
+                            <div class="col-12 col-md-9">
+                               <input class="form-control-file" type="file" name="image" id="imageIn">
                             </div>
                         </div>
-                        <div class="col-md-6 offset-md-4  col-sm-6 ">
-                            <div class="col-sm-4 col-md-4">
-                                Category : 
+                        <!-- Input to title-->
+                        <div class="row form-group">
+                            <div class="col col-md-2"><label for="title" class="form-control-label">Title</label></div>
+                            <div class="col-12 col-md-9">
+                                <?php echo '<input class="form-control" type="text" name="title" value="'.$key['title'].'">';?>
                             </div>
-                            <div class="col-sm-2   ml-auto">
-                            <select name =level>
-                                <?php 
-                                    switch ($key['level']) {
-                                        case '1':
-                                            echo '
-                                                <option value="1" selected>Letters</option>
-                                                <option value="2">Words</option>
-                                                <option value="3">Phrases</option>';
+                        </div>
+                        <!--Input for Category-->
+                        <div class="row form-group">
+                            <div class="col col-md-2">
+                                <label for="level" class="form-control-label">Category</label>
+                            </div>
+                            <div class="col-12 col-md-9">
+                                <select  class="form-control" name ="level">
+                                    <?php 
+                                        switch ($key['level']) {
+                                            case '1':
+                                                echo '
+                                                    <option value="1" selected>Letters</option>
+                                                    <option value="2">Words</option>
+                                                    <option value="3">Phrases</option>';
+                                                    break;
+                                            case '2':
+                                                echo '
+                                                    <option value="1" >Letters</option>
+                                                    <option value="2" selected>Words</option>
+                                                    <option value="3">Phrases</option>';
+                                                 break;
+                                            case '3':
+                                                echo '
+                                                    <option value="1" >Letters</option>
+                                                    <option value="2">Words</option>
+                                                    <option value="3" selected>Phrases</option>';
                                                 break;
-                                        case '2':
-                                            echo '
-                                                <option value="1" >Letters</option>
-                                                <option value="2" selected>Words</option>
-                                                <option value="3">Phrases</option>';
-                                             break;
-                                        case '3':
-                                            echo '
-                                                <option value="1" >Letters</option>
-                                                <option value="2">Words</option>
-                                                <option value="3" selected>Phrases</option>';
-                                            break;
-                                                
-                                        default:
-                                            echo '
-                                                <option value="1" >Letters</option>
-                                                <option value="2">Words</option>
-                                                <option value="3" selected>Phrases</option>';
-                                            break;
-                                        }
+                                                    
+                                            default:
+                                                echo '
+                                                    <option value="1" >Letters</option>
+                                                    <option value="2">Words</option>
+                                                    <option value="3" selected>Phrases</option>';
+                                                break;
+                                            }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!--Input for English Translation-->
+                        <div class="row form-group">
+                            <div class="col col-md-2"><label for="english" class="form-control-label">English</label></div>
+                            <div class="col-12 col-md-9">
+                                <?php
+                                    echo '<input class="form-control" type="text" name="english" value="'.$key['english'].'">'
                                 ?>
-                            </select>
+                            </div>
                         </div>
+
+
+                        <!--Input for Tagalog Translation-->
+                        <div class="row form-group">
+                            <div class="col col-md-2"><label for="tagalog" class="form-control-label">Tagalog</label></div>
+                            <div class="col-12 col-md-9">
+                                <?php
+                                    echo '<input class="form-control" type="text" name="tagalog" value="'.$key['tagalog'].'">'
+                                ?>
+                            </div>
                         </div>
-                         </div>
-                       <!--
-                       <table>
-                       
-							<tr>
-								<td>English :</td>
-								<td>
-									<?php
-										echo '<input type="text" name="english" value="'.$key['english'].'">'
-									?>
-									
-								</td>
-							</tr>
-							<tr>
-								<td>Tagalog :</td>
-								<td>
-									<?php
-										echo '<input type="text" name="tagalog" value="'.$key['tagalog'].'">'
-									?>
-								</td>
-							</tr>
-							<tr>
-								<td>Bicol :</td>
-								<td>
-									<?php
-										echo '<input type="text" name="bicol" value="'.$key['bicol'].'">'
-									?>
-								</td>
-							</tr>
-							<tr>
-								<td>Notes :</td>
-								<td>
-									<?php
-										echo '<textarea type="text" rows="10" name="note">'.$key['note'].'</textarea>'
-									?>
-									
-								</td>
-							</tr>
-							<tr>
-								<td colspan="2">
-									<input type="submit" name="submit" value="upload">
-								</td>
-							</tr>
-						</table> -->
+
+                        <!--Input for Bicol Translation-->
+                        <div class="row form-group">
+                            <div class="col col-md-2"><label for="bicol" class="form-control-label">Bicol</label></div>
+                            <div class="col-12 col-md-9">
+                                <?php
+                                    echo '<input class="form-control" type="text" name="bicol" value="'.$key['bicol'].'">'
+                                ?>
+                            </div>
+                        </div>
+
+
+                        <!--Input for item definition -->
+                        <div class="row form-group">
+                            <div class="col col-md-2"><label for="definition" class="form-control-label">Definition</label></div>
+                            <div class="col-12 col-md-9">
+                                <?php
+                                    echo '<textarea class="form-control" type="text" name="definition" >'.$key['definition'].'</textarea>'
+                                ?>
+                            </div>
+                        </div>
+
+
+                        <!--Input for item note -->
+                        <div class="row form-group">
+                            <div class="col col-md-2"><label for="note" class="form-control-label">Note</label></div>
+                            <div class="col-12 col-md-9">
+                                <?php
+                                    echo '<textarea class="form-control" type="text" name="note" value="'.$key['note'].'"></textarea>'
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- End of the card-body-->
+                    <div class="card-footer text-center">
+                        <button class="btn btn-primary btn-sm"type="submit" name="submit">Upload</button>
+                    </div>
 					</form>
 
 				</div>
@@ -580,8 +641,8 @@ function show_searchResult($data=null,$page=0){
                 <th scope="col">Id</th>
                 <th scope="col">Thumbnail</th>
                 <th scope="col">English</th>
-                <th scope="col" >Defination</th>
                 <th scope="col" >Tagalog</th>
+                <th scope="col" >Definition</th>
                 <th scope="col">Options</th>
             </tr>
         <?php
@@ -599,7 +660,7 @@ function show_searchResult($data=null,$page=0){
                 </td>
                 <td><?php echo $key['english']?></td>
                 <td><?php echo $key['tagalog']?></td>
-                <td><?php echo $key['defination']?></td>
+                <td><?php echo $key['definition']?></td>
                 
                 <td>
                     <button class="btn btn-sm btn-primary"  onclick="toggleModal(<?php echo $key['id'] ?>)">View</button>
@@ -720,12 +781,13 @@ function show_msgModal($msg){
      }else{
         jQuery('.'+ modal).css('display','block');
      }
-}</script>
+    }</script>
 
 
 
 	<?php
 }
+
 // Show the video uploading form
 function show_upVideo($file,$update=false){
 	?>
@@ -740,6 +802,7 @@ function show_upVideo($file,$update=false){
 
 	<?php
 }
+
 function show_403(){
 	?>
 
@@ -780,6 +843,7 @@ function do_upload($data=null){
 					 english,
 					 tagalog,
 					 bicol,
+                     definition,
 					 level)
 				 VALUES (
 				 '".$_SESSION['id']."',
@@ -789,6 +853,7 @@ function do_upload($data=null){
 				 ,'".$_POST['english']."'
 				 ,'".$_POST['tagalog']."'
 				 ,'".$_POST['bicol']."'
+                 ,'".$_POST['definition']."'
 				 ,'".$_POST['level']."'
 
 					)" ;
@@ -808,6 +873,7 @@ function do_upload($data=null){
 					english='".$_POST['english']."',
 					tagalog='".$_POST['tagalog']."',
 					bicol='".$_POST['bicol']."',
+                    definition='".$_POST['definition']."',
 					level='".$_POST['level']."' 
 					WHERE id = '".$data."'";
 		global $c;
