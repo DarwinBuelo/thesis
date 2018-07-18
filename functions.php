@@ -27,10 +27,10 @@ function index(){
 					<img src="image/logo.png" width="250px" style="float:left;padding:10px;">
 				</p>
 				<p style="padding:10px;"><br>
-					Word Quiz is an Educational Material / Tool that provides references to the users and make things much more easier and faster in understanding sign language.This will provide as tool for the teacher to assest users progress in the asl (American Sign Language). This will also provide as a references to the users showing information such as English Translation , Tagalog Translation, Bicol Translation and  the some information about the sign.
+					Word Quiz is an Educational Material / Tool that provides references to the users and make things much more easier and faster in understanding sign language.This will provide as tool for the teacher to asses users progress in the asl (American Sign Language). This will also provide as a references to the users showing information such as English Translation , Tagalog Translation, Bicol Translation and  the some information about the sign.
 				</p>
 				<p style="padding:10px">
-					The content of this web application was based on the book Love Signs - The Sign Language in English and Pilipino by REV. S. WAYNE SHANEYFELT.
+					The content of this web application was based on the book Love Signs - The Sign Language in English and Filipino by REV. S. WAYNE SHANEYFELT.
 				</p>
 				<p>
 				</p>
@@ -46,10 +46,8 @@ function index(){
 function profile(){
     global $c;
     $userProgress = $c->select('progress','id',$_SESSION['id']);
-
-    show_msgModal('nenen');
 	?>
-    <button class="btn btn-primary" onclick="tracker(2,true)">Click</button>
+
     <div class="col-sm-4">
     <div class="card">
         <div class="card-header">
@@ -621,6 +619,7 @@ function show_searchInput(){
 	
 	<?php
 }
+
 //do the searching for mgAllImage
 function show_searchResult($data=null,$page=0){
         // set the value of page to 1 if the value is smaller
@@ -663,7 +662,7 @@ function show_searchResult($data=null,$page=0){
                 <td><?php echo $key['definition']?></td>
                 
                 <td>
-                    <button class="btn btn-sm btn-primary"  onclick="toggleModal(<?php echo $key['id'] ?>)">View</button>
+                    <button class="btn btn-sm btn-primary"  onclick="toggleModal(<?php echo $key['id'] ?>);tracker(<?php echo $key['id'] ?>)">View</button>
                     <?php 
                     if (is_logged() == 1){
                         echo "<a href=\"index.php?p=upImage&id=".$key['id']."&task=edit\">Edit </a>";
@@ -745,6 +744,10 @@ function show_viewDetails($id){
 					<td > Bicol : </td>
 					<td > <?php echo $result[0]['bicol'];?> </td>
 				</tr>
+                <tr>
+                    <td > Definition : </td>
+                    <td > <?php echo $result[0]['definition'];?> </td>
+                </tr>
 				<tr>
 					<td > Note : </td>
 					<td > <?php echo $result[0]['note'];?> </td>
@@ -752,7 +755,7 @@ function show_viewDetails($id){
 				
 			</table>
 			<div class="footer">
-				<button class="btn btn-success"onclick="toggleModal(<?php echo $result[0]['id'] ?>)"> Close</button>
+				<button class="btn btn-success"onclick="toggleModal(<?php echo $result[0]['id'] ?>);tracker(<?php echo $result[0]['id'] ?>)"> Close</button>
 
  
 			</div>
@@ -763,29 +766,27 @@ function show_viewDetails($id){
 
 
 function show_msgModal($msg){
-	?>
-		<div class="modal_new">
-			<div class="modalContent center">
-				<?php echo '<h3>'.$msg.'</h3>';?>
-				<div class="footer">
-					<button onclick="toggleModal('modal2')"> Close</button>
-					
-				</div>
-			</div>	
-		</div>
-        <script type="text/javascript"> function toggleModal(modal){
-     var modalStat = jQuery('.'+modal).css('display');
-     
-     if (modalStat == 'block'){
-        jQuery('.'+modal).css('display','none');
-     }else{
-        jQuery('.'+ modal).css('display','block');
-     }
-    }</script>
+    switch ($msg) {
+        case 'complete':    
+            ?>
+            <div class="sufee-alert alert with-close alert-success alert-dismissible fade show">
+                <span class="badge badge-pill badge-success">Success</span> Image deleted Complete
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <?php 
+        break;
+
+        case 'error':
+        ?>
+        <div class="sufee-alert alert with-close alert-danger alert-dismissible fade show">
+            <span class="badge badge-pill badge-danger">Error</span> Error occurred while deleting
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+        </div>
+        <?php
+        break; 
+    }
 
 
-
-	<?php
 }
 
 // Show the video uploading form
@@ -823,6 +824,7 @@ function do_deleteImage($id,$filename){
  	$c->delete('content',$id);
  	$path = "media/images/".$filename;
  	unlink($path);
+    return 'complete';
 }
 
 //do the uploading of images to the database and the file folder
@@ -954,30 +956,58 @@ function show_study($current){
 	}
 }
 
+
+//this function will show the tutorial on how to read the context of the site such images
+// must be understand carefully to obtain the necessary knowledge about sign language
+
+function show_tutorial(){
+
+}
+
 function show_studyList($array){
 	global $c;
 	//check if the array is not null and is an actual array
 	if (is_array($array) and $array !== null){
         foreach ($array as $key) {
             $result = $c->select('content','id',$key);
-            ?>
-            <div class="col-lg-4 col-md-6">
-                <div class="card">
-                <div class="card-header">
-                    <stong class="card-title"><?php echo $result[0]['title']?></stong>
+
+            if (!$result == null){
+               ?>
+                <div class="col-lg-4 col-md-6">
+                    <div class="card">
+                    <div class="card-header">
+                        <stong class="card-title"><?php echo $result[0]['title']?></stong>
+                    </div>
+                    <div class="card-body">
+                        <div class="mx-auto d-block">
+                        <?php 
+
+                            echo '<img class="mx-auto d-block zoom2" src="media/images/'.$result[0]['media_link'].'" width="100px" height="125px"></div>';
+                            echo "<div class='text-sm-center'><a href='#' onclick=\"toggleModalId('modal_".$key."')\">View</a></div>";   
+                      
+                        ?>
+                     </div> 
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div class="mx-auto d-block">
-                    <?php echo '<img class="mx-auto d-block zoom2" src="media/images/'.$result[0]['media_link'].'" width="100px" height="125px"></div>';   
-                          echo "<div class='text-sm-center'><a href='#' onclick=\"toggleModalId('modal_".$key."')\">View</a></div>";
-                    ?>
-                 </div> 
-                </div>
-            </div>
+            
      
                 <?php
+                }else{
+                    ?><div class="col-lg-4 col-md-6">
+                    <div class="card">
+                    <div class="card-header">
+                        <stong class="card-title">Item with id no. <?php echo "<strong style='color:red'>".$key."</strong>";?> Not Found</stong>
+                    </div>
+                    <div class="card-body">
+                        <div class="mx-auto d-block">
+                           <img class="mx-auto d-block zoom2" src="image/thumbnail.jpg" width="100px" height="125px">
+                        </div>
+                        Please Report to the admin the issue  
+                    </div>
+                </div>
+                </div><?php
                 }
-  
+               }
 
 		//generate the modal.. by running another foreach loop to the array
 		// we cannot include this one to the foreach load from the top because t
@@ -1005,21 +1035,6 @@ function show_studyList($array){
 }
 
 
-function generate_Study($level){
-	global $c;
-	$max = $c->get_max($level);
-	$array = randomGen(1,$max,20);
-	$list = array();
-
-	foreach($array as $key){
-		$result = $c->select('content','level',$level);
-		$list[] =$result[$key-1]['id'];
-		}
-
-	$c->set_study_guide(json_encode($list));
-
-}
-
 function randomGen($min, $max, $quantity) {
     $numbers = range($min, $max);
     shuffle($numbers);
@@ -1037,6 +1052,21 @@ function get_studyMaterial($id){
 	return $guideList;
  	
 	
+}
+
+function generate_Study($level){
+    global $c;
+    $max = $c->get_max($level);
+    $array = randomGen(1,$max,20);
+    $list = array();
+
+    foreach($array as $key){
+        $result = $c->select('content','level',$level);
+        $list[] =$result[$key-1]['id'];
+        }
+
+    $c->set_study_guide(json_encode($list));
+
 }
 
 function generate_modal($id){
@@ -1088,6 +1118,14 @@ function redirect($url){
 				window.location.replace("'.$url.'");
 		</script>';
 
+}
+
+
+// Functions in making EXAMINATION
+
+
+function show_exam(){
+    
 }
 
 ?>

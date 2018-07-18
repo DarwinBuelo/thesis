@@ -10,8 +10,8 @@ class dbcon
 {
 	//define the variable needed
 	protected $host = '127.0.0.1';
-	protected $username = 'darwin';
-	protected $password = '12345';
+	protected $username = 'root';
+	protected $password = '';
 	protected $dbname = 'thesis';
 
 	protected $conn;

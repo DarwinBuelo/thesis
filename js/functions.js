@@ -40,31 +40,53 @@ var switchs = false; // the state of the tracker if turned on or off
 var start; // time the tracker is turned on
 var end ; // time the tracker is ended
 
-var id; // current id that is being tracked
+var currentId = null; // current id that is being tracked
 
 function tracker(id){
 
-	// onclick the function will check if the start variable is set
-	// if the var start is not set then the program will set the start time
-	// on the second click or unload the function will set the end time and will
-	// send the result to the database tru ajax request with the item id.
 
-
-	// problems 
-	// ## the function will not trigger on unloading page, 
-	//    nullifying the start value and not recording the last item being read
-	if (switchs == false){
+	if ( id !== currentId && currentId !== null ){
+		//if the user has click to another item without closing the current one
+		end = new Date().getTime();
+		console.log('current id turning off and creating new id start time');
+		console.log(currentId)
+		var timeToRead = (end - start)/1000.0;
+		console.log(timeToRead);
+		//send data to the database
+		jQuery.post(
+			'process.php',
+			{	task:'user_log',
+				contentId : currentId,
+				time_spent : timeToRead
+			}
+			);
+		
+		currentId = id;
 		start = new Date().getTime();
-		console.log('start variable defined');
+		switchs = true;
+	}else if (switchs == false){
+		//if the user has click to an item.
+		start = new Date().getTime();
 		console.log('turnedon');
 		switchs = true;
-	}else if(switchs == true && id ){
+		currentId = id;
+		console.log(id);
+
+	}else if(switchs == true){
 		end = new Date().getTime();
-		console.log(end);
 		console.log('turned off');
 		switchs = false;
-		var timeToRead = end - start;
-		console.log(timeToRead/1000.0);
+		var timeToRead = (end - start)/1000.0;
+		console.log(timeToRead);
+		
+		jQuery.post(
+			'process.php',
+			{	task:'user_log',
+				contentId : currentId,
+				time_spent : timeToRead
+			}
+		);
 
+		currentId = null;
 	}
 }

@@ -230,8 +230,8 @@
 			 				break;
 			 			case 'del':
 							if (is_numeric($id)&&isset($filename)){
-								do_deleteImage($id,$filename);
-					 			redirect('index.php?p=mgAllImage&task=msg&msg=deleted');
+								$msg = do_deleteImage($id,$filename);
+					 			redirect('index.php?p=mgAllImage&task=msg&msg='.$msg);
 					 		}
 			 				break;
 			 		}
@@ -248,6 +248,7 @@
 			 		
 
 			 		break;
+
 			 	case 'cert':
 			 		do_cert();
 				 	break;
