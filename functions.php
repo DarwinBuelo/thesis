@@ -69,6 +69,21 @@ function profile(){
         </div>
     </div>
 	</div>
+
+    <div class="col-lg-3 col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="stat-widget-one">
+                    <div class="stat-icon dib"><i class="ti-user text-primary border-primary"></i></div>
+                    <div class="stat-content dib">
+                        <div class="stat-text">New Customer</div>
+                        <div class="stat-digit">961</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 	<?php
 }
 
@@ -225,7 +240,7 @@ function show_login($message=null){
                                               </div>';}?>
            		<div class="login-logo">
                     <a href="index.php">
-                        <img class="align-content" src="images/logo.png" alt="">
+                       
                     </a>
                 </div>
                 <div class="login-form " >
@@ -312,7 +327,7 @@ function show_upImage($id=null){
                                         <label for="image" class="form-control-label">File</label>
                                     </div>
                                     <div class="col-12 col-md-9">
-                                        <input type="file" class="form-control-file" name="image" id="imageIn">
+                                        <input onchange="readURL()" type="file" class="form-control-file" name="image" id="imageIn">
                                     </div>
                                 </div>
                                 <!-- Input for title -->
@@ -765,24 +780,38 @@ function show_viewDetails($id){
 }
 
 
-function show_msgModal($msg){
+function show_msgModal($msg,$text=null){
     switch ($msg) {
-        case 'complete':    
+        case 'complete':
+            if($text!= null){
+                ?><div class="sufee-alert alert with-close alert-success alert-dismissible fade show">
+                <span class="badge badge-pill badge-success">Info</span> <?php echo $text;?>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div><?php
+            }else{
             ?>
             <div class="sufee-alert alert with-close alert-success alert-dismissible fade show">
                 <span class="badge badge-pill badge-success">Success</span> Image deleted Complete
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <?php 
+            }
         break;
 
         case 'error':
-        ?>
-        <div class="sufee-alert alert with-close alert-danger alert-dismissible fade show">
-            <span class="badge badge-pill badge-danger">Error</span> Error occurred while deleting
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-        </div>
-        <?php
+           if($text!= null){
+                ?><div class="sufee-alert alert with-close alert-danger alert-dismissible fade show">
+                <span class="badge badge-pill badge-danger">Error</span <?php echo $text;?>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div><?php
+            }else{
+                ?>
+            <div class="sufee-alert alert with-close alert-danger alert-dismissible fade show">
+                <span class="badge badge-pill badge-danger">Error</span> Error occurred while deleting
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+        <?php 
+        }
         break; 
     }
 
@@ -897,7 +926,6 @@ function doLogin($username,$password){
 		//header("location:index.php");
 		redirect('index.php?p=profile');
 	}else{
-
 		show_login('error');
 	}
 }
@@ -976,7 +1004,7 @@ function show_studyList($array){
                 <div class="col-lg-4 col-md-6">
                     <div class="card">
                     <div class="card-header">
-                        <stong class="card-title"><?php echo $result[0]['title']?></stong>
+                        <stong class="card-title"> Word : <?php echo $result[0]['title']?></stong>
                     </div>
                     <div class="card-body">
                         <div class="mx-auto d-block">
@@ -1124,8 +1152,139 @@ function redirect($url){
 // Functions in making EXAMINATION
 
 
-function show_exam(){
+function show_exam($level=1 ){
+
+    if ($level== 2){
+        echo "you are in level 2";
     
+    }
+    elseif($level == 3){
+        echo "you are in level 3";
+    }
+    else{
+        show_msgModal('complete','Warning once you start the quiz, you have to finish it as much as possible.');
+        show_exam_lvl1();
+     }   
+    
+}
+
+
+function show_exam_lvl1(){
+
+    // fetch data from the database
+    global $c;
+    $sql = "SELECT * FROM content WHERE level = 1";
+    $result = mysqli_fetch_assoc($c->execute($sql));
+
+    //get a random number of numbers
+    $randIndex = randomGen(0,sizeof($result)-1,8);
+    ?>
+
+    <div class="container-app">
+            <section class="score-panel">
+                <ul class="stars">
+                    <li><i class="fa fa-star"></i></li>
+                    <li><i class="fa fa-star"></i></li>
+                    <li><i class="fa fa-star"></i></li>
+                </ul>
+
+                <span class="moves">0</span> Move(s)
+
+                <div class="timer">
+                </div>
+            </section>
+        </div>
+        
+        <!-- first load an array of abc to an array ang for a pair of card.. 
+
+            maximum pair is 8 pairs 
+
+        -->
+    
+        <ul class="deck" id="card-deck">
+            <?php
+
+            // loop around the array
+            foreach ($result as $key) {
+                # code...
+                echo '<li class="card" type="'.$result[title].'"><img class="img" src="media/images/'.$result[media_link].'" alt=""></li>';
+                echo '<li class="card" type="'.$result[title].'"><img class="img" src="image/a.jpg" alt=""></li>';                
+            }
+
+
+            ?>
+
+            <li class="card" type="plane">
+                <i class="fa fa-paper-plane-o"></i>
+            </li>
+            <li class="card match" type="anchor">
+                <i class="fa fa-anchor"></i>
+            </li>
+            <li class="card" type="bolt" >
+                <i class="fa fa-bolt"></i>
+            </li>
+            <li class="card" type="cube">
+                <i class="fa fa-cube"></i>
+            </li>
+            <li class="card match" type="anchor">
+                <i class="fa fa-anchor"></i>
+            </li>
+            <li class="card" type="leaf">
+                <i class="fa fa-leaf"></i>
+            </li>
+            <li class="card" type="bicycle">
+                <i class="fa fa-bicycle"></i>
+            </li>
+            <li class="card" type="bomb">
+                <i class="fa fa-bomb"></i>
+            </li>
+            <li class="card" type="leaf">
+                <i class="fa fa-leaf"></i>
+            </li>
+            <li class="card" type="bomb">
+                <i class="fa fa-bomb"></i>
+            </li>
+            <li class="card open show" type="bolt">
+                <i class="fa fa-bolt"></i>
+            </li>
+            <li class="card" type="bicycle">
+                <i class="fa fa-bicycle"></i>
+            </li>
+            <li class="card" type="plane">
+                <i class="fa fa-paper-plane-o"></i>
+            </li>
+            <li class="card" type="cube">
+                <i class="fa fa-cube"></i>
+            </li>
+        </ul>
+
+        <div id="popup1" class="overlay">
+            <div class="popup">
+                <h2>Congratulations 🎉</h2>
+                <a class="close" href=# >×</a>
+                <div class="content-1">
+                    Congratulations you're a winner 🎉🎉
+                </div>
+                <div class="content-2">
+                    <p>You made <span id=finalMove> </span> moves </p>
+                    <p>in <span id=totalTime> </span> </p>
+                    <p>Rating:  <span id=starRating></span></p>
+                </div>
+                <button id="play-again"onclick="playAgain()">
+                    Play again</a>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="js/engine.js"></script>
+ 
+
+
+
+
+    <?php
 }
 
 ?>

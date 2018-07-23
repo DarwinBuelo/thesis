@@ -19,18 +19,22 @@
     <link rel="stylesheet" href="assets/css/font-awesome.min.css">
     <link rel="stylesheet" href="assets/css/themify-icons.css">
     <link rel="stylesheet" href="assets/css/cs-skin-elastic.css">
-    <link rel="stylesheet" href="assets/css/bootstrap-select.less"> 
+    <link rel="stylesheet" href="assets/css/bootstrap-select.css"> 
     <link rel="stylesheet" href="assets/scss/style.css">
     <link href="assets/css/lib/vector-map/jqvmap.min.css" rel="stylesheet">
+    <!-- games css  -->
+    <link rel="stylesheet" href="css/word.css">
 
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
 	
 	<script src="js/jquery.min.js"></script>
 	<script src="js/main.js"></script>
+	<script src="assets/js/plugins.js"></script>
+	<script src="js/functions.js"></script>
 
 <!-- Customize the theme-->
 	<link rel="stylesheet" type="text/css" href="css/styles_new.css">
-	<script src="js/functions.js"></script>
+
 
 
 
@@ -71,6 +75,7 @@
 								echo '<li><a href="index.php?p=profile"><i class="menu-icon fa fa-user"></i>Profile</a></li>';
 								echo '<li><a href="index.php?p=study"><i class="menu-icon ti-blackboard"></i>Study</a></li>';
 								echo '<li><a href="index.php?p=mgAllImage"><i class="menu-icon fa fa-book"></i>Reference</a></li>';
+								echo '<li><a href="index.php?p=exam"><i class="menu-icon fa fa-user"></i>Exam	</a></li>';
 								echo '<li><a href="index.php?p=cert"><i class="menu-icon fa fa-certificate"></i>Get Certificate</a></li>';
 							echo '<li><a href="index.php?p=logout"><i class="menu-icon fa fa-sign-in"></i>Logout</a></li>';
 							}
@@ -268,6 +273,11 @@
 					
 					break;
 
+				// exam
+				case 'exam';
+					show_exam();
+					break;
+
 			 	default:
 			 		index();
 			 		break;
@@ -276,6 +286,7 @@
 
 			?>
    </div><!-- /#right-panel -->
+
 
 
 

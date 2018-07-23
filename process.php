@@ -1,6 +1,16 @@
 <?php
 
+/*
+* this is file is for the video processing only
+
+
+
+
+*/
 // do some processing to ajax request
+
+
+
 
 require_once('init.php');
 

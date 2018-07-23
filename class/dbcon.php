@@ -94,11 +94,17 @@ class dbcon
 
 	//for Login Verification
 	function verifyUser($username,$password){
+		// variables 
 		$username = $this->clean($username);
 		$password = $this->clean($password);
+		$sql ="SELECT * FROM user WHERE username ='$username' AND password = md5('$password')";
 
-		$result =mysqli_query($this->conn,"SELECT * FROM user WHERE username ='$username' AND password = md5('$password')") ;
+
+		// search the users credentials
+		$result =mysqli_query($this->conn,$sql) ;
 		$count=mysqli_num_rows($result);
+
+
 
 		if ($count > 0){
 			$obj = $result->fetch_object();
