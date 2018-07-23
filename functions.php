@@ -327,7 +327,12 @@ function show_upImage($id=null){
                                         <label for="image" class="form-control-label">File</label>
                                     </div>
                                     <div class="col-12 col-md-9">
-                                        <input onchange="readURL()" type="file" class="form-control-file" name="image" id="imageIn">
+                                        <input type="file" class="form-control-file" name="image" id="imageIn">
+                                        <script type="text/javascript">
+                                        jQuery("#imageIn").change(function() {
+                                            readURL(this);
+                                        });
+                                    </script>
                                     </div>
                                 </div>
                                 <!-- Input for title -->
@@ -1173,10 +1178,11 @@ function show_exam_lvl1(){
 
     // fetch data from the database
     global $c;
-    $sql = "SELECT * FROM content WHERE level = 1";
-    $result = mysqli_fetch_assoc($c->execute($sql));
+    $result = $c->select('content','level','1');
 
     //get a random number of numbers
+
+    $c->debug($result);
     $randIndex = randomGen(0,sizeof($result)-1,8);
     ?>
 
@@ -1207,8 +1213,8 @@ function show_exam_lvl1(){
             // loop around the array
             foreach ($result as $key) {
                 # code...
-                echo '<li class="card" type="'.$result[title].'"><img class="img" src="media/images/'.$result[media_link].'" alt=""></li>';
-                echo '<li class="card" type="'.$result[title].'"><img class="img" src="image/a.jpg" alt=""></li>';                
+                echo '<li class="card" type="'.$key[title].'"><img class="img" src="media/images/'.$key[media_link].'" alt=""></li>';
+                echo '<li class="card" type="'.$key[title].'"><img class="img" src="image/a.jpg" alt=""></li>';                
             }
 
 
