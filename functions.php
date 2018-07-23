@@ -1154,7 +1154,12 @@ function redirect($url){
 }
 
 
-// Functions in making EXAMINATION
+##############################################################################
+############## FUNCTION FOR MAKING THE EXAM FEATURE ##########################
+##############################################################################
+
+
+// this part of the code makes the examination or the game
 
 
 function show_exam($level=1 ){
@@ -1182,7 +1187,6 @@ function show_exam_lvl1(){
 
     //get a random number of numbers
 
-    $c->debug($result);
     $randIndex = randomGen(0,sizeof($result)-1,8);
     ?>
 
@@ -1211,57 +1215,17 @@ function show_exam_lvl1(){
             <?php
 
             // loop around the array
-            foreach ($result as $key) {
+            foreach ($randIndex as $key) {
+
                 # code...
-                echo '<li class="card" type="'.$key[title].'"><img class="img" src="media/images/'.$key[media_link].'" alt=""></li>';
-                echo '<li class="card" type="'.$key[title].'"><img class="img" src="image/a.jpg" alt=""></li>';                
+                echo '<li class="card show" type="'.$result[$key][title].'"><img class="img" src="media/images/'.$result[$key][media_link].'" alt=""></li>';
+                echo '<li class="card show" type="'.$result[$key][title].'"><img class="img" src="image/'.$result[$key][title].'.jpg" alt=""></li>';               
+
             }
 
 
             ?>
 
-            <li class="card" type="plane">
-                <i class="fa fa-paper-plane-o"></i>
-            </li>
-            <li class="card match" type="anchor">
-                <i class="fa fa-anchor"></i>
-            </li>
-            <li class="card" type="bolt" >
-                <i class="fa fa-bolt"></i>
-            </li>
-            <li class="card" type="cube">
-                <i class="fa fa-cube"></i>
-            </li>
-            <li class="card match" type="anchor">
-                <i class="fa fa-anchor"></i>
-            </li>
-            <li class="card" type="leaf">
-                <i class="fa fa-leaf"></i>
-            </li>
-            <li class="card" type="bicycle">
-                <i class="fa fa-bicycle"></i>
-            </li>
-            <li class="card" type="bomb">
-                <i class="fa fa-bomb"></i>
-            </li>
-            <li class="card" type="leaf">
-                <i class="fa fa-leaf"></i>
-            </li>
-            <li class="card" type="bomb">
-                <i class="fa fa-bomb"></i>
-            </li>
-            <li class="card open show" type="bolt">
-                <i class="fa fa-bolt"></i>
-            </li>
-            <li class="card" type="bicycle">
-                <i class="fa fa-bicycle"></i>
-            </li>
-            <li class="card" type="plane">
-                <i class="fa fa-paper-plane-o"></i>
-            </li>
-            <li class="card" type="cube">
-                <i class="fa fa-cube"></i>
-            </li>
         </ul>
 
         <div id="popup1" class="overlay">

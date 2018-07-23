@@ -197,6 +197,8 @@ function startTimer(){
 
 // @description congratulations when all cards match, show modal and moves, time and rating
 function congratulations(){
+
+    // the number 16 should be represented as a variable to dynamically change when the amount of cards change
     if (matchedCard.length == 16){
         clearInterval(interval);
         finalTime = timer.innerHTML;
