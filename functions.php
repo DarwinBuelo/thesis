@@ -226,6 +226,7 @@ function show_register(){
 }
 
 
+
 //show login
 function show_login($message=null){
 	?>
@@ -1258,3 +1259,8 @@ function show_exam_lvl1(){
 }
 
 ?>
+
+
+
+
+<!-- exam lvl2 and 3 will be generated automatically by the server final -->

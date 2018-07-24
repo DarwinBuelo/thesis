@@ -57,6 +57,7 @@
 
 .card .img{
 	display: none;
+	height: 100%;
 }
 
 .card.open .img{
