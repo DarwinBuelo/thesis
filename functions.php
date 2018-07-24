@@ -45,7 +45,8 @@ function index(){
 
 function profile(){
     global $c;
-    $userProgress = $c->select('progress','id',$_SESSION['id']);
+    $userProgress = $c->select('progress','userid',$_SESSION['id']);
+
 	?>
 
     <div class="col-sm-4">
@@ -62,22 +63,28 @@ function profile(){
                 <table class="table">
                     <tr>
                         <td>Level</td>
-                        <td><?php echo (sizeof($userProgress) !== 0) ? $userProgress['level'] : '1';?></td>
+                        <td><?php echo (sizeof($userProgress) !== 0) ? $userProgress[0]['level'] +1 : '1';?></td>
                     </tr>
                 </table>
             </div>
         </div>
     </div>
 	</div>
+    <?php
 
+    if($_SESSION['privilege'] ){
+        $sql = "SELECT count(*) FROM user WHERE type = 0";
+        $result = mysqli_fetch_all($c->execute($sql));
+        $users_num = $result[0][0];
+     ?>
     <div class="col-lg-3 col-md-6">
         <div class="card">
             <div class="card-body">
                 <div class="stat-widget-one">
                     <div class="stat-icon dib"><i class="ti-user text-primary border-primary"></i></div>
-                    <div class="stat-content dib">
+                    <div class="stat-content dib">  
                         <div class="stat-text">New Customer</div>
-                        <div class="stat-digit">961</div>
+                        <div class="stat-digit"><?php echo $users_num; ?></div>
                     </div>
                 </div>
             </div>
@@ -85,6 +92,7 @@ function profile(){
     </div>
 
 	<?php
+    }
 }
 
 /* This part make the page front end with the Prefix Show*/
@@ -974,20 +982,59 @@ function show_study($current){
 	global $c;
 
 	echo '<p>Hello '.$_SESSION['name'].'</p>';
+    $userid =  $_SESSION['id'];
 
+    //sql for checking the study material count and content
+    $sql =  "SELECT * from user_study_guide where userid=$userid";
+    $ex = $c->execute($sql);
+    $result =mysqli_fetch_all($ex);
+    $row = mysqli_num_rows($ex);
+
+    if ($row == 0){
+        generate_Study(1);
+        $current_level= 1;
+    }else{
+        $current_loop = 0; //tracker for the loop
+        $last_loop =$row-1; 
+        foreach ($result as $key) {
+            
+            //check if this is the last loop of the array
+            if ($current_loop == $last_loop){
+                //check if the last item in study guide is passed
+                // if passed then generate the  study material
+
+                if ($key[5] == 'passed'){
+                    generate_Study($key[4]+1);
+                    $current_level =$key[4]+1; 
+                }else{
+                    $current_level =  $key[4];
+                }
+
+            }else{
+                $current_loop ++;    
+            }
+            
+        }
+    }
+    $array = get_studyMaterial($current_level);
+    show_studyList($array);
 	// check if the user already had a record in the database
     // if the user  has no record it will generate the study material.
-	if($c->get_progress($_SESSION['id'])){
-		$array = get_studyMaterial($_SESSION['id']);
-		show_studyList($array);
-		
-	}else{
+    // else if the user has already have a record on another level
 
-		echo 'You are new to this site.';
-		generate_Study(1);
-		get_studyMaterial($_SESSION['id']);
+
+
+	// if($c->get_progress($_SESSION['id'])){
+	// 	$array = get_studyMaterial($_SESSION['id']);
+	// 	show_studyList($array);
 		
-	}
+	// }else{
+
+	// 	echo 'You are new to this site.';
+	// 	//generate_Study(1);
+	// 	get_studyMaterial($_SESSION['id']);
+		
+	// }
 }
 
 
@@ -1075,12 +1122,14 @@ function randomGen($min, $max, $quantity) {
     return array_slice($numbers, 0, $quantity);
 }
 
-function get_studyMaterial($id){
+function get_studyMaterial($level=1){
 	global $c;
-	//fetch the list of study guide in the database
-	$user_guide = $c->select('user_study_guide','userid',$id);
+    $id = $_SESSION['id'];
+	//fetch the id of the user study guide depending on the level
+    $sql = "SELECT * FROM user_study_guide WHERE userid =  $id AND level = $level";
+    $result = mysqli_fetch_assoc($c->execute($sql)); // get the array of data from the database
 	//fetch the actual json list and decode it to array
-	$guideList = json_decode($user_guide[0]['studyResource']);
+	$guideList = json_decode($result['studyResource']);
 	//fetch the resources
 
 	return $guideList;
@@ -1090,8 +1139,14 @@ function get_studyMaterial($id){
 
 function generate_Study($level){
     global $c;
-    $max = $c->get_max($level);
-    $array = randomGen(1,$max,20);
+    $max = $c->get_max($level); // get the max number of entry in the database
+
+    if ($level ==  1){
+        $array = range(1,26);  // generate a random number with the max number of 26 items because their is 26 letter in the english alphabets
+    }else{
+        $array = randomGen(1,$max,20);  // generate a random number with the max number of 20 items
+    }
+
     $list = array();
 
     foreach($array as $key){
@@ -1099,7 +1154,7 @@ function generate_Study($level){
         $list[] =$result[$key-1]['id'];
         }
 
-    $c->set_study_guide(json_encode($list));
+    $c->set_study_guide(json_encode($list),$level);
 
 }
 
@@ -1193,12 +1248,13 @@ function show_exam_lvl1(){
 
     <div class="container-app">
             <section class="score-panel">
-                <ul class="stars">
+              <span id="score">100</span>  
+              <ul class="stars">
                     <li><i class="fa fa-star"></i></li>
                     <li><i class="fa fa-star"></i></li>
                     <li><i class="fa fa-star"></i></li>
                 </ul>
-
+               
                 <span class="moves">0</span> Move(s)
 
                 <div class="timer">
@@ -1232,7 +1288,7 @@ function show_exam_lvl1(){
         <div id="popup1" class="overlay">
             <div class="popup">
                 <h2>Congratulations 🎉</h2>
-                <a class="close" href=# >×</a>
+                <a class="close" href='index.php?p=profile'>×</a>
                 <div class="content-1">
                     Congratulations you're a winner 🎉🎉
                 </div>
@@ -1240,6 +1296,7 @@ function show_exam_lvl1(){
                     <p>You made <span id=finalMove> </span> moves </p>
                     <p>in <span id=totalTime> </span> </p>
                     <p>Rating:  <span id=starRating></span></p>
+                    <p>Score:  <span id='finalScore'></span></p>
                 </div>
                 <button id="play-again"onclick="playAgain()">
                     Play again</a>

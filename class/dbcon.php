@@ -218,13 +218,17 @@ class dbcon
 			}	
 	}
 
+// wont use this function any more
 	function get_progress($id){
 		$query = "SELECT * FROM user_study_guide WHERE userid = '$id'";
 		$result = $this->execute($query);
 		$row = mysqli_num_rows($result); 
+		$data  = mysqli_fetch_all($result);
+
 		if ($row > 0){
-			return true;
-		}else{
+			return $row;
+		}
+		else{
 			return false;
 		}
 
@@ -241,8 +245,8 @@ class dbcon
 		return $row;
 	}
 
-	function set_study_guide($json,$level=1,$stat='ongoing'){
-
+	function set_study_guide($json,$level){
+		$stat='ongoing';
 		$user = $_SESSION['id'];
 		$query = "INSERT INTO user_study_guide (userid,studyResource,level,stat) VALUES ('$user','$json','$level','$stat')";
 		

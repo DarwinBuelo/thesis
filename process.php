@@ -45,11 +45,49 @@ switch ($task) {
 		$c->execute($query);
 
 		break;
+
+	// will handle the saving of data from the game to the database via ajax request
+	case 'user_progress';
+		$user_id = $_SESSION['id'];
+		$level = getParam('lvl');
+		$score = getParam('rating');
+		$duration = getParam('time');
+
+
+		// sql for making the exam result available to the database
+		$sql = "INSERT INTO progress
+					(userid,
+					level,
+					score,
+					duration
+					)
+				VALUES (
+					$user_id,
+					$level,
+					$score,
+					'$duration'
+					)";
+		$c->execute($sql);
+
+
+
+		if ($score > 60){
+			$sql = "UPDATE user_study_guide SET stat='passed' WHERE userid ='$user_id'";
+		 	$c->execute($sql);
+		}
+		// sql for  changing the status of the user_guide from lvl to lvl
+		 
+
+
+
+		break;
 	
 	default:
 		# code...
 		break;
 }
+
+
 
 
 ?>

@@ -27,6 +27,9 @@ let matchedCard = document.getElementsByClassName("match");
  // array for opened cards
 var openedCards = [];
 
+// score
+var score = 100;
+
 
 // @description shuffles cards
 // @param {array}
@@ -52,6 +55,10 @@ document.body.onload = startGame();
 
 // @description function to start a new play 
 function startGame(){
+
+
+
+
     // shuffle deck
     cards = shuffle(cards);
     // remove all exisiting classes from each card
@@ -70,6 +77,8 @@ function startGame(){
         stars[i].style.color = "#FFD700";
         stars[i].style.visibility = "visible";
     }
+
+
     //reset timer
     second = 0;
     minute = 0; 
@@ -149,7 +158,16 @@ function enable(){
 // @description count player's moves
 function moveCounter(){
     moves++;
+    
     counter.innerHTML = moves;
+
+    //start scoring
+    if (moves > 8){
+        score -= 2;
+        document.getElementById('score').innerText = score;
+        console.log(score);
+    }
+
     //start timer on first click
     if(moves == 1){
         second = 0;
@@ -158,14 +176,14 @@ function moveCounter(){
         startTimer();
     }
     // setting rates based on moves
-    if (moves > 8 && moves < 12){
+    if (moves > 14 && moves < 19){
         for( i= 0; i < 3; i++){
             if(i > 1){
                 stars[i].style.visibility = "collapse";
             }
         }
     }
-    else if (moves > 13){
+    else if (moves > 20){
         for( i= 0; i < 3; i++){
             if(i > 0){
                 stars[i].style.visibility = "collapse";
@@ -206,6 +224,7 @@ function congratulations(){
         // show congratulations modal
         modal.classList.add("show");
 
+
         // declare star rating variable
         var starRating = document.querySelector(".stars").innerHTML;
 
@@ -213,6 +232,12 @@ function congratulations(){
         document.getElementById("finalMove").innerHTML = moves;
         document.getElementById("starRating").innerHTML = starRating;
         document.getElementById("totalTime").innerHTML = finalTime;
+        console.log('logging');
+        document.getElementById('finalScore').innerText = score;
+        jQuery.get('process.php?task=user_progress&lvl=1&rating='+score+'&time='+finalTime,function(data,status) {console.log(data);});
+      
+
+
 
         //closeicon on modal
         closeModal();
@@ -243,3 +268,4 @@ for (var i = 0; i < cards.length; i++){
     card.addEventListener("click", cardOpen);
     card.addEventListener("click",congratulations);
 };
+
