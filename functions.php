@@ -52,7 +52,7 @@ function profile(){
     <div class="col-sm-4">
     <div class="card">
         <div class="card-header">
-           <strong class="card-title mb-3">Profile Card </strong>
+           <strong class="card-title mb-3">Profile Card</strong>
         </div>
         <div class="card-body">
             <div class="mx-auto d-block">
@@ -276,7 +276,37 @@ function show_login($message=null){
 
 //about page
 function show_about(){
-	echo "this is the about page";
+	?>
+    <h3>About Us</h3>
+    <p></p>
+
+    <h3>About the Developers</h3>
+    <p class="indent">The 3 developer of this project are Darwin B. Buelo , Joan Mae C. Ceneta , and Jowena Siapno. This three are computer Science Student in Dr. Ruby Lanting Casaul Educational Foundation Inc. 
+    </p>
+    <p class="indent">
+        Darwin B. Buelo is 23 years old Computer Science Student. The son of Roger Buelo jr. and Edna B. Buelo. Residing at Zone - 5 San Ramon , Tabaco City. He has a online porfolio <a href="www.darwinbuelo.wordpress.com">www.darwinbuelo.wordpress.com</a> 
+    </p>
+    <p class="indent">
+        Joan Mae Centa
+    </p>
+    <p class="indent">
+        Jowena Siapno
+    </p>
+
+    <h3>About the School</h3>
+
+    <p>
+        //details about the school
+
+    </p>
+
+    <h3>Vision</h3>
+    <p></p>
+
+
+
+
+    <?php
 }
 
 //show upload Image for uploading and editing
@@ -1050,6 +1080,7 @@ function show_studyList($array){
 	//check if the array is not null and is an actual array
 	if (is_array($array) and $array !== null){
         foreach ($array as $key) {
+
             $result = $c->select('content','id',$key);
 
             if (!$result == null){
@@ -1217,12 +1248,18 @@ function redirect($url){
 
 // this part of the code makes the examination or the game
 
-
-function show_exam($level=1 ){
+/***
+*   This function shows the current exam of the user
+*   depending on the level
+*/
+function show_exam(){
+    global $c;
+    $userProgress = $c->select('progress','userid',$_SESSION['id']);
+    $level = (sizeof($userProgress) !== 0) ? $userProgress[0]['level'] +1 : '1';
 
     if ($level== 2){
-        echo "you are in level 2";
-    
+        // echo "you are in level 2";
+        show_exam_lvl2();
     }
     elseif($level == 3){
         echo "you are in level 3";
@@ -1234,7 +1271,9 @@ function show_exam($level=1 ){
     
 }
 
-
+/***
+*   This function handles the level one exam
+*/
 function show_exam_lvl1(){
 
     // fetch data from the database
@@ -1287,10 +1326,10 @@ function show_exam_lvl1(){
 
         <div id="popup1" class="overlay">
             <div class="popup">
-                <h2>Congratulations 🎉</h2>
+                <h2>Congratulations</h2>
                 <a class="close" href='index.php?p=profile'>×</a>
                 <div class="content-1">
-                    Congratulations you're a winner 🎉🎉
+                    Congratulations you're a winner
                 </div>
                 <div class="content-2">
                     <p>You made <span id=finalMove> </span> moves </p>
@@ -1298,9 +1337,7 @@ function show_exam_lvl1(){
                     <p>Rating:  <span id=starRating></span></p>
                     <p>Score:  <span id='finalScore'></span></p>
                 </div>
-                <button id="play-again"onclick="playAgain()">
-                    Play again</a>
-                </button>
+                
             </div>
         </div>
 
@@ -1315,4 +1352,128 @@ function show_exam_lvl1(){
     <?php
 }
 
+
+
+/***
+*   This function handles the level two exam
+*/
+function show_exam_lvl2(){
+    global $c;
+
+    $quiz_list = $c->select('user_quiz','user_id',$_SESSION['id']);
+
+
+    if ($quiz_list == null){
+        $quiz = generate_exam(2);
+
+    }else{
+        $quiz =$quiz_list[sizeof($quiz_list)-1]; //gets the current generated exam of the user by getting the last element
+    }
+
+        
+      /*
+            TODO : CREATING THE VIEW OF THE LEVEL 2
+            DETAILS : hti 
+      */
+
+    //fetch all the item in the database
+    foreach ($quiz as $key) {
+        $data = $c->select('content','id',$key);
+        echo $data[0]['title'];
+        echo '<br>';
+        echo '<img src="media/images/'.$data[0]['media_link'].'">';
+        echo '<br>';
+    
+    }
+}
+
+
+/**
+*   This function will generate the level 2 and 3 exam
+*   level 2 and 3 almost the same they only differ int their content
+*/
+function generate_exam($level){
+    /*
+        1. Get the max number all level 2 or 3 content from the database
+        2. generate a random 20 random number
+    */
+
+    global $c ;
+    $max = $c->get_max($level); //get max count of content in the level
+    $randcontent = randomGen(0,$max-1,20); // get 20 random numbers in the range of the max numbers 
+
+    //fetch the items and get their Id
+    $temp = [];
+    $sql = 'SELECT id FROM content WHERE level='.$level;
+    $row = $c->execute($sql);
+    $content = mysqli_fetch_all($row);
+    foreach($randcontent as $key){
+        $temp[] = $content[$key][0];
+    }
+    $gen_Content = $temp;
+
+
+    //user current study guide
+    $result = $c->execute("SELECT studyResource FROM user_study_guide WHERE userid = '".$_SESSION['id']."' AND level = '$level' ");
+    $user_guide = mysqli_fetch_all($result);
+    $user_guide = $user_guide[0][0];
+    // get the user log
+
+
+
+    /*==================================================
+
+    TODO : FIXING BUG
+    DESC :  the user log  gets all the user log including the level 1 items..
+             make a way to clean and eliminate the item that is not in the level that was specified
+    
+    */ 
+    $result = $c->execute('SELECT contentId FROM  user_log WHERE userid = '.$_SESSION['id'] );
+    $user_log = mysqli_fetch_all($result);
+    $temp = [];
+    foreach($user_log as $key){
+        $temp[]=$key[0];
+    }
+    $user_log = $temp;
+
+    /**
+    *   $gen_Content = This is an array of generated content
+    *   $user_guide = this is the current user guide
+    *   $user_log = Array of users log on level 2
+    */
+
+
+    //compare the user_log and user_guide to get a sample exam list
+
+    $list_1 = array_merge(json_decode($user_guide),$user_log); // merge the array
+    $cleaned = array_unique($list_1); // make sure their is no duplicate array
+
+    //check if the result is 20 the size of the strandard exam
+    // if the array is not complete then.. complete the array
+
+    if (sizeof($cleaned) <> 20){
+        return completer($cleaned,$gen_Content);      
+    }
+
+
+}
+
+
+function completer($array,$gen_Content){
+    //  =====================================================================
+    // change the value <= 10 to == 20 for specific sizing of the exam
+    // ======================================================================
+    if(sizeof($array) <= 20){
+        return $array;
+    }else{
+        $array = array_merge($array,$gen_Content);
+        $array = array_unique($array);
+        completer($array,$gen_Content);
+        return $array;
+    }
+}
+
+
+
 ?>
+

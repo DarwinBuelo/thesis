@@ -77,7 +77,7 @@ class dbcon
 		if($result = mysqli_query($this->conn,$query)){
 			return $result->fetch_all(MYSQLI_ASSOC);
 		}else{
-			return "error";
+			return "error";	
 		}
 		$this->close();
 	}

@@ -55,25 +55,32 @@ switch ($task) {
 
 
 		// sql for making the exam result available to the database
-		$sql = "INSERT INTO progress
-					(userid,
-					level,
-					score,
-					duration
-					)
-				VALUES (
-					$user_id,
-					$level,
-					$score,
-					'$duration'
-					)";
-		$c->execute($sql);
 
 
+		 $passing_grade = 60; //change this to the passing score 
 
-		if ($score > 60){
-			$sql = "UPDATE user_study_guide SET stat='passed' WHERE userid ='$user_id'";
+		if ($score > $passing_grade){
+			$sql = "INSERT INTO progress
+						(userid,
+						level,
+						score,
+						duration
+						)
+					VALUES (
+						$user_id,
+						$level,
+						$score,
+						'$duration'
+						)";
+			$c->execute($sql);
+
+			$sql = "UPDATE user_study_guide SET stat='passed' WHERE userid ='$user_id' and level = $level";
 		 	$c->execute($sql);
+		 	$level +=1;
+		 	$date = date("Y/m/d");
+		 	$sql = "INSERT INTO user_level_status(userid,level,status,date_created) 
+		 				VALUES ('$user_id','$level','passed','$date')";
+			$c->execute($sql);
 		}
 		// sql for  changing the status of the user_guide from lvl to lvl
 		 
