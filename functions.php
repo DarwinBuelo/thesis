@@ -1365,26 +1365,79 @@ function show_exam_lvl2(){
 
     if ($quiz_list == null){
         $quiz = generate_exam(2);
+        //save the exam to the databaase
+        $query = " INSERT INTO user_quiz( user_id, quiz_list) VALUES ('".$_SESSION['id']."','".json_encode($quiz)."')";
+        $c->execute($query);
 
     }else{
-        $quiz =$quiz_list[sizeof($quiz_list)-1]; //gets the current generated exam of the user by getting the last element
+        $quiz_list =$quiz_list[0]['quiz_list']; // specifying data location in the array
+        $quiz =  json_decode($quiz_list);
     }
 
         
       /*
             TODO : CREATING THE VIEW OF THE LEVEL 2
-            DETAILS : hti 
+            DETAILS :  
       */
+
+    // Counter
+    $counter =  0;
+
+
+
+    ?>
+
+        <form action ="test.php" method="post">
+        
+        <input type="hidden" name="list" value='<?php echo json_encode($quiz);?>'>
+
+
+
+    <?php
 
     //fetch all the item in the database
     foreach ($quiz as $key) {
         $data = $c->select('content','id',$key);
-        echo $data[0]['title'];
-        echo '<br>';
-        echo '<img src="media/images/'.$data[0]['media_link'].'">';
-        echo '<br>';
-    
-    }
+        $answers = genRandAnswer(2);
+        array_push($answers,$data[0]['title']);
+        shuffle($answers);
+        ?>
+        <div class="holder" >
+            <div class="row">
+                <div class="col col-md-3">
+                    <label class=" form-control-label">
+                        <?php echo '<img src="media/images/'.$data[0]['media_link'].'">'; ?>
+                    </label>
+                </div>
+                    <div class="col col-md-9">
+                        <div class="form-check">
+                            <?php
+                                foreach ($answers as $value) {
+                            ?>
+                                    <div class="radio">
+                                        <label for="radio1" class="form-check-label ">
+                                            <input id="radio1" name="radios<?php echo $key?>" value="<?php echo $value ?>" class="form-check-input" type="radio"><?php echo $value ?>
+                                        </label>
+                                    </div>
+
+                            <?php
+                                }   
+                            ?>
+  
+                        </div>
+                    </div>
+            </div>
+        </div>
+        <?php
+       
+    }   
+
+    ?>
+        <input type="submit" name="submit">
+        <!-- end of the form -->
+        </form>
+
+    <?php
 }
 
 
@@ -1428,7 +1481,7 @@ function generate_exam($level){
              make a way to clean and eliminate the item that is not in the level that was specified
     
     */ 
-    $result = $c->execute('SELECT contentId FROM  user_log WHERE userid = '.$_SESSION['id'] );
+    $result = $c->execute('SELECT contentId FROM  user_log WHERE userid = '.$_SESSION['id'] .' AND lvl="'.$level.'" ' );
     $user_log = mysqli_fetch_all($result);
     $temp = [];
     foreach($user_log as $key){
@@ -1459,9 +1512,10 @@ function generate_exam($level){
 }
 
 
+
 function completer($array,$gen_Content){
     //  =====================================================================
-    // change the value <= 10 to == 20 for specific sizing of the exam
+    // change the value 20 to the size of the exam
     // ======================================================================
     if(sizeof($array) <= 20){
         return $array;
@@ -1473,7 +1527,26 @@ function completer($array,$gen_Content){
     }
 }
 
+// function that will generate 3 random answer
+function genRandAnswer($level){
 
+    /*
+        get a random word from the database based upon the level
+    */
+    
+    global $c;
+
+    $lvl_contents = $c->select('content','level',$level);
+
+    $rand = randomGen(0,sizeof($lvl_contents)-1,3);
+    foreach ($rand as $key) {
+        $temp [] = $lvl_contents[$key]['title'];
+    }
+
+    return $temp;
+
+
+}
 
 ?>
 

@@ -48,10 +48,7 @@ function tracker(id){
 	if ( id !== currentId && currentId !== null ){
 		//if the user has click to another item without closing the current one
 		end = new Date().getTime();
-		console.log('current id turning off and creating new id start time');
-		console.log(currentId)
 		var timeToRead = (end - start)/1000.0;
-		console.log(timeToRead);
 		//send data to the database
 		jQuery.post(
 			'process.php',
@@ -67,23 +64,21 @@ function tracker(id){
 	}else if (switchs == false){
 		//if the user has click to an item.
 		start = new Date().getTime();
-		console.log('turnedon');
 		switchs = true;
 		currentId = id;
-		console.log(id);
 
 	}else if(switchs == true){
 		end = new Date().getTime();
-		console.log('turned off');
 		switchs = false;
 		var timeToRead = (end - start)/1000.0;
-		console.log(timeToRead);
+	
 		
 		jQuery.post(
 			'process.php',
 			{	task:'user_log',
 				contentId : currentId,
 				time_spent : timeToRead
+				
 			}
 		);
 

@@ -245,3 +245,11 @@ p.indent::first-letter{
     font-weight: bold;
     font-size: 30px;
 }
+
+
+.holder{
+    width:800px;
+    align : center;
+
+
+}
